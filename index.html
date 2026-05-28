@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#00338D">
+<title>Copa 2026 — Figurinhas | Lucas Nascimento</title>
+<link rel="manifest" href="data:application/json,{}">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+/* ── THEME VARIABLES ─────────────────────────────── */
+:root {
+  --copa-red:#C8102E; --copa-blue:#00338D; --copa-gold:#F0A500;
+  --bg:#f4f6fb; --surface:#ffffff; --surface2:#f0f4ff; --surface3:#e8edf8;
+  --border:#dde3f0; --text:#0d1b3e; --muted:#6b7a99;
+  --green:#0a7c4e; --green-bg:#e6f6ef; --red-bg:#fdeaed;
+  --shadow:0 2px 12px rgba(0,30,100,.08);
+}
+[data-theme="dark"] {
+  --bg:#0d1117; --surface:#161b27; --surface2:#1e2535; --surface3:#242d40;
+  --border:#2a3550; --text:#e2e8f5; --muted:#8899bb;
+  --green:#22c77a; --green-bg:#0d2e1f; --red-bg:#2a0d14;
+  --shadow:0 2px 12px rgba(0,0,0,.4);
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body { background:var(--bg); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; transition:background .3s,color .3s; }
+
+/* ── HEADER ──────────────────────────────────────── */
+.header-stripe { height:6px; background:linear-gradient(90deg,var(--copa-red) 33%,var(--copa-gold) 33% 66%,#fff 66%); }
+header { background:linear-gradient(135deg,var(--copa-blue) 0%,#001f6b 60%,#00124a 100%); border-bottom:4px solid var(--copa-gold); position:relative; overflow:hidden; }
+.header-bg-text { position:absolute; right:-10px; top:-10px; font-family:'Bebas Neue',sans-serif; font-size:140px; color:rgba(255,255,255,.04); letter-spacing:8px; line-height:1; pointer-events:none; user-select:none; }
+.header-inner { padding:20px 32px; display:flex; align-items:center; justify-content:space-between; position:relative; z-index:1; gap:12px; flex-wrap:wrap; }
+.header-left { display:flex; align-items:center; gap:16px; }
+.header-trophy { font-size:44px; line-height:1; }
+.header-title h1 { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:4px; color:#fff; line-height:1; }
+.header-title p { font-size:11px; color:rgba(255,255,255,.55); letter-spacing:2.5px; text-transform:uppercase; margin-top:4px; font-weight:300; }
+.header-right { display:flex; align-items:center; gap:12px; }
+.last-update { font-size:11px; color:rgba(255,255,255,.5); text-transform:uppercase; letter-spacing:1.5px; }
+.last-update strong { color:var(--copa-gold); }
+/* Dark toggle */
+.theme-btn { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:20px; padding:6px 14px; color:#fff; font-size:12px; font-family:'Barlow',sans-serif; font-weight:600; cursor:pointer; transition:all .2s; white-space:nowrap; }
+.theme-btn:hover { background:rgba(255,255,255,.2); }
+
+/* ── MAIN ────────────────────────────────────────── */
+main { max-width:1200px; margin:0 auto; padding:28px 28px 16px; }
+
+/* ── PANELS ──────────────────────────────────────── */
+.panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px 24px; margin-bottom:24px; box-shadow:var(--shadow); }
+.panel.blue-top { border-top:3px solid var(--copa-blue); }
+.panel.gold-top { border-top:3px solid var(--copa-gold); }
+.panel.green-top { border-top:3px solid var(--green); }
+.panel-title { font-family:'Barlow Condensed',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
+.panel-title::before { content:''; width:3px; height:14px; background:var(--copa-blue); border-radius:2px; flex-shrink:0; }
+.panel.gold-top .panel-title::before { background:var(--copa-gold); }
+.panel.green-top .panel-title::before { background:var(--green); }
+
+/* ── BIG NUMBERS ─────────────────────────────────── */
+.bignums { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:24px; }
+.bignum { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px 16px; position:relative; overflow:hidden; box-shadow:var(--shadow); }
+.bignum::before { content:''; position:absolute; top:0; left:0; right:0; height:4px; }
+.bignum.red::before { background:var(--copa-red); }
+.bignum.blue::before { background:var(--copa-blue); }
+.bignum.gold::before { background:var(--copa-gold); }
+.bignum.green-c::before { background:var(--green); }
+.bignum-icon { font-size:22px; margin-bottom:8px; }
+.bignum-label { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:4px; font-weight:500; }
+.bignum-value { font-family:'Bebas Neue',sans-serif; font-size:46px; line-height:1; }
+.bignum.red .bignum-value { color:var(--copa-red); }
+.bignum.blue .bignum-value { color:var(--copa-blue); }
+.bignum.gold .bignum-value { color:var(--copa-gold); }
+.bignum.green-c .bignum-value { color:var(--green); }
+.bignum-sub { font-size:11px; color:var(--muted); margin-top:4px; }
+
+/* ── CHART ───────────────────────────────────────── */
+.chart-panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px 24px; margin-bottom:24px; box-shadow:var(--shadow); }
+.chart-inner { overflow-x:auto; }
+.chart-bars { display:flex; align-items:flex-end; gap:6px; height:140px; min-width:600px; padding-top:8px; }
+.chart-bar-wrap { display:flex; flex-direction:column; align-items:center; flex:1; min-width:36px; }
+.chart-bar-stack { display:flex; flex-direction:column; align-items:center; width:100%; justify-content:flex-end; flex:1; gap:1px; }
+.bar-seg-unique { background:var(--copa-blue); border-radius:3px 3px 0 0; width:80%; min-height:2px; transition:height .4s; }
+.bar-seg-rep { background:var(--copa-red); opacity:.75; width:80%; min-height:2px; }
+.bar-seg-rep:first-child { border-radius:3px 3px 0 0; }
+.chart-label { font-size:9px; font-family:'Barlow Condensed',sans-serif; font-weight:700; color:var(--muted); margin-top:5px; text-align:center; letter-spacing:.5px; }
+.chart-legend { display:flex; gap:16px; margin-top:12px; font-size:11px; color:var(--muted); }
+.chart-legend span { display:flex; align-items:center; gap:5px; }
+.leg-dot { width:10px; height:10px; border-radius:2px; }
+
+/* ── SECTION LABEL ───────────────────────────────── */
+.section-label { font-family:'Barlow Condensed',sans-serif; font-size:17px; letter-spacing:2px; text-transform:uppercase; color:var(--text); margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+.section-label::after { content:''; flex:1; height:1px; background:var(--border); }
+
+/* ── BUTTONS ─────────────────────────────────────── */
+.btn { padding:10px 20px; border-radius:10px; border:none; font-family:'Barlow',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; white-space:nowrap; }
+.btn-add { background:var(--green); color:#fff; }
+.btn-add:hover { opacity:.88; }
+.btn-remove { background:var(--copa-red); color:#fff; }
+.btn-remove:hover { opacity:.88; }
+.btn-secondary { background:var(--surface2); color:var(--muted); border:1.5px solid var(--border); }
+.btn-secondary:hover { color:var(--text); border-color:var(--muted); }
+.btn-gold { background:var(--copa-gold); color:#3d2600; font-weight:700; }
+.btn-gold:hover { opacity:.88; }
+
+/* ── INPUTS ──────────────────────────────────────── */
+textarea, input[type=text] {
+  background:var(--bg); border:1.5px solid var(--border);
+  border-radius:10px; color:var(--text); font-family:'Barlow',sans-serif; font-size:13px;
+  padding:10px 14px; outline:none; transition:border-color .2s;
+}
+textarea::placeholder, input[type=text]::placeholder { color:var(--muted); opacity:.7; }
+textarea:focus, input[type=text]:focus { border-color:var(--copa-blue); }
+.gold-focus:focus { border-color:var(--copa-gold); }
+.input-row { display:flex; gap:10px; flex-wrap:wrap; align-items:flex-start; }
+.input-row textarea { flex:1; min-width:240px; resize:vertical; min-height:56px; }
+.btn-col { display:flex; gap:8px; flex-direction:column; }
+.msg { font-size:12px; margin-top:10px; min-height:18px; font-weight:500; }
+.msg.ok { color:var(--green); }
+.msg.err { color:var(--copa-red); }
+
+/* ── FILTER ROW ──────────────────────────────────── */
+.filter-row { display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap; align-items:center; }
+.search-input { background:var(--surface); border:1.5px solid var(--border); border-radius:10px; color:var(--text); font-family:'Barlow',sans-serif; font-size:13px; padding:8px 14px; outline:none; width:200px; transition:border-color .2s; }
+.search-input:focus { border-color:var(--copa-blue); }
+.filter-btn { padding:8px 14px; border-radius:10px; border:1.5px solid var(--border); background:var(--surface); color:var(--muted); font-size:12px; cursor:pointer; transition:all .15s; font-family:'Barlow',sans-serif; font-weight:600; }
+.filter-btn.active { background:var(--copa-blue); color:#fff; border-color:var(--copa-blue); }
+.filter-btn:hover:not(.active) { border-color:var(--copa-blue); color:var(--copa-blue); }
+.filter-btn.group-btn.active { background:var(--copa-gold); color:#3d2600; border-color:var(--copa-gold); }
+.filter-btn.group-btn:hover:not(.active) { border-color:var(--copa-gold); color:var(--copa-gold); }
+
+/* ── RANKING TABLE ───────────────────────────────── */
+.ranking-wrap { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:24px; box-shadow:var(--shadow); overflow-x:auto; }
+.ranking-wrap table { width:100%; border-collapse:collapse; min-width:500px; }
+.ranking-wrap thead tr { background:linear-gradient(90deg,var(--copa-blue) 0%,#001f6b 100%); }
+.ranking-wrap thead th { padding:11px 14px; font-family:'Barlow Condensed',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:rgba(255,255,255,.75); text-align:left; font-weight:600; }
+.ranking-wrap thead th.right { text-align:right; }
+.ranking-wrap tbody tr { border-top:1px solid var(--border); transition:background .12s; }
+.ranking-wrap tbody tr:hover { background:var(--surface2); }
+.ranking-wrap td { padding:9px 14px; font-size:13px; }
+.ranking-wrap td.right { text-align:right; }
+.val-blue { color:var(--copa-blue); font-weight:700; }
+.val-rep { color:var(--copa-red); font-weight:600; }
+.val-shield { color:var(--copa-gold); font-weight:600; }
+.bar-bg { background:var(--surface3); border-radius:4px; height:6px; width:80px; }
+.bar-fill { height:6px; border-radius:4px; background:linear-gradient(90deg,var(--copa-blue),#4a7eff); }
+
+/* ── DETAIL GRID ─────────────────────────────────── */
+#detail-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:12px; margin-bottom:24px; }
+.country-card { background:var(--surface); border:1px solid var(--border); border-radius:14px; overflow:hidden; box-shadow:var(--shadow); }
+.country-card-header { background:linear-gradient(90deg,var(--copa-blue) 0%,#001f6b 100%); padding:11px 14px; display:flex; justify-content:space-between; align-items:center; }
+.country-card-header h4 { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; color:#fff; letter-spacing:1px; text-transform:uppercase; }
+.country-card-header .c-stats { font-size:11px; color:rgba(255,255,255,.6); }
+.country-card-body { padding:10px 12px; display:flex; flex-wrap:wrap; gap:4px; }
+.chip { padding:3px 8px; border-radius:6px; font-size:11px; font-weight:600; font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px; }
+.chip.q1 { background:#e8f0ff; color:var(--copa-blue); border:1px solid #c5d4f5; }
+.chip.q2 { background:#fff6e0; color:#8a5d00; border:1px solid #f0d07a; }
+.chip.qn { background:var(--red-bg); color:#8a0015; border:1px solid #f5b3bc; }
+[data-theme="dark"] .chip.q1 { background:#0d1e40; color:#7eb3ff; border-color:#1e3a70; }
+[data-theme="dark"] .chip.q2 { background:#2a1e00; color:#f0c050; border-color:#5a3e00; }
+[data-theme="dark"] .chip.qn { background:#2a0d14; color:#ff8099; border-color:#5a1525; }
+.chip sup { font-size:8px; vertical-align:super; margin-left:1px; opacity:.8; }
+
+/* ── ZEROED ──────────────────────────────────────── */
+.zeroed-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+.zeroed-chip { padding:5px 12px; background:var(--red-bg); color:#8a0015; border:1px solid #f5b3bc; border-radius:8px; font-size:13px; font-weight:600; }
+[data-theme="dark"] .zeroed-chip { color:#ff8099; border-color:#5a1525; }
+
+/* ── TROCA ───────────────────────────────────────── */
+.troca-result { margin-top:16px; display:none; }
+.troca-result-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px; }
+.troca-result-title { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; text-transform:uppercase; letter-spacing:1px; }
+.troca-summary { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+.troca-badge { padding:4px 12px; border-radius:8px; font-size:12px; font-weight:700; font-family:'Barlow Condensed',sans-serif; }
+.troca-badge.have { background:var(--green-bg); color:#085c39; }
+.troca-badge.nothave { background:var(--red-bg); color:#8a0015; }
+[data-theme="dark"] .troca-badge.have { color:#22c77a; }
+[data-theme="dark"] .troca-badge.nothave { color:#ff8099; }
+.troca-list { display:flex; flex-wrap:wrap; gap:5px; }
+.troca-chip-have { padding:4px 10px; border-radius:7px; font-size:12px; font-weight:700; font-family:'Barlow Condensed',sans-serif; background:var(--green-bg); color:#085c39; border:1px solid #9addc0; }
+[data-theme="dark"] .troca-chip-have { color:#22c77a; border-color:#1a5c38; }
+.troca-chip-have .qty { font-size:9px; opacity:.75; margin-left:2px; }
+.troca-chip-no { padding:4px 10px; border-radius:7px; font-size:12px; font-weight:700; font-family:'Barlow Condensed',sans-serif; background:var(--red-bg); color:#8a0015; border:1px solid #f5b3bc; }
+[data-theme="dark"] .troca-chip-no { color:#ff8099; border-color:#5a1525; }
+.troca-mini-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); font-weight:600; margin:12px 0 6px; }
+.copy-btn { padding:6px 14px; border-radius:8px; border:1.5px solid var(--copa-gold); background:transparent; color:var(--copa-gold); font-family:'Barlow',sans-serif; font-size:12px; font-weight:600; cursor:pointer; transition:all .15s; }
+.copy-btn:hover { background:var(--copa-gold); color:#3d2600; }
+
+/* ── MINHA LISTA ─────────────────────────────────── */
+.minha-lista-save { display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; align-items:center; }
+.minha-lista-info { font-size:11px; color:var(--muted); margin-top:6px; }
+
+/* ── HISTÓRICO ───────────────────────────────────── */
+.hist-table-wrap { overflow-x:auto; max-height:320px; overflow-y:auto; border-radius:10px; border:1px solid var(--border); }
+.hist-table { width:100%; border-collapse:collapse; font-size:12px; min-width:480px; }
+.hist-table thead th { background:var(--surface3); padding:9px 12px; text-align:left; font-family:'Barlow Condensed',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; position:sticky; top:0; z-index:1; }
+.hist-table tbody tr { border-top:1px solid var(--border); transition:background .1s; }
+.hist-table tbody tr:hover { background:var(--surface2); }
+.hist-table td { padding:8px 12px; vertical-align:top; }
+.hist-badge { display:inline-block; padding:2px 8px; border-radius:5px; font-size:11px; font-weight:700; font-family:'Barlow Condensed',sans-serif; }
+.hist-badge.in { background:var(--green-bg); color:#085c39; }
+.hist-badge.out { background:var(--red-bg); color:#8a0015; }
+[data-theme="dark"] .hist-badge.in { color:#22c77a; }
+[data-theme="dark"] .hist-badge.out { color:#ff8099; }
+.hist-codes { color:var(--muted); font-size:11px; max-width:280px; word-break:break-word; }
+.hist-person { font-weight:600; color:var(--copa-blue); }
+[data-theme="dark"] .hist-person { color:#7eb3ff; }
+.hist-empty { text-align:center; padding:32px; color:var(--muted); font-size:13px; }
+.hist-person-input { width:180px; }
+
+/* ── PASSWORD MODAL ──────────────────────────────── */
+.pwd-overlay { display:none; position:fixed; inset:0; background:rgba(0,10,40,.7); z-index:9999; align-items:center; justify-content:center; }
+.pwd-overlay.active { display:flex; }
+.pwd-modal { background:var(--surface); border-radius:18px; border:2px solid var(--copa-gold); padding:32px 36px; width:320px; text-align:center; animation:popIn .2s ease; }
+@keyframes popIn { from{transform:scale(.92);opacity:0} to{transform:scale(1);opacity:1} }
+.pwd-modal-icon { font-size:32px; margin-bottom:10px; }
+.pwd-modal h3 { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text); margin-bottom:5px; }
+.pwd-modal p { font-size:12px; color:var(--muted); margin-bottom:18px; }
+.pwd-dots { display:flex; gap:10px; justify-content:center; margin-bottom:20px; }
+.pwd-dot { width:13px; height:13px; border-radius:50%; border:2px solid var(--border); background:transparent; transition:all .15s; }
+.pwd-dot.filled { background:var(--copa-blue); border-color:var(--copa-blue); }
+.pwd-dot.error { background:var(--copa-red); border-color:var(--copa-red); }
+.pwd-numpad { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+.pwd-key { padding:13px; border-radius:10px; border:1.5px solid var(--border); background:var(--surface2); color:var(--text); font-family:'Barlow Condensed',sans-serif; font-size:20px; font-weight:700; cursor:pointer; transition:all .12s; }
+.pwd-key:hover { background:var(--copa-blue); color:#fff; border-color:var(--copa-blue); }
+.pwd-key:active { transform:scale(.94); }
+.pwd-key.del { font-size:14px; color:var(--muted); }
+.pwd-key.del:hover { background:var(--red-bg); color:var(--copa-red); border-color:var(--copa-red); }
+.pwd-cancel { width:100%; padding:9px; border-radius:10px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:'Barlow',sans-serif; font-size:13px; cursor:pointer; transition:all .15s; margin-top:6px; }
+.pwd-cancel:hover { border-color:var(--muted); color:var(--text); }
+.pwd-shake { animation:shake .35s ease; }
+@keyframes shake { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+
+/* ── FOOTER ──────────────────────────────────────── */
+.footer-stripe { height:4px; background:linear-gradient(90deg,var(--copa-red) 33%,var(--copa-gold) 33% 66%,#fff 66%); }
+footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); border-top:4px solid var(--copa-gold); padding:24px 32px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+.footer-sig strong { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:1px; color:var(--copa-gold); display:block; }
+.footer-sig span { font-size:11px; color:rgba(255,255,255,.45); letter-spacing:1.5px; text-transform:uppercase; }
+.footer-right p { font-size:11px; color:rgba(255,255,255,.4); letter-spacing:1px; text-align:right; }
+.footer-right strong { color:rgba(255,255,255,.65); }
+
+/* ── RESPONSIVE ──────────────────────────────────── */
+@media(max-width:900px){
+  .bignums{grid-template-columns:repeat(2,1fr);}
+  .header-inner{padding:16px 20px;}
+  main{padding:16px 16px 8px;}
+  #detail-grid{grid-template-columns:1fr 1fr;}
+  .header-title h1{font-size:26px;}
+  .header-bg-text{font-size:90px;}
+}
+@media(max-width:600px){
+  .bignums{grid-template-columns:1fr 1fr;}
+  #detail-grid{grid-template-columns:1fr;}
+  .header-title h1{font-size:22px;}
+  .header-title p{display:none;}
+  .filter-row{gap:6px;}
+  .filter-btn{padding:7px 10px;font-size:11px;}
+  .search-input{width:100%;}
+  footer{flex-direction:column;text-align:center;}
+  .footer-right p{text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="header-stripe"></div>
+<header>
+  <div class="header-bg-text">COPA 2026</div>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-trophy">🏆</div>
+      <div class="header-title">
+        <h1>Copa 2026 — Figurinhas</h1>
+        <p>Controle de repetidas para venda &amp; troca · Panini Official</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="last-update">Atualizado: <strong id="last-update-date">—</strong></div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- BIG NUMBERS -->
+  <div class="bignums">
+    <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">—</div><div class="bignum-sub">repetidas no estoque</div></div>
+    <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">—</div><div class="bignum-sub">códigos únicos</div></div>
+    <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">—</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
+    <div class="bignum green-c"><div class="bignum-icon">🥇</div><div class="bignum-label">Maior acervo</div><div class="bignum-value" id="bn-top">—</div><div class="bignum-sub" id="bn-top-sub">seleção com mais distintas</div></div>
+  </div>
+
+  <!-- CHART -->
+  <div class="section-label">Distribuição por grupo</div>
+  <div class="chart-panel">
+    <div class="chart-inner">
+      <div class="chart-bars" id="chart-bars"></div>
+    </div>
+    <div class="chart-legend">
+      <span><span class="leg-dot" style="background:var(--copa-blue)"></span>Únicas</span>
+      <span><span class="leg-dot" style="background:var(--copa-red);opacity:.75"></span>Repetidas</span>
+    </div>
+  </div>
+
+  <!-- ATUALIZAR ESTOQUE -->
+  <div class="section-label">Atualizar estoque</div>
+  <div class="panel blue-top">
+    <div class="panel-title">Gerenciar acervo</div>
+    <div class="input-row">
+      <input type="text" id="hist-person" class="hist-person-input" placeholder="Nome (ex: João)">
+      <textarea id="sticker-input" placeholder="Códigos — ex: MEX1, CAN5, BIH13, QAT9 (vírgula, espaço ou linha)" style="flex:1;min-width:200px;min-height:48px;"></textarea>
+      <div class="btn-col">
+        <button class="btn btn-add" onclick="pedirSenha('add')">+ Entrou</button>
+        <button class="btn btn-remove" onclick="pedirSenha('remove')">− Saiu</button>
+      </div>
+    </div>
+    <div class="msg" id="update-msg"></div>
+  </div>
+
+  <!-- HISTÓRICO -->
+  <div class="section-label">Histórico de transações</div>
+  <div class="panel blue-top">
+    <div class="panel-title">Registro de entradas e saídas</div>
+    <div class="hist-table-wrap">
+      <table class="hist-table">
+        <thead><tr>
+          <th>Data/Hora</th><th>Tipo</th><th>Pessoa</th><th>Figurinhas</th><th class="right" style="text-align:right">Qtd</th>
+        </tr></thead>
+        <tbody id="hist-body"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;display:flex;justify-content:flex-end;">
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 14px;" onclick="pedirSenhaHist()">🗑 Limpar histórico</button>
+    </div>
+  </div>
+
+  <!-- RANKING -->
+  <div class="section-label">Ranking por seleção</div>
+  <div class="filter-row">
+    <input class="search-input" id="search" placeholder="🔍  Buscar seleção…" oninput="renderRanking()">
+    <button class="filter-btn active" id="sort-unique" onclick="setSort('unique')">Mais distintas</button>
+    <button class="filter-btn" id="sort-total" onclick="setSort('total')">Mais total</button>
+    <span style="font-size:11px;color:var(--muted);margin-left:4px">Grupo:</span>
+    <button class="filter-btn group-btn active" id="grp-all" onclick="setGroup('all')">Todos</button>
+    <div id="grp-btns" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+  </div>
+  <div class="ranking-wrap">
+    <table>
+      <thead><tr>
+        <th class="right" style="width:36px">#</th>
+        <th>Seleção</th>
+        <th class="right">Distintas</th>
+        <th class="right">Total</th>
+        <th class="right">Repetidas</th>
+        <th class="right">Escudos</th>
+        <th style="width:100px"></th>
+      </tr></thead>
+      <tbody id="ranking-body"></tbody>
+    </table>
+  </div>
+
+  <!-- ZERADAS -->
+  <div class="section-label">Seleções zeradas</div>
+  <div class="panel">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Seleções sem nenhuma figurinha no estoque:</p>
+    <div class="zeroed-chips" id="zeroed-list"></div>
+  </div>
+
+  <!-- CONSULTA TROCAS -->
+  <div class="section-label">Consulta de trocas</div>
+  <div class="panel gold-top">
+    <div class="panel-title">O que você precisa?</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Cole aqui a lista de figurinhas que você <strong>está buscando</strong>. O sistema verifica o que o Lucas tem disponível.</p>
+    <div class="input-row">
+      <textarea id="troca-input" class="gold-focus" placeholder="Cole os códigos que você está buscando — ex: MEX1, QAT13, SEN7…" style="flex:1;min-width:220px;min-height:72px;"></textarea>
+      <div class="btn-col">
+        <button class="btn btn-gold" onclick="consultarTroca()">🔍 Consultar</button>
+        <button class="btn btn-secondary" onclick="limparTroca()">Limpar</button>
+      </div>
+    </div>
+    <!-- Minha lista salva -->
+    <div class="minha-lista-save">
+      <span style="font-size:12px;color:var(--muted);font-weight:600">💾 Minha lista:</span>
+      <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="salvarMinhaLista()">Salvar lista</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="carregarMinhaLista()">Carregar lista salva</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="limparMinhaLista()">Apagar lista</button>
+    </div>
+    <div class="minha-lista-info" id="minha-lista-info"></div>
+
+    <div class="troca-result" id="troca-result">
+      <div class="troca-result-header">
+        <span class="troca-result-title">Resultado</span>
+        <div class="troca-summary">
+          <span class="troca-badge have" id="troca-count-have">✅ 0 disponíveis</span>
+          <span class="troca-badge nothave" id="troca-count-no">❌ 0 indisponíveis</span>
+          <button class="copy-btn" onclick="copiarResultado()">📋 Copiar disponíveis</button>
+        </div>
+      </div>
+      <div class="troca-mini-label">🟢 Tenho para troca</div>
+      <div class="troca-list" id="troca-have"></div>
+      <div class="troca-mini-label" style="margin-top:14px">🔴 Não tenho</div>
+      <div class="troca-list" id="troca-nothave"></div>
+    </div>
+  </div>
+
+  <!-- ACERVO DETALHADO -->
+  <div class="section-label">Acervo detalhado</div>
+  <div class="filter-row" style="margin-bottom:12px">
+    <span style="font-size:11px;color:var(--muted);font-weight:600">Filtrar por grupo:</span>
+    <button class="filter-btn group-btn active" id="dgrp-all" onclick="setDetailGroup('all')">Todos</button>
+    <div id="dgrp-btns" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+  </div>
+  <div id="detail-grid"></div>
+
+</main>
+
+<!-- PASSWORD MODAL -->
+<div class="pwd-overlay" id="pwd-overlay">
+  <div class="pwd-modal" id="pwd-modal">
+    <div class="pwd-modal-icon">🔒</div>
+    <h3>Área restrita</h3>
+    <p>Digite a senha para confirmar a atualização.</p>
+    <div class="pwd-dots">
+      <div class="pwd-dot" id="d0"></div><div class="pwd-dot" id="d1"></div>
+      <div class="pwd-dot" id="d2"></div><div class="pwd-dot" id="d3"></div>
+    </div>
+    <div class="pwd-numpad">
+      <button class="pwd-key" onclick="pwdKey('1')">1</button>
+      <button class="pwd-key" onclick="pwdKey('2')">2</button>
+      <button class="pwd-key" onclick="pwdKey('3')">3</button>
+      <button class="pwd-key" onclick="pwdKey('4')">4</button>
+      <button class="pwd-key" onclick="pwdKey('5')">5</button>
+      <button class="pwd-key" onclick="pwdKey('6')">6</button>
+      <button class="pwd-key" onclick="pwdKey('7')">7</button>
+      <button class="pwd-key" onclick="pwdKey('8')">8</button>
+      <button class="pwd-key" onclick="pwdKey('9')">9</button>
+      <button class="pwd-key del" onclick="pwdKey('del')">⌫</button>
+      <button class="pwd-key" onclick="pwdKey('0')">0</button>
+      <button class="pwd-key del" onclick="pwdKey('clr')">✕</button>
+    </div>
+    <button class="pwd-cancel" onclick="fecharSenha()">Cancelar</button>
+  </div>
+</div>
+
+<div class="footer-stripe"></div>
+<footer>
+  <div class="footer-sig">
+    <strong>Lucas Nascimento</strong>
+    <span>Data Analyst Professional</span>
+  </div>
+  <div class="footer-right">
+    <p>Copa do Mundo FIFA <strong>2026</strong></p>
+    <p>Controle de Figurinhas Panini</p>
+  </div>
+</footer>
+
+<script>
+// ── STORAGE KEY ───────────────────────────────────
+const SK_LISTA = 'copa2026_minhalista_v1';
+const SK_THEME = 'copa2026_theme_v1';
+// ── JSONBIN CONFIG ────────────────────────────────
+const JSONBIN_ID = '6a186bfdddf5aa59f77093a1';
+const JSONBIN_KEY = '$2a$10$zH/nJTWhWD2OlIWMb26ATuBmu5JXhvgzeJGmdVuTe5wahghB55kQK';
+const JSONBIN_URL = `https://api.jsonbin.io/v3/b/${JSONBIN_ID}`;
+let _saveTimer = null;
+
+async function jbRead() {
+  try {
+    const r = await fetch(JSONBIN_URL+'/latest', {headers:{'X-Master-Key':JSONBIN_KEY}});
+    const j = await r.json();
+    return j.record || {};
+  } catch(e) { console.error('JSONBin read error',e); return {}; }
+}
+
+async function jbWrite(data) {
+  try {
+    await fetch(JSONBIN_URL, {
+      method:'PUT',
+      headers:{'Content-Type':'application/json','X-Master-Key':JSONBIN_KEY},
+      body: JSON.stringify(data)
+    });
+  } catch(e) { console.error('JSONBin write error',e); }
+}
+
+function scheduleSave(data) {
+  if(_saveTimer) clearTimeout(_saveTimer);
+  _saveTimer = setTimeout(()=>jbWrite(data), 800);
+}
+
+// ── GRUPOS ────────────────────────────────────────
+const GROUPS = {
+  A:['MEX','RSA','KOR','CZE'], B:['CAN','BIH','QAT','SUI'],
+  C:['BRA','MAR','HAI','SCO'], D:['USA','PAR','AUS','TUR'],
+  E:['GER','CUW','CIV','ECU'], F:['NED','JPN','SWE','TUN'],
+  G:['BEL','EGY','IRN','NZL'], H:['ESP','CPV','KSA','URU'],
+  I:['FRA','SEN','IRQ','NOR'], J:['ARG','ALG','AUT','JOR'],
+  K:['POR','COD','UZB','COL'], L:['ENG','CRO','GHA','PAN'],
+  FWC:['FWC']
+};
+const COUNTRY_GROUP = {};
+for(const[g,cs] of Object.entries(GROUPS)) cs.forEach(c=>COUNTRY_GROUP[c]=g);
+
+const ALL_COUNTRIES=['ARG','AUS','AUT','BEL','BIH','BRA','CAN','CIV','COD','COL','CPV','CRO','CUW','CZE','ECU','EGY','ENG','ESP','FRA','FWC','GER','GHA','HAI','IRN','IRQ','JOR','JPN','KOR','KSA','MAR','MEX','NED','NOR','NZL','PAN','PAR','POR','QAT','RSA','SCO','SEN','SUI','SWE','TUN','TUR','URU','USA','UZB'];
+const FLAGS={ARG:'🇦🇷',AUS:'🇦🇺',AUT:'🇦🇹',BEL:'🇧🇪',BIH:'🇧🇦',BRA:'🇧🇷',CAN:'🇨🇦',CIV:'🇨🇮',COD:'🇨🇩',COL:'🇨🇴',CPV:'🇨🇻',CRO:'🇭🇷',CUW:'🇨🇼',CZE:'🇨🇿',ECU:'🇪🇨',EGY:'🇪🇬',ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿',ESP:'🇪🇸',FRA:'🇫🇷',FWC:'🌟',GER:'🇩🇪',GHA:'🇬🇭',HAI:'🇭🇹',IRN:'🇮🇷',IRQ:'🇮🇶',JOR:'🇯🇴',JPN:'🇯🇵',KOR:'🇰🇷',KSA:'🇸🇦',MAR:'🇲🇦',MEX:'🇲🇽',NED:'🇳🇱',NOR:'🇳🇴',NZL:'🇳🇿',PAN:'🇵🇦',PAR:'🇵🇾',POR:'🇵🇹',QAT:'🇶🇦',RSA:'🇿🇦',SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿',SEN:'🇸🇳',SUI:'🇨🇭',SWE:'🇸🇪',TUN:'🇹🇳',TUR:'🇹🇷',URU:'🇺🇾',USA:'🇺🇸',UZB:'🇺🇿'};
+
+const INITIAL={"BEL3":3,"MEX4":1,"BEL5":1,"ESP6":1,"ENG6":1,"CAN7":1,"NED7":1,"BEL7":2,"CAN8":3,"FRA8":2,"ENG8":1,"MEX9":1,"NED9":2,"BEL9":1,"ESP9":1,"FRA9":1,"ENG9":1,"MEX10":1,"BEL10":2,"MEX11":3,"CAN11":1,"NED11":2,"BEL11":2,"CAN12":1,"GER12":3,"ARG12":3,"MEX13":6,"CAN13":2,"GER13":4,"FRA13":3,"ARG13":1,"ENG14":1,"MEX15":3,"BEL15":2,"NED16":4,"ESP19":1,"ENG19":1,"ESP20":1,"JPN1":1,"RSA2":3,"SEN2":1,"CRO2":1,"RSA3":3,"CUW3":1,"CPV3":3,"RSA4":2,"RSA5":7,"SEN5":1,"CRO5":1,"CPV6":1,"SEN6":1,"CRO6":1,"CUW7":1,"JPN7":1,"CPV7":1,"SEN7":2,"CRO7":3,"BIH8":1,"JPN8":2,"SEN8":3,"CRO8":2,"CPV9":1,"SEN9":3,"MAR10":1,"CUW10":1,"JPN10":1,"BIH11":3,"JPN11":1,"EGY11":1,"CPV11":1,"RSA12":1,"JPN12":1,"SEN12":1,"CRO12":1,"RSA13":3,"MAR13":3,"BIH14":2,"SEN14":1,"BIH15":2,"MAR15":2,"CUW15":1,"JPN15":1,"CPV15":1,"SEN15":1,"JPN16":1,"EGY16":1,"SEN17":1,"COD17":1,"SEN19":2,"RSA20":1,"QAT1":1,"KSA2":1,"UZB2":1,"UZB3":2,"GHA4":1,"IRQ6":2,"KOR7":2,"QAT7":2,"UZB7":4,"GHA7":1,"KOR8":3,"QAT8":4,"HAI8":1,"AUS8":1,"KSA8":2,"GHA8":1,"KSA9":3,"CIV10":2,"KSA10":1,"AUT10":1,"KOR11":1,"QAT11":5,"GHA11":1,"KOR12":2,"QAT12":1,"HAI12":2,"CIV12":2,"GHA12":1,"QAT13":3,"AUS13":5,"IRN13":1,"KSA13":4,"AUT13":4,"UZB13":4,"QAT14":3,"CIV14":1,"UZB14":1,"GHA14":1,"KOR15":3,"QAT15":1,"AUS15":1,"IRQ15":1,"AUT15":1,"KOR16":1,"QAT16":1,"AUT16":1,"IRN17":2,"AUT17":1,"IRQ19":2,"AUT19":1,"UZB20":1,"URU1":1,"SCO2":1,"ECU2":4,"JOR2":1,"COL2":1,"SCO3":2,"ECU3":1,"SCO5":1,"ECU5":1,"SCO6":1,"ECU6":1,"CZE7":1,"NOR7":1,"JOR7":1,"COL7":1,"SUI8":2,"NOR8":2,"COL8":4,"PAN8":1,"TUN9":1,"URU9":1,"NOR9":1,"COL9":2,"SCO10":1,"TUR10":2,"TUN10":3,"URU10":2,"COL10":3,"CZE11":1,"SCO11":1,"TUN11":4,"NZL11":1,"COL11":3,"SUI12":3,"TUN12":3,"URU12":3,"NOR12":1,"PAN12":1,"SUI13":4,"NOR13":3,"PAN13":1,"TUN14":3,"URU14":1,"NOR14":2,"COL14":1,"TUN15":1,"URU15":1,"NOR15":1,"COL15":2,"URU16":1,"NZL17":2,"URU17":1,"TUR18":3,"TUN18":5,"URU18":1,"URU20":3};
+
+let stock={}, history=[], sortBy='unique', activeGroup='all', activeDetailGroup='all';
+
+// ── THEME ─────────────────────────────────────────
+function toggleTheme(){
+  const t=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+  document.documentElement.setAttribute('data-theme',t);
+  document.getElementById('theme-btn').textContent=t==='dark'?'☀️ Light':'🌙 Dark';
+  try{localStorage.setItem(SK_THEME,t);}catch(e){}
+}
+function loadTheme(){
+  try{const t=localStorage.getItem(SK_THEME)||'light';document.documentElement.setAttribute('data-theme',t);document.getElementById('theme-btn').textContent=t==='dark'?'☀️ Light':'🌙 Dark';}catch(e){}
+}
+
+// ── LOAD / SAVE ───────────────────────────────────
+async function loadStock(){
+  document.getElementById('last-update-date').textContent = 'Carregando…';
+  try {
+    const data = await jbRead();
+    stock   = data.stock   || JSON.parse(JSON.stringify(INITIAL));
+    history = data.history || [];
+    const saved = data.lastUpdate || '';
+    if(saved) document.getElementById('last-update-date').textContent = saved;
+  } catch {
+    stock = JSON.parse(JSON.stringify(INITIAL));
+    history = [];
+  }
+  buildGroupBtns();
+  renderAll();
+}
+async function saveStock(){
+  const now = new Date();
+  const ds = now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('last-update-date').textContent = ds;
+  scheduleSave({ stock, history, lastUpdate: ds });
+}
+async function saveHistory(){
+  history = history.slice(0, 200);
+  // saved together with stock via scheduleSave in saveStock
+}
+
+// ── GROUP BUTTONS ─────────────────────────────────
+function buildGroupBtns(){
+  const grps=Object.keys(GROUPS);
+  ['grp-btns','dgrp-btns'].forEach((id,di)=>{
+    document.getElementById(id).innerHTML=grps.map(g=>
+      `<button class="filter-btn group-btn" id="${di?'d':''}grp-${g}" onclick="${di?'setDetailGroup':'setGroup'}('${g}')">${g==='FWC'?'⭐ FWC':'Gr. '+g}</button>`
+    ).join('');
+  });
+}
+function setGroup(g){
+  activeGroup=g;
+  document.querySelectorAll('#grp-all,[id^=grp-]:not([id^=grp-btns])').forEach(b=>b.classList.remove('active'));
+  document.getElementById(g==='all'?'grp-all':'grp-'+g).classList.add('active');
+  renderRanking();
+}
+function setDetailGroup(g){
+  activeDetailGroup=g;
+  document.querySelectorAll('#dgrp-all,[id^=dgrp-]:not([id^=dgrp-btns])').forEach(b=>b.classList.remove('active'));
+  document.getElementById(g==='all'?'dgrp-all':'dgrp-'+g).classList.add('active');
+  renderDetail(computeStats());
+}
+
+// ── PARSE ─────────────────────────────────────────
+function parseCodes(txt) {
+  const upper = txt.toUpperCase();
+
+  // Format 1 — inline codes: MEX1, QAT13, ENG9
+  // Only use this if we find codes without colon-based structure
+  const hasCountryColon = /^\s*[A-Z]{2,4}[^:]*:/m.test(upper);
+
+  if (!hasCountryColon) {
+    return upper.match(/\b([A-Z]{2,4})(\d{1,2})\b/g) || [];
+  }
+
+  // Format 2 — "COUNTRY <emoji/text>: num, num, num" per line
+  const result = [];
+  const lines = upper.split('\n');
+  for (const line of lines) {
+    const countryMatch = line.match(/^\s*([A-Z]{2,4})/);
+    if (!countryMatch) continue;
+    const country = countryMatch[1];
+    const colonIdx = line.indexOf(':');
+    if (colonIdx === -1) continue;
+    const afterColon = line.slice(colonIdx + 1);
+    const nums = afterColon.match(/\d{1,2}/g);
+    if (!nums) continue;
+    nums.forEach(n => result.push(country + n));
+  }
+  return result;
+}
+
+// ── UPDATE ────────────────────────────────────────
+function updateStickers(action,person){
+  const input=document.getElementById('sticker-input').value;
+  const codes=parseCodes(input);
+  const msg=document.getElementById('update-msg');
+  if(!codes.length){msg.textContent='⚠️ Nenhum código reconhecido.';msg.className='msg err';return;}
+  let done=[],notFound=[];
+  codes.forEach(code=>{
+    if(action==='add'){stock[code]=(stock[code]||0)+1;done.push(code);}
+    else{
+      if(!stock[code]||stock[code]<=0){notFound.push(code);return;}
+      stock[code]--;if(stock[code]===0)delete stock[code];done.push(code);
+    }
+  });
+  if(done.length){
+    const entry={ts:new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),type:action,person:person||'—',codes:done,count:done.length};
+    history.unshift(entry);saveHistory();
+  }
+  saveStock();renderAll();
+  let t=action==='add'?`✅ ${done.length} adicionada(s): ${done.slice(0,6).join(', ')}${done.length>6?'…':''}`:`✅ ${done.length} removida(s)`;
+  if(notFound.length)t+=` · ⚠️ Não encontradas: ${notFound.join(', ')}`;
+  msg.textContent=t;msg.className='msg ok';
+  document.getElementById('sticker-input').value='';
+}
+
+// ── STATS ─────────────────────────────────────────
+function computeStats(){
+  const by={};
+  for(const[code,qty] of Object.entries(stock)){
+    const m=code.match(/^([A-Z]+)(\d+)$/);if(!m)continue;
+    const[,country,numStr]=m;const num=parseInt(numStr);
+    if(!by[country])by[country]={total:0,unique:0,repeated:0,shields:0,codes:{}};
+    by[country].total+=qty;by[country].unique++;by[country].repeated+=qty-1;
+    if(num===1)by[country].shields++;
+    by[country].codes[code]=qty;
+  }
+  return by;
+}
+
+// ── RENDER ALL ────────────────────────────────────
+function renderAll(){
+  const by=computeStats();
+  let total=0,unique=0,shields=0;
+  for(const d of Object.values(by)){total+=d.total;unique+=d.unique;shields+=d.shields;}
+  document.getElementById('bn-total').textContent=total.toLocaleString('pt-BR');
+  document.getElementById('bn-unique').textContent=unique.toLocaleString('pt-BR');
+  document.getElementById('bn-shields').textContent=shields.toLocaleString('pt-BR');
+  const top=Object.entries(by).sort((a,b)=>b[1].unique-a[1].unique)[0];
+  if(top){document.getElementById('bn-top').textContent=top[0];document.getElementById('bn-top-sub').textContent=`${top[1].unique} distintas  ${FLAGS[top[0]]||''}`;}
+  // date is loaded from JSONBin on init
+  renderChart(by);renderRanking(by);renderZeroed(by);renderDetail(by);renderHistory();
+}
+
+// ── CHART ─────────────────────────────────────────
+function renderChart(by){
+  const grpOrder=Object.keys(GROUPS);
+  const maxVal=Math.max(...grpOrder.map(g=>{
+    const cs=GROUPS[g];let t=0,u=0;
+    cs.forEach(c=>{if(by[c]){t+=by[c].total;u+=by[c].unique;}});
+    return t;
+  }),1);
+  const H=120;
+  document.getElementById('chart-bars').innerHTML=grpOrder.map(g=>{
+    const cs=GROUPS[g];let t=0,u=0;
+    cs.forEach(c=>{if(by[c]){t+=by[c].total;u+=by[c].unique;}});
+    const rep=t-u;
+    const hU=Math.round((u/maxVal)*H);const hR=Math.round((rep/maxVal)*H);
+    const label=g==='FWC'?'FWC':'Gr.'+g;
+    return `<div class="chart-bar-wrap" title="Grupo ${g}: ${u} únicas, ${rep} repetidas">
+      <div class="chart-bar-stack" style="height:${H}px">
+        ${rep>0?`<div class="bar-seg-rep" style="height:${hR}px"></div>`:''}
+        ${u>0?`<div class="bar-seg-unique" style="height:${hU}px"></div>`:''}
+      </div>
+      <div class="chart-label">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── RANKING ───────────────────────────────────────
+function setSort(s){
+  sortBy=s;
+  document.querySelectorAll('#sort-unique,#sort-total').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sort-'+s).classList.add('active');
+  renderRanking();
+}
+function renderRanking(by){
+  if(!by)by=computeStats();
+  const search=(document.getElementById('search')?.value||'').toUpperCase();
+  let rows=Object.entries(by).filter(([c])=>!search||c.includes(search));
+  if(activeGroup!=='all')rows=rows.filter(([c])=>COUNTRY_GROUP[c]===activeGroup);
+  rows.sort((a,b)=>sortBy==='unique'?b[1].unique-a[1].unique:b[1].total-a[1].total);
+  const maxU=rows[0]?.[1]?.unique||1;
+  const tbody=document.getElementById('ranking-body');
+  if(!rows.length){tbody.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:28px;color:var(--muted)">Nenhuma seleção encontrada.</td></tr>`;return;}
+  tbody.innerHTML=rows.map(([c,d],i)=>{
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    const pct=Math.round((d.unique/maxU)*100);
+    const grp=COUNTRY_GROUP[c]?`<span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.${COUNTRY_GROUP[c]}</span>`:'';
+    return `<tr>
+      <td class="right" style="color:var(--muted);font-size:12px">${medal||i+1}</td>
+      <td><span style="font-weight:600">${FLAGS[c]||'🏳️'} ${c}</span>${grp}</td>
+      <td class="right val-blue">${d.unique}</td>
+      <td class="right">${d.total}</td>
+      <td class="right val-rep">${d.repeated}</td>
+      <td class="right val-shield">${d.shields||'—'}</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:${pct}%"></div></div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── ZEROED ────────────────────────────────────────
+function renderZeroed(by){
+  const z=ALL_COUNTRIES.filter(c=>!by[c]||by[c].unique===0);
+  document.getElementById('zeroed-list').innerHTML=z.map(c=>`<span class="zeroed-chip">${FLAGS[c]||'🏳️'} ${c}</span>`).join('');
+}
+
+// ── DETAIL ────────────────────────────────────────
+function renderDetail(by){
+  let entries=Object.entries(by).sort((a,b)=>b[1].unique-a[1].unique);
+  if(activeDetailGroup!=='all')entries=entries.filter(([c])=>COUNTRY_GROUP[c]===activeDetailGroup);
+  document.getElementById('detail-grid').innerHTML=entries.map(([c,d])=>{
+    const chips=Object.entries(d.codes)
+      .sort((a,b)=>parseInt(a[0].match(/\d+/)[0])-parseInt(b[0].match(/\d+/)[0]))
+      .map(([code,qty])=>{
+        const cls=qty===1?'q1':qty===2?'q2':'qn';
+        return `<span class="chip ${cls}">${code}${qty>1?`<sup>×${qty}</sup>`:''}</span>`;
+      }).join('');
+    return `<div class="country-card">
+      <div class="country-card-header">
+        <h4>${FLAGS[c]||'🏳️'} ${c}</h4>
+        <span class="c-stats">${d.unique} dist. · ${d.total} total</span>
+      </div>
+      <div class="country-card-body">${chips}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── HISTORY ───────────────────────────────────────
+function renderHistory(){
+  const tbody=document.getElementById('hist-body');
+  if(!history.length){tbody.innerHTML=`<tr><td colspan="5" class="hist-empty">Nenhuma transação registrada ainda.</td></tr>`;return;}
+  tbody.innerHTML=history.map(h=>`<tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">${h.ts}</td>
+    <td><span class="hist-badge ${h.type==='add'?'in':'out'}">${h.type==='add'?'+ Entrou':'− Saiu'}</span></td>
+    <td class="hist-person">${h.person}</td>
+    <td class="hist-codes">${h.codes.slice(0,12).join(', ')}${h.codes.length>12?` +${h.codes.length-12} mais`:''}</td>
+    <td style="text-align:right;font-weight:600">${h.count}</td>
+  </tr>`).join('');
+}
+
+// ── TROCA ─────────────────────────────────────────
+let trocaHaveList=[];
+function consultarTroca(){
+  const codes=parseCodes(document.getElementById('troca-input').value);
+  if(!codes.length)return;
+  trocaHaveList=[];const have=[],nothave=[];
+  codes.forEach(code=>{const qty=stock[code]||0;if(qty>0){have.push({code,qty});trocaHaveList.push(code);}else nothave.push(code);});
+  document.getElementById('troca-count-have').textContent=`✅ ${have.length} disponíve${have.length!==1?'is':'l'}`;
+  document.getElementById('troca-count-no').textContent=`❌ ${nothave.length} indisponíve${nothave.length!==1?'is':'l'}`;
+  document.getElementById('troca-have').innerHTML=have.length?have.map(({code,qty})=>`<span class="troca-chip-have">${code}${qty>1?`<span class="qty">×${qty}</span>`:''}</span>`).join(''):`<span style="font-size:13px;color:var(--muted)">Nenhuma disponível</span>`;
+  document.getElementById('troca-nothave').innerHTML=nothave.length?nothave.map(c=>`<span class="troca-chip-no">${c}</span>`).join(''):`<span style="font-size:13px;color:var(--muted)">Todas disponíveis 🎉</span>`;
+  const res=document.getElementById('troca-result');res.style.display='block';res.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function limparTroca(){document.getElementById('troca-input').value='';document.getElementById('troca-result').style.display='none';trocaHaveList=[];}
+
+// ── MINHA LISTA ───────────────────────────────────
+function salvarMinhaLista(){
+  const val=document.getElementById('troca-input').value.trim();
+  if(!val){document.getElementById('minha-lista-info').textContent='⚠️ Campo vazio.';return;}
+  try{localStorage.setItem(SK_LISTA,val);const n=parseCodes(val).length;document.getElementById('minha-lista-info').textContent=`✅ Lista salva com ${n} figurinhas!`;}
+  catch{document.getElementById('minha-lista-info').textContent='❌ Erro ao salvar. Tente copiar a lista manualmente.';}
+}
+function carregarMinhaLista(){
+  try{const v=localStorage.getItem(SK_LISTA);
+    if(!v){document.getElementById('minha-lista-info').textContent='⚠️ Nenhuma lista salva.';return;}
+    document.getElementById('troca-input').value=v;
+    const n=parseCodes(v).length;
+    document.getElementById('minha-lista-info').textContent=`📋 Lista carregada com ${n} figurinhas. Clique em Consultar!`;
+  }catch{document.getElementById('minha-lista-info').textContent='❌ Erro ao carregar.';}
+}
+function limparMinhaLista(){
+  try{localStorage.removeItem(SK_LISTA);document.getElementById('minha-lista-info').textContent='🗑 Lista apagada.';}catch{}
+}
+
+function copiarResultado(){
+  if(!trocaHaveList.length)return;
+  const txt='Fala Lucas, beleza? Segue a relação das figurinhas que preciso de ti:\n\n'+trocaHaveList.join(', ')+'\n\n— Desenvolvido por Lucas Nascimento | Data Analyst Professional';
+  navigator.clipboard.writeText(txt).then(()=>{const b=document.querySelector('.copy-btn');const o=b.textContent;b.textContent='✅ Copiado!';setTimeout(()=>b.textContent=o,2000);}).catch(()=>prompt('Copie a lista:',txt));
+}
+
+// ── PASSWORD ──────────────────────────────────────
+const PWD='6010';let pwdBuffer='',pwdAction=null;
+function pedirSenha(action){pwdAction=action;pwdBuffer='';atualizarDots();document.getElementById('pwd-overlay').classList.add('active');}
+function pedirSenhaHist(){pwdAction='clearHist';pwdBuffer='';atualizarDots();document.getElementById('pwd-overlay').classList.add('active');}
+function fecharSenha(){document.getElementById('pwd-overlay').classList.remove('active');pwdBuffer='';pwdAction=null;atualizarDots();}
+function pwdKey(k){
+  if(k==='del')pwdBuffer=pwdBuffer.slice(0,-1);
+  else if(k==='clr')pwdBuffer='';
+  else if(pwdBuffer.length<4)pwdBuffer+=k;
+  atualizarDots();if(pwdBuffer.length===4)setTimeout(verificarSenha,120);
+}
+function atualizarDots(state){
+  for(let i=0;i<4;i++){const d=document.getElementById('d'+i);d.className='pwd-dot';if(state==='error')d.classList.add('error');else if(i<pwdBuffer.length)d.classList.add('filled');}
+}
+function verificarSenha(){
+  if(pwdBuffer===PWD){
+    const action=pwdAction;fecharSenha();
+    if(action==='clearHist'){history=[];saveHistory();renderHistory();}
+    else{const person=document.getElementById('hist-person').value.trim()||'—';updateStickers(action,person);}
+  }else{
+    atualizarDots('error');document.getElementById('pwd-modal').classList.add('pwd-shake');
+    setTimeout(()=>{document.getElementById('pwd-modal').classList.remove('pwd-shake');pwdBuffer='';atualizarDots();document.getElementById('update-msg').textContent='⚠️ Senha incorreta.';document.getElementById('update-msg').className='msg err';fecharSenha();},400);
+  }
+}
+
+loadTheme();loadStock();
+</script>
+</body>
+</html>
