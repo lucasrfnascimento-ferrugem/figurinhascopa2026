@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<!-- saved from url=(0069)file:///C:/Users/lucas.nascimento/Downloads/copa2026_dashboard_2.html -->
-<html lang="pt-BR" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- saved from url=(0069)file:///C:/Users/lucas.nascimento/Downloads/copa2026_dashboard_3.html -->
+<html lang="pt-BR" data-theme="dark"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#00338D">
-<title>Copa 2026 — Figurinhas | Lucas Nascimento</title>
+<title>Acervo de Lucas Nascimento — Figurinhas Copa do Mundo 2026</title>
 <link rel="manifest" href="data:application/json,{}">
 <link href="./index_files/css2" rel="stylesheet">
 <style>
@@ -43,6 +43,14 @@ header { background:linear-gradient(135deg,var(--copa-blue) 0%,#001f6b 60%,#0012
 /* Dark toggle */
 .theme-btn { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius:20px; padding:6px 14px; color:#fff; font-size:12px; font-family:'Barlow',sans-serif; font-weight:600; cursor:pointer; transition:all .2s; white-space:nowrap; }
 .theme-btn:hover { background:rgba(255,255,255,.2); }
+
+/* ── NAV TABS ─────────────────────────────────────── */
+.nav-tabs { background:linear-gradient(135deg,var(--copa-blue) 0%,#001f6b 100%); display:flex; justify-content:center; gap:0; border-bottom:3px solid var(--copa-gold); }
+.nav-tab { padding:13px 40px; font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:rgba(255,255,255,.55); cursor:pointer; border:none; background:transparent; transition:all .2s; border-bottom:3px solid transparent; margin-bottom:-3px; }
+.nav-tab:hover { color:rgba(255,255,255,.85); }
+.nav-tab.active { color:#fff; border-bottom:3px solid var(--copa-gold); }
+.page { display:none; }
+.page.active { display:block; }
 
 /* ── MAIN ────────────────────────────────────────── */
 main { max-width:1200px; margin:0 auto; padding:28px 28px 16px; }
@@ -270,592 +278,101 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <div class="header-left">
       <div class="header-trophy">🏆</div>
       <div class="header-title">
-        <h1>Copa 2026 — Figurinhas</h1>
-        <p>Controle de repetidas para venda &amp; troca · Panini Official</p>
+        <h1>Acervo de Lucas Nascimento — Figurinhas Copa do Mundo 2026</h1>
+        <p>Controle de Figurinhas para Vendas e Trocas · Seja bem vindo ao meu acervo!</p>
       </div>
     </div>
     <div class="header-right">
-      <div class="last-update">Atualizado: <strong id="last-update-date">Nunca</strong></div>
-      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
+      <div class="last-update">Atualizado: <strong id="last-update-date">28/05/2026 17:18</strong></div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">☀️ Light</button>
     </div>
   </div>
 </header>
 
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="setPage(&#39;consulta&#39;)" id="tab-consulta">🎴 Consulta de Figurinhas</button>
+  <button class="nav-tab" onclick="setPage(&#39;acervo&#39;)" id="tab-acervo">⚙️ Atualização de Acervo</button>
+</nav>
+
 <main>
 
-  <!-- BIG NUMBERS -->
-  <div class="bignums">
-    <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">351</div><div class="bignum-sub">repetidas no estoque</div></div>
-    <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">197</div><div class="bignum-sub">códigos únicos</div></div>
-    <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">3</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
-    <div class="bignum green-c"><div class="bignum-icon">🥇</div><div class="bignum-label">Maior acervo</div><div class="bignum-value" id="bn-top">SEN</div><div class="bignum-sub" id="bn-top-sub">11 distintas  🇸🇳</div></div>
-  </div>
+  <!-- ═══ PÁGINA 1: CONSULTA ═══ -->
+  <div class="page active" id="page-consulta">
 
-  <!-- CHART -->
-  <div class="section-label">Distribuição por grupo</div>
-  <div class="chart-panel">
-    <div class="chart-inner">
-      <div class="chart-bars" id="chart-bars"><div class="chart-bar-wrap" title="Grupo A: 21 únicas, 28 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:69px"></div>
-        <div class="bar-seg-unique" style="height:51px"></div>
-      </div>
-      <div class="chart-label">Gr.A</div>
-    </div><div class="chart-bar-wrap" title="Grupo B: 21 únicas, 25 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:61px"></div>
-        <div class="bar-seg-unique" style="height:51px"></div>
-      </div>
-      <div class="chart-label">Gr.B</div>
-    </div><div class="chart-bar-wrap" title="Grupo C: 11 únicas, 5 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:12px"></div>
-        <div class="bar-seg-unique" style="height:27px"></div>
-      </div>
-      <div class="chart-label">Gr.C</div>
-    </div><div class="chart-bar-wrap" title="Grupo D: 5 únicas, 7 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:17px"></div>
-        <div class="bar-seg-unique" style="height:12px"></div>
-      </div>
-      <div class="chart-label">Gr.D</div>
-    </div><div class="chart-bar-wrap" title="Grupo E: 13 únicas, 10 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:24px"></div>
-        <div class="bar-seg-unique" style="height:32px"></div>
-      </div>
-      <div class="chart-label">Gr.E</div>
-    </div><div class="chart-bar-wrap" title="Grupo F: 19 únicas, 19 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:47px"></div>
-        <div class="bar-seg-unique" style="height:47px"></div>
-      </div>
-      <div class="chart-label">Gr.F</div>
-    </div><div class="chart-bar-wrap" title="Grupo G: 13 únicas, 8 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:20px"></div>
-        <div class="bar-seg-unique" style="height:32px"></div>
-      </div>
-      <div class="chart-label">Gr.G</div>
-    </div><div class="chart-bar-wrap" title="Grupo H: 25 únicas, 13 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:32px"></div>
-        <div class="bar-seg-unique" style="height:61px"></div>
-      </div>
-      <div class="chart-label">Gr.H</div>
-    </div><div class="chart-bar-wrap" title="Grupo I: 24 únicas, 15 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:37px"></div>
-        <div class="bar-seg-unique" style="height:59px"></div>
-      </div>
-      <div class="chart-label">Gr.I</div>
-    </div><div class="chart-bar-wrap" title="Grupo J: 10 únicas, 5 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:12px"></div>
-        <div class="bar-seg-unique" style="height:24px"></div>
-      </div>
-      <div class="chart-label">Gr.J</div>
-    </div><div class="chart-bar-wrap" title="Grupo K: 15 únicas, 16 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:39px"></div>
-        <div class="bar-seg-unique" style="height:37px"></div>
-      </div>
-      <div class="chart-label">Gr.K</div>
-    </div><div class="chart-bar-wrap" title="Grupo L: 20 únicas, 3 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        <div class="bar-seg-rep" style="height:7px"></div>
-        <div class="bar-seg-unique" style="height:49px"></div>
-      </div>
-      <div class="chart-label">Gr.L</div>
-    </div><div class="chart-bar-wrap" title="Grupo FWC: 0 únicas, 0 repetidas">
-      <div class="chart-bar-stack" style="height:120px">
-        
-        
-      </div>
-      <div class="chart-label">FWC</div>
-    </div></div>
+    <!-- BIG NUMBERS -->
+    <div class="bignums">
+      <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">361</div><div class="bignum-sub">repetidas no estoque</div></div>
+      <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">210</div><div class="bignum-sub">códigos únicos</div></div>
+      <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">3</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
+      <div class="bignum green-c"><div class="bignum-icon">🥇</div><div class="bignum-label">Maior acervo</div><div class="bignum-value" id="bn-top">SEN</div><div class="bignum-sub" id="bn-top-sub">10 distintas  🇸🇳</div></div>
     </div>
-    <div class="chart-legend">
-      <span><span class="leg-dot" style="background:var(--copa-blue)"></span>Únicas</span>
-      <span><span class="leg-dot" style="background:var(--copa-red);opacity:.75"></span>Repetidas</span>
-    </div>
-  </div>
 
-  <!-- ATUALIZAR ESTOQUE -->
-  <div class="section-label">Atualizar estoque</div>
-  <div class="panel blue-top">
-    <div class="panel-title">Gerenciar acervo</div>
-    <div class="input-row">
-      <input type="text" id="hist-person" class="hist-person-input" placeholder="Nome (ex: João)">
-      <textarea id="sticker-input" placeholder="Códigos — ex: MEX1, CAN5, BIH13, QAT9 (vírgula, espaço ou linha)" style="flex:1;min-width:200px;min-height:48px;"></textarea>
-      <div class="btn-col">
-        <button class="btn btn-add" onclick="pedirSenha(&#39;add&#39;)">+ Entrou</button>
-        <button class="btn btn-remove" onclick="pedirSenha(&#39;remove&#39;)">− Saiu</button>
-      </div>
-    </div>
-    <div class="msg" id="update-msg"></div>
-    <div id="save-status" style="font-size:12px;margin-top:4px;font-weight:500;min-height:16px;"></div>
-  </div>
-
-  <!-- HISTÓRICO -->
-  <div class="section-label">Histórico de transações</div>
-  <div class="panel blue-top">
-    <div class="panel-title">Registro de entradas e saídas</div>
-    <div class="hist-table-wrap">
-      <table class="hist-table">
-        <thead><tr>
-          <th>Data/Hora</th><th>Tipo</th><th>Pessoa</th><th>Figurinhas</th><th class="right" style="text-align:right">Qtd</th>
-        </tr></thead>
-        <tbody id="hist-body"><tr><td colspan="5" class="hist-empty">Nenhuma transação registrada ainda.</td></tr></tbody>
-      </table>
-    </div>
-    <div style="margin-top:10px;display:flex;justify-content:flex-end;">
-      <button class="btn btn-secondary" style="font-size:12px;padding:7px 14px;" onclick="pedirSenhaHist()">🗑 Limpar histórico</button>
-    </div>
-  </div>
-
-  <!-- RANKING -->
-  <div class="section-label">Ranking por seleção</div>
-  <div class="filter-row">
-    <input class="search-input" id="search" placeholder="🔍  Buscar seleção…" oninput="renderRanking()">
-    <button class="filter-btn active" id="sort-unique" onclick="setSort(&#39;unique&#39;)">Mais distintas</button>
-    <button class="filter-btn" id="sort-total" onclick="setSort(&#39;total&#39;)">Mais total</button>
-    <span style="font-size:11px;color:var(--muted);margin-left:4px">Grupo:</span>
-    <button class="filter-btn group-btn active" id="grp-all" onclick="setGroup(&#39;all&#39;)">Todos</button>
-    <div id="grp-btns" style="display:flex;gap:6px;flex-wrap:wrap;"><button class="filter-btn group-btn" id="grp-A" onclick="setGroup(&#39;A&#39;)">Gr. A</button><button class="filter-btn group-btn" id="grp-B" onclick="setGroup(&#39;B&#39;)">Gr. B</button><button class="filter-btn group-btn" id="grp-C" onclick="setGroup(&#39;C&#39;)">Gr. C</button><button class="filter-btn group-btn" id="grp-D" onclick="setGroup(&#39;D&#39;)">Gr. D</button><button class="filter-btn group-btn" id="grp-E" onclick="setGroup(&#39;E&#39;)">Gr. E</button><button class="filter-btn group-btn" id="grp-F" onclick="setGroup(&#39;F&#39;)">Gr. F</button><button class="filter-btn group-btn" id="grp-G" onclick="setGroup(&#39;G&#39;)">Gr. G</button><button class="filter-btn group-btn" id="grp-H" onclick="setGroup(&#39;H&#39;)">Gr. H</button><button class="filter-btn group-btn" id="grp-I" onclick="setGroup(&#39;I&#39;)">Gr. I</button><button class="filter-btn group-btn" id="grp-J" onclick="setGroup(&#39;J&#39;)">Gr. J</button><button class="filter-btn group-btn" id="grp-K" onclick="setGroup(&#39;K&#39;)">Gr. K</button><button class="filter-btn group-btn" id="grp-L" onclick="setGroup(&#39;L&#39;)">Gr. L</button><button class="filter-btn group-btn" id="grp-FWC" onclick="setGroup(&#39;FWC&#39;)">⭐ FWC</button></div>
-  </div>
-  <div class="ranking-wrap">
-    <table>
-      <thead><tr>
-        <th class="right" style="width:36px">#</th>
-        <th>Seleção</th>
-        <th class="right">Distintas</th>
-        <th class="right">Total</th>
-        <th class="right">Repetidas</th>
-        <th class="right">Escudos</th>
-        <th style="width:100px"></th>
-      </tr></thead>
-      <tbody id="ranking-body"><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">🥇</td>
-      <td><span style="font-weight:600">🇸🇳 SEN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
-      <td class="right val-blue">11</td>
-      <td class="right">17</td>
-      <td class="right val-rep">6</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">🥈</td>
-      <td><span style="font-weight:600">🇺🇾 URU</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
-      <td class="right val-blue">10</td>
-      <td class="right">15</td>
-      <td class="right val-rep">5</td>
-      <td class="right val-shield">1</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:91%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">🥉</td>
-      <td><span style="font-weight:600">🇶🇦 QAT</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
-      <td class="right val-blue">9</td>
-      <td class="right">21</td>
-      <td class="right val-rep">12</td>
-      <td class="right val-shield">1</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:82%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">4</td>
-      <td><span style="font-weight:600">🇯🇵 JPN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
-      <td class="right val-blue">8</td>
-      <td class="right">9</td>
-      <td class="right val-rep">1</td>
-      <td class="right val-shield">1</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:73%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">5</td>
-      <td><span style="font-weight:600">🇨🇴 COL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
-      <td class="right val-blue">8</td>
-      <td class="right">17</td>
-      <td class="right val-rep">9</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:73%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">6</td>
-      <td><span style="font-weight:600">🇧🇪 BEL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
-      <td class="right val-blue">7</td>
-      <td class="right">13</td>
-      <td class="right val-rep">6</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:64%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">7</td>
-      <td><span style="font-weight:600">🇿🇦 RSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
-      <td class="right val-blue">7</td>
-      <td class="right">20</td>
-      <td class="right val-rep">13</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:64%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">8</td>
-      <td><span style="font-weight:600">🇳🇴 NOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
-      <td class="right val-blue">7</td>
-      <td class="right">11</td>
-      <td class="right val-rep">4</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:64%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">9</td>
-      <td><span style="font-weight:600">🇹🇳 TUN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
-      <td class="right val-blue">7</td>
-      <td class="right">20</td>
-      <td class="right val-rep">13</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:64%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">10</td>
-      <td><span style="font-weight:600">🇲🇽 MEX</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">15</td>
-      <td class="right val-rep">9</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">11</td>
-      <td><span style="font-weight:600">🇭🇷 CRO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">9</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">12</td>
-      <td><span style="font-weight:600">🇨🇻 CPV</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">8</td>
-      <td class="right val-rep">2</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">13</td>
-      <td><span style="font-weight:600">🇺🇿 UZB</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">13</td>
-      <td class="right val-rep">7</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">14</td>
-      <td><span style="font-weight:600">🇬🇭 GHA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">6</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">15</td>
-      <td><span style="font-weight:600">🇰🇷 KOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">12</td>
-      <td class="right val-rep">6</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">16</td>
-      <td><span style="font-weight:600">🇦🇹 AUT</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">9</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">17</td>
-      <td><span style="font-weight:600">🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">7</td>
-      <td class="right val-rep">1</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:55%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">18</td>
-      <td><span style="font-weight:600">🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
-      <td class="right val-blue">5</td>
-      <td class="right">5</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:45%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">19</td>
-      <td><span style="font-weight:600">🇨🇦 CAN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
-      <td class="right val-blue">5</td>
-      <td class="right">8</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:45%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">20</td>
-      <td><span style="font-weight:600">🇸🇦 KSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
-      <td class="right val-blue">5</td>
-      <td class="right">11</td>
-      <td class="right val-rep">6</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:45%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">21</td>
-      <td><span style="font-weight:600">🇪🇸 ESP</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
-      <td class="right val-blue">4</td>
-      <td class="right">4</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:36%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">22</td>
-      <td><span style="font-weight:600">🇳🇱 NED</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
-      <td class="right val-blue">4</td>
-      <td class="right">9</td>
-      <td class="right val-rep">5</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:36%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">23</td>
-      <td><span style="font-weight:600">🇨🇼 CUW</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
-      <td class="right val-blue">4</td>
-      <td class="right">4</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:36%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">24</td>
-      <td><span style="font-weight:600">🇧🇦 BIH</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
-      <td class="right val-blue">4</td>
-      <td class="right">8</td>
-      <td class="right val-rep">4</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:36%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">25</td>
-      <td><span style="font-weight:600">🇪🇨 ECU</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
-      <td class="right val-blue">4</td>
-      <td class="right">7</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:36%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">26</td>
-      <td><span style="font-weight:600">🇫🇷 FRA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">6</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">27</td>
-      <td><span style="font-weight:600">🇲🇦 MAR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">6</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">28</td>
-      <td><span style="font-weight:600">🇮🇶 IRQ</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">5</td>
-      <td class="right val-rep">2</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">29</td>
-      <td><span style="font-weight:600">🇦🇺 AUS</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">7</td>
-      <td class="right val-rep">4</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">30</td>
-      <td><span style="font-weight:600">🇨🇮 CIV</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">5</td>
-      <td class="right val-rep">2</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">31</td>
-      <td><span style="font-weight:600">🇨🇭 SUI</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">9</td>
-      <td class="right val-rep">6</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">32</td>
-      <td><span style="font-weight:600">🇵🇦 PAN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">3</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:27%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">33</td>
-      <td><span style="font-weight:600">🇩🇪 GER</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">7</td>
-      <td class="right val-rep">5</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">34</td>
-      <td><span style="font-weight:600">🇦🇷 ARG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">4</td>
-      <td class="right val-rep">2</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">35</td>
-      <td><span style="font-weight:600">🇪🇬 EGY</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">2</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">36</td>
-      <td><span style="font-weight:600">🇭🇹 HAI</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">3</td>
-      <td class="right val-rep">1</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">37</td>
-      <td><span style="font-weight:600">🇮🇷 IRN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">3</td>
-      <td class="right val-rep">1</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">38</td>
-      <td><span style="font-weight:600">🇯🇴 JOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">2</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">39</td>
-      <td><span style="font-weight:600">🇨🇿 CZE</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">2</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">40</td>
-      <td><span style="font-weight:600">🇹🇷 TUR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">5</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">41</td>
-      <td><span style="font-weight:600">🇳🇿 NZL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
-      <td class="right val-blue">2</td>
-      <td class="right">3</td>
-      <td class="right val-rep">1</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:18%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">42</td>
-      <td><span style="font-weight:600">🇨🇩 COD</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
-      <td class="right val-blue">1</td>
-      <td class="right">1</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:9%"></div></div></td>
-    </tr></tbody>
-    </table>
-  </div>
-
-  <!-- ZERADAS -->
-  <div class="section-label">Seleções zeradas</div>
-  <div class="panel">
-    <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Seleções sem nenhuma figurinha no estoque:</p>
-    <div class="zeroed-chips" id="zeroed-list"><span class="zeroed-chip">🇧🇷 BRA</span><span class="zeroed-chip">🌟 FWC</span><span class="zeroed-chip">🇵🇾 PAR</span><span class="zeroed-chip">🇵🇹 POR</span><span class="zeroed-chip">🇸🇪 SWE</span><span class="zeroed-chip">🇺🇸 USA</span></div>
-  </div>
-
-  <!-- CONSULTA TROCAS -->
-  <div class="section-label">Consulta de trocas</div>
-  <div class="panel gold-top">
-    <div class="panel-title">O que você precisa?</div>
-    <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Cole aqui a lista de figurinhas que você <strong>está buscando</strong>. O sistema verifica o que o Lucas tem disponível.</p>
-    <div class="input-row">
-      <textarea id="troca-input" class="gold-focus" placeholder="Cole os códigos que você está buscando — ex: MEX1, QAT13, SEN7…" style="flex:1;min-width:220px;min-height:72px;"></textarea>
-      <div class="btn-col">
-        <button class="btn btn-gold" onclick="consultarTroca()">🔍 Consultar</button>
-        <button class="btn btn-secondary" onclick="limparTroca()">Limpar</button>
-      </div>
-    </div>
-    <!-- Minha lista salva -->
-    <div class="minha-lista-save">
-      <span style="font-size:12px;color:var(--muted);font-weight:600">💾 Minha lista:</span>
-      <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="salvarMinhaLista()">Salvar lista</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="carregarMinhaLista()">Carregar lista salva</button>
-      <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="limparMinhaLista()">Apagar lista</button>
-    </div>
-    <div class="minha-lista-info" id="minha-lista-info"></div>
-
-    <div class="troca-result" id="troca-result">
-      <div class="troca-result-header">
-        <span class="troca-result-title">Resultado</span>
-        <div class="troca-summary">
-          <span class="troca-badge have" id="troca-count-have">✅ 0 disponíveis</span>
-          <span class="troca-badge nothave" id="troca-count-no">❌ 0 indisponíveis</span>
-          <button class="copy-btn" onclick="copiarResultado()">📋 Copiar disponíveis</button>
+    <!-- CONSULTA TROCAS -->
+    <div class="section-label">Consulta de trocas</div>
+    <div class="panel gold-top">
+      <div class="panel-title">O que você precisa?</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;line-height:1.6">Cole aqui a lista de figurinhas que você <strong>está buscando</strong>. O sistema verifica o que o Lucas tem disponível.</p>
+      <div class="input-row">
+        <textarea id="troca-input" class="gold-focus" placeholder="Cole os códigos que você está buscando — ex: MEX1, QAT13, SEN7…" style="flex:1;min-width:220px;min-height:72px;"></textarea>
+        <div class="btn-col">
+          <button class="btn btn-gold" onclick="consultarTroca()">🔍 Consultar</button>
+          <button class="btn btn-secondary" onclick="limparTroca()">Limpar</button>
         </div>
       </div>
-      <div class="troca-mini-label">🟢 Tenho para troca</div>
-      <div class="troca-list" id="troca-have"></div>
-      <div class="troca-mini-label" style="margin-top:14px">🔴 Não tenho</div>
-      <div class="troca-list" id="troca-nothave"></div>
+      <div class="minha-lista-save">
+        <span style="font-size:12px;color:var(--muted);font-weight:600">💾 Minha lista:</span>
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="salvarMinhaLista()">Salvar lista</button>
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="carregarMinhaLista()">Carregar lista salva</button>
+        <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;" onclick="limparMinhaLista()">Apagar lista</button>
+      </div>
+      <div class="minha-lista-info" id="minha-lista-info"></div>
+      <div class="troca-result" id="troca-result">
+        <div class="troca-result-header">
+          <span class="troca-result-title">Resultado</span>
+          <div class="troca-summary">
+            <span class="troca-badge have" id="troca-count-have">✅ 0 disponíveis</span>
+            <span class="troca-badge nothave" id="troca-count-no">❌ 0 indisponíveis</span>
+            <button class="copy-btn" onclick="copiarResultado()">📋 Copiar disponíveis</button>
+          </div>
+        </div>
+        <div class="troca-mini-label">🟢 Tenho para troca</div>
+        <div class="troca-list" id="troca-have"></div>
+        <div class="troca-mini-label" style="margin-top:14px">🔴 Não tenho</div>
+        <div class="troca-list" id="troca-nothave"></div>
+      </div>
     </div>
-  </div>
 
-  <!-- ACERVO DETALHADO -->
-  <div class="section-label">Acervo detalhado</div>
-  <div class="filter-row" style="margin-bottom:12px">
-    <span style="font-size:11px;color:var(--muted);font-weight:600">Filtrar por grupo:</span>
-    <button class="filter-btn group-btn active" id="dgrp-all" onclick="setDetailGroup(&#39;all&#39;)">Todos</button>
-    <div id="dgrp-btns" style="display:flex;gap:6px;flex-wrap:wrap;"><button class="filter-btn group-btn" id="dgrp-A" onclick="setDetailGroup(&#39;A&#39;)">Gr. A</button><button class="filter-btn group-btn" id="dgrp-B" onclick="setDetailGroup(&#39;B&#39;)">Gr. B</button><button class="filter-btn group-btn" id="dgrp-C" onclick="setDetailGroup(&#39;C&#39;)">Gr. C</button><button class="filter-btn group-btn" id="dgrp-D" onclick="setDetailGroup(&#39;D&#39;)">Gr. D</button><button class="filter-btn group-btn" id="dgrp-E" onclick="setDetailGroup(&#39;E&#39;)">Gr. E</button><button class="filter-btn group-btn" id="dgrp-F" onclick="setDetailGroup(&#39;F&#39;)">Gr. F</button><button class="filter-btn group-btn" id="dgrp-G" onclick="setDetailGroup(&#39;G&#39;)">Gr. G</button><button class="filter-btn group-btn" id="dgrp-H" onclick="setDetailGroup(&#39;H&#39;)">Gr. H</button><button class="filter-btn group-btn" id="dgrp-I" onclick="setDetailGroup(&#39;I&#39;)">Gr. I</button><button class="filter-btn group-btn" id="dgrp-J" onclick="setDetailGroup(&#39;J&#39;)">Gr. J</button><button class="filter-btn group-btn" id="dgrp-K" onclick="setDetailGroup(&#39;K&#39;)">Gr. K</button><button class="filter-btn group-btn" id="dgrp-L" onclick="setDetailGroup(&#39;L&#39;)">Gr. L</button><button class="filter-btn group-btn" id="dgrp-FWC" onclick="setDetailGroup(&#39;FWC&#39;)">⭐ FWC</button></div>
-  </div>
-  <div id="detail-grid"><div class="country-card">
+    <!-- ACERVO DETALHADO -->
+    <div class="section-label">Acervo detalhado</div>
+    <div class="filter-row" style="margin-bottom:12px">
+      <span style="font-size:11px;color:var(--muted);font-weight:600">Filtrar por grupo:</span>
+      <button class="filter-btn group-btn active" id="dgrp-all" onclick="setDetailGroup(&#39;all&#39;)">Todos</button>
+      <div id="dgrp-btns" style="display:flex;gap:6px;flex-wrap:wrap;"><button class="filter-btn group-btn" id="dgrp-A" onclick="setDetailGroup(&#39;A&#39;)">Gr. A</button><button class="filter-btn group-btn" id="dgrp-B" onclick="setDetailGroup(&#39;B&#39;)">Gr. B</button><button class="filter-btn group-btn" id="dgrp-C" onclick="setDetailGroup(&#39;C&#39;)">Gr. C</button><button class="filter-btn group-btn" id="dgrp-D" onclick="setDetailGroup(&#39;D&#39;)">Gr. D</button><button class="filter-btn group-btn" id="dgrp-E" onclick="setDetailGroup(&#39;E&#39;)">Gr. E</button><button class="filter-btn group-btn" id="dgrp-F" onclick="setDetailGroup(&#39;F&#39;)">Gr. F</button><button class="filter-btn group-btn" id="dgrp-G" onclick="setDetailGroup(&#39;G&#39;)">Gr. G</button><button class="filter-btn group-btn" id="dgrp-H" onclick="setDetailGroup(&#39;H&#39;)">Gr. H</button><button class="filter-btn group-btn" id="dgrp-I" onclick="setDetailGroup(&#39;I&#39;)">Gr. I</button><button class="filter-btn group-btn" id="dgrp-J" onclick="setDetailGroup(&#39;J&#39;)">Gr. J</button><button class="filter-btn group-btn" id="dgrp-K" onclick="setDetailGroup(&#39;K&#39;)">Gr. K</button><button class="filter-btn group-btn" id="dgrp-L" onclick="setDetailGroup(&#39;L&#39;)">Gr. L</button><button class="filter-btn group-btn" id="dgrp-FWC" onclick="setDetailGroup(&#39;FWC&#39;)">⭐ FWC</button></div>
+    </div>
+    <div id="detail-grid"><div class="country-card">
       <div class="country-card-header">
         <h4>🇸🇳 SEN</h4>
-        <span class="c-stats">11 dist. · 17 total</span>
+        <span class="c-stats">10 dist. · 16 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1">SEN2</span><span class="chip q1">SEN5</span><span class="chip q1">SEN6</span><span class="chip q2">SEN7<sup>×2</sup></span><span class="chip qn">SEN8<sup>×3</sup></span><span class="chip qn">SEN9<sup>×3</sup></span><span class="chip q1">SEN12</span><span class="chip q1">SEN14</span><span class="chip q1">SEN15</span><span class="chip q1">SEN17</span><span class="chip q2">SEN19<sup>×2</sup></span></div>
+      <div class="country-card-body"><span class="chip q1">SEN2</span><span class="chip q1">SEN5</span><span class="chip q1">SEN6</span><span class="chip q2">SEN7<sup>×2</sup></span><span class="chip qn">SEN8<sup>×3</sup></span><span class="chip qn">SEN9<sup>×3</sup></span><span class="chip q1">SEN12</span><span class="chip q1">SEN15</span><span class="chip q1">SEN17</span><span class="chip q2">SEN19<sup>×2</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇺🇾 URU</h4>
-        <span class="c-stats">10 dist. · 15 total</span>
+        <span class="c-stats">9 dist. · 14 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1">URU1</span><span class="chip q1">URU9</span><span class="chip q2">URU10<sup>×2</sup></span><span class="chip qn">URU12<sup>×3</sup></span><span class="chip q1">URU14</span><span class="chip q1">URU15</span><span class="chip q1">URU16</span><span class="chip q1">URU17</span><span class="chip q1">URU18</span><span class="chip qn">URU20<sup>×3</sup></span></div>
+      <div class="country-card-body"><span class="chip q1">URU9</span><span class="chip q2">URU10<sup>×2</sup></span><span class="chip qn">URU12<sup>×3</sup></span><span class="chip q1">URU14</span><span class="chip q1">URU15</span><span class="chip q1">URU16</span><span class="chip q1">URU17</span><span class="chip q1">URU18</span><span class="chip qn">URU20<sup>×3</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇶🇦 QAT</h4>
-        <span class="c-stats">9 dist. · 21 total</span>
+        <span class="c-stats">8 dist. · 20 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1">QAT1</span><span class="chip q2">QAT7<sup>×2</sup></span><span class="chip qn">QAT8<sup>×4</sup></span><span class="chip qn">QAT11<sup>×5</sup></span><span class="chip q1">QAT12</span><span class="chip qn">QAT13<sup>×3</sup></span><span class="chip qn">QAT14<sup>×3</sup></span><span class="chip q1">QAT15</span><span class="chip q1">QAT16</span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4>🇯🇵 JPN</h4>
-        <span class="c-stats">8 dist. · 9 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1">JPN1</span><span class="chip q1">JPN7</span><span class="chip q2">JPN8<sup>×2</sup></span><span class="chip q1">JPN10</span><span class="chip q1">JPN11</span><span class="chip q1">JPN12</span><span class="chip q1">JPN15</span><span class="chip q1">JPN16</span></div>
+      <div class="country-card-body"><span class="chip q2">QAT7<sup>×2</sup></span><span class="chip qn">QAT8<sup>×4</sup></span><span class="chip qn">QAT11<sup>×5</sup></span><span class="chip q1">QAT12</span><span class="chip qn">QAT13<sup>×3</sup></span><span class="chip qn">QAT14<sup>×3</sup></span><span class="chip q1">QAT15</span><span class="chip q1">QAT16</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇨🇴 COL</h4>
-        <span class="c-stats">8 dist. · 17 total</span>
+        <span class="c-stats">8 dist. · 16 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1">COL2</span><span class="chip q1">COL7</span><span class="chip qn">COL8<sup>×4</sup></span><span class="chip q2">COL9<sup>×2</sup></span><span class="chip qn">COL10<sup>×3</sup></span><span class="chip qn">COL11<sup>×3</sup></span><span class="chip q1">COL14</span><span class="chip q2">COL15<sup>×2</sup></span></div>
+      <div class="country-card-body"><span class="chip q1">COL2</span><span class="chip q1">COL7</span><span class="chip qn">COL8<sup>×4</sup></span><span class="chip q2">COL9<sup>×2</sup></span><span class="chip qn">COL10<sup>×3</sup></span><span class="chip q2">COL11<sup>×2</sup></span><span class="chip q1">COL14</span><span class="chip q2">COL15<sup>×2</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇧🇪 BEL</h4>
@@ -888,16 +405,16 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q1">MEX4</span><span class="chip q1">MEX9</span><span class="chip q1">MEX10</span><span class="chip qn">MEX11<sup>×3</sup></span><span class="chip qn">MEX13<sup>×6</sup></span><span class="chip qn">MEX15<sup>×3</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
+        <h4>🇯🇵 JPN</h4>
+        <span class="c-stats">6 dist. · 6 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">JPN1</span><span class="chip q1">JPN7</span><span class="chip q1">JPN8</span><span class="chip q1">JPN10</span><span class="chip q1">JPN11</span><span class="chip q1">JPN15</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
         <h4>🇭🇷 CRO</h4>
         <span class="c-stats">6 dist. · 9 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1">CRO2</span><span class="chip q1">CRO5</span><span class="chip q1">CRO6</span><span class="chip qn">CRO7<sup>×3</sup></span><span class="chip q2">CRO8<sup>×2</sup></span><span class="chip q1">CRO12</span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4>🇨🇻 CPV</h4>
-        <span class="c-stats">6 dist. · 8 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip qn">CPV3<sup>×3</sup></span><span class="chip q1">CPV6</span><span class="chip q1">CPV7</span><span class="chip q1">CPV9</span><span class="chip q1">CPV11</span><span class="chip q1">CPV15</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇺🇿 UZB</h4>
@@ -930,16 +447,22 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q1">SCO2</span><span class="chip q2">SCO3<sup>×2</sup></span><span class="chip q1">SCO5</span><span class="chip q1">SCO6</span><span class="chip q1">SCO10</span><span class="chip q1">SCO11</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
-        <h4>🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG</h4>
-        <span class="c-stats">5 dist. · 5 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1">ENG6</span><span class="chip q1">ENG8</span><span class="chip q1">ENG9</span><span class="chip q1">ENG14</span><span class="chip q1">ENG19</span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
         <h4>🇨🇦 CAN</h4>
         <span class="c-stats">5 dist. · 8 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1">CAN7</span><span class="chip qn">CAN8<sup>×3</sup></span><span class="chip q1">CAN11</span><span class="chip q1">CAN12</span><span class="chip q2">CAN13<sup>×2</sup></span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4>🇦🇷 ARG</h4>
+        <span class="c-stats">5 dist. · 7 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">ARG9</span><span class="chip q1">ARG10</span><span class="chip qn">ARG12<sup>×3</sup></span><span class="chip q1">ARG13</span><span class="chip q1">ARG14</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4>🇨🇻 CPV</h4>
+        <span class="c-stats">5 dist. · 7 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip qn">CPV3<sup>×3</sup></span><span class="chip q1">CPV6</span><span class="chip q1">CPV7</span><span class="chip q1">CPV9</span><span class="chip q1">CPV15</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇸🇦 KSA</h4>
@@ -948,10 +471,28 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q1">KSA2</span><span class="chip q2">KSA8<sup>×2</sup></span><span class="chip qn">KSA9<sup>×3</sup></span><span class="chip q1">KSA10</span><span class="chip qn">KSA13<sup>×4</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
+        <h4>🇵🇹 POR</h4>
+        <span class="c-stats">5 dist. · 5 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">POR5</span><span class="chip q1">POR6</span><span class="chip q1">POR13</span><span class="chip q1">POR18</span><span class="chip q1">POR19</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4>🇸🇪 SWE</h4>
+        <span class="c-stats">5 dist. · 5 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">SWE1</span><span class="chip q1">SWE2</span><span class="chip q1">SWE4</span><span class="chip q1">SWE7</span><span class="chip q1">SWE16</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
         <h4>🇪🇸 ESP</h4>
         <span class="c-stats">4 dist. · 4 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1">ESP6</span><span class="chip q1">ESP9</span><span class="chip q1">ESP19</span><span class="chip q1">ESP20</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4>🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG</h4>
+        <span class="c-stats">4 dist. · 4 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">ENG6</span><span class="chip q1">ENG8</span><span class="chip q1">ENG14</span><span class="chip q1">ENG19</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇳🇱 NED</h4>
@@ -984,6 +525,12 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q2">FRA8<sup>×2</sup></span><span class="chip q1">FRA9</span><span class="chip qn">FRA13<sup>×3</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
+        <h4>🇩🇪 GER</h4>
+        <span class="c-stats">3 dist. · 8 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">GER1</span><span class="chip qn">GER12<sup>×3</sup></span><span class="chip qn">GER13<sup>×4</sup></span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
         <h4>🇲🇦 MAR</h4>
         <span class="c-stats">3 dist. · 6 total</span>
       </div>
@@ -991,15 +538,9 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇮🇶 IRQ</h4>
-        <span class="c-stats">3 dist. · 5 total</span>
+        <span class="c-stats">3 dist. · 4 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q2">IRQ6<sup>×2</sup></span><span class="chip q1">IRQ15</span><span class="chip q2">IRQ19<sup>×2</sup></span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4>🇦🇺 AUS</h4>
-        <span class="c-stats">3 dist. · 7 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1">AUS8</span><span class="chip qn">AUS13<sup>×5</sup></span><span class="chip q1">AUS15</span></div>
+      <div class="country-card-body"><span class="chip q1">IRQ6</span><span class="chip q1">IRQ15</span><span class="chip q2">IRQ19<sup>×2</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇨🇮 CIV</h4>
@@ -1020,22 +561,22 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q1">PAN8</span><span class="chip q1">PAN12</span><span class="chip q1">PAN13</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
-        <h4>🇩🇪 GER</h4>
-        <span class="c-stats">2 dist. · 7 total</span>
+        <h4>🏳️ ALG</h4>
+        <span class="c-stats">3 dist. · 3 total</span>
       </div>
-      <div class="country-card-body"><span class="chip qn">GER12<sup>×3</sup></span><span class="chip qn">GER13<sup>×4</sup></span></div>
+      <div class="country-card-body"><span class="chip q1">ALG4</span><span class="chip q1">ALG7</span><span class="chip q1">ALG13</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
-        <h4>🇦🇷 ARG</h4>
-        <span class="c-stats">2 dist. · 4 total</span>
+        <h4>🇵🇾 PAR</h4>
+        <span class="c-stats">3 dist. · 3 total</span>
       </div>
-      <div class="country-card-body"><span class="chip qn">ARG12<sup>×3</sup></span><span class="chip q1">ARG13</span></div>
+      <div class="country-card-body"><span class="chip q1">PAR11</span><span class="chip q1">PAR16</span><span class="chip q1">PAR17</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
-        <h4>🇪🇬 EGY</h4>
-        <span class="c-stats">2 dist. · 2 total</span>
+        <h4>🇺🇸 USA</h4>
+        <span class="c-stats">3 dist. · 3 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1">EGY11</span><span class="chip q1">EGY16</span></div>
+      <div class="country-card-body"><span class="chip q1">USA11</span><span class="chip q1">USA12</span><span class="chip q1">USA18</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇭🇹 HAI</h4>
@@ -1044,16 +585,16 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q1">HAI8</span><span class="chip q2">HAI12<sup>×2</sup></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
+        <h4>🇦🇺 AUS</h4>
+        <span class="c-stats">2 dist. · 6 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip qn">AUS13<sup>×5</sup></span><span class="chip q1">AUS15</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
         <h4>🇮🇷 IRN</h4>
         <span class="c-stats">2 dist. · 3 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1">IRN13</span><span class="chip q2">IRN17<sup>×2</sup></span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4>🇯🇴 JOR</h4>
-        <span class="c-stats">2 dist. · 2 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1">JOR2</span><span class="chip q1">JOR7</span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4>🇨🇿 CZE</h4>
@@ -1078,7 +619,527 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <span class="c-stats">1 dist. · 1 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1">COD17</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4>🇯🇴 JOR</h4>
+        <span class="c-stats">1 dist. · 1 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">JOR7</span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4>🌟 FWC</h4>
+        <span class="c-stats">1 dist. · 1 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1">FWC4</span></div>
     </div></div>
+
+    <!-- ZERADAS -->
+    <div class="section-label">Seleções zeradas</div>
+    <div class="panel">
+      <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Seleções sem nenhuma figurinha no estoque:</p>
+      <div class="zeroed-chips" id="zeroed-list"><span class="zeroed-chip">🇧🇷 BRA</span><span class="zeroed-chip">🇪🇬 EGY</span></div>
+    </div>
+
+    <!-- RANKING -->
+    <div class="section-label">Ranking por seleção</div>
+    <div class="filter-row">
+      <input class="search-input" id="search" placeholder="🔍  Buscar seleção…" oninput="renderRanking()">
+      <button class="filter-btn active" id="sort-unique" onclick="setSort(&#39;unique&#39;)">Mais distintas</button>
+      <button class="filter-btn" id="sort-total" onclick="setSort(&#39;total&#39;)">Mais total</button>
+      <span style="font-size:11px;color:var(--muted);margin-left:4px">Grupo:</span>
+      <button class="filter-btn group-btn active" id="grp-all" onclick="setGroup(&#39;all&#39;)">Todos</button>
+      <div id="grp-btns" style="display:flex;gap:6px;flex-wrap:wrap;"><button class="filter-btn group-btn" id="grp-A" onclick="setGroup(&#39;A&#39;)">Gr. A</button><button class="filter-btn group-btn" id="grp-B" onclick="setGroup(&#39;B&#39;)">Gr. B</button><button class="filter-btn group-btn" id="grp-C" onclick="setGroup(&#39;C&#39;)">Gr. C</button><button class="filter-btn group-btn" id="grp-D" onclick="setGroup(&#39;D&#39;)">Gr. D</button><button class="filter-btn group-btn" id="grp-E" onclick="setGroup(&#39;E&#39;)">Gr. E</button><button class="filter-btn group-btn" id="grp-F" onclick="setGroup(&#39;F&#39;)">Gr. F</button><button class="filter-btn group-btn" id="grp-G" onclick="setGroup(&#39;G&#39;)">Gr. G</button><button class="filter-btn group-btn" id="grp-H" onclick="setGroup(&#39;H&#39;)">Gr. H</button><button class="filter-btn group-btn" id="grp-I" onclick="setGroup(&#39;I&#39;)">Gr. I</button><button class="filter-btn group-btn" id="grp-J" onclick="setGroup(&#39;J&#39;)">Gr. J</button><button class="filter-btn group-btn" id="grp-K" onclick="setGroup(&#39;K&#39;)">Gr. K</button><button class="filter-btn group-btn" id="grp-L" onclick="setGroup(&#39;L&#39;)">Gr. L</button><button class="filter-btn group-btn" id="grp-FWC" onclick="setGroup(&#39;FWC&#39;)">⭐ FWC</button></div>
+    </div>
+    <div class="ranking-wrap">
+      <table>
+        <thead><tr>
+          <th class="right" style="width:36px">#</th>
+          <th>Seleção</th>
+          <th class="right">Distintas</th>
+          <th class="right">Total</th>
+          <th class="right">Repetidas</th>
+          <th class="right">Escudos</th>
+          <th style="width:100px"></th>
+        </tr></thead>
+        <tbody id="ranking-body"><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">🥇</td>
+      <td><span style="font-weight:600">🇸🇳 SEN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
+      <td class="right val-blue">10</td>
+      <td class="right">16</td>
+      <td class="right val-rep">6</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">🥈</td>
+      <td><span style="font-weight:600">🇺🇾 URU</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
+      <td class="right val-blue">9</td>
+      <td class="right">14</td>
+      <td class="right val-rep">5</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">🥉</td>
+      <td><span style="font-weight:600">🇶🇦 QAT</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
+      <td class="right val-blue">8</td>
+      <td class="right">20</td>
+      <td class="right val-rep">12</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:80%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">4</td>
+      <td><span style="font-weight:600">🇨🇴 COL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
+      <td class="right val-blue">8</td>
+      <td class="right">16</td>
+      <td class="right val-rep">8</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:80%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">5</td>
+      <td><span style="font-weight:600">🇧🇪 BEL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
+      <td class="right val-blue">7</td>
+      <td class="right">13</td>
+      <td class="right val-rep">6</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">6</td>
+      <td><span style="font-weight:600">🇿🇦 RSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
+      <td class="right val-blue">7</td>
+      <td class="right">20</td>
+      <td class="right val-rep">13</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">7</td>
+      <td><span style="font-weight:600">🇳🇴 NOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
+      <td class="right val-blue">7</td>
+      <td class="right">11</td>
+      <td class="right val-rep">4</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">8</td>
+      <td><span style="font-weight:600">🇹🇳 TUN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
+      <td class="right val-blue">7</td>
+      <td class="right">20</td>
+      <td class="right val-rep">13</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">9</td>
+      <td><span style="font-weight:600">🇲🇽 MEX</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">15</td>
+      <td class="right val-rep">9</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">10</td>
+      <td><span style="font-weight:600">🇯🇵 JPN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">6</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">1</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">11</td>
+      <td><span style="font-weight:600">🇭🇷 CRO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">9</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">12</td>
+      <td><span style="font-weight:600">🇺🇿 UZB</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">13</td>
+      <td class="right val-rep">7</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">13</td>
+      <td><span style="font-weight:600">🇬🇭 GHA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">6</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">14</td>
+      <td><span style="font-weight:600">🇰🇷 KOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">12</td>
+      <td class="right val-rep">6</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">15</td>
+      <td><span style="font-weight:600">🇦🇹 AUT</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">9</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">16</td>
+      <td><span style="font-weight:600">🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">7</td>
+      <td class="right val-rep">1</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:60%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">17</td>
+      <td><span style="font-weight:600">🇨🇦 CAN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">8</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">18</td>
+      <td><span style="font-weight:600">🇦🇷 ARG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">7</td>
+      <td class="right val-rep">2</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">19</td>
+      <td><span style="font-weight:600">🇨🇻 CPV</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">7</td>
+      <td class="right val-rep">2</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">20</td>
+      <td><span style="font-weight:600">🇸🇦 KSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">11</td>
+      <td class="right val-rep">6</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">21</td>
+      <td><span style="font-weight:600">🇵🇹 POR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">5</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">22</td>
+      <td><span style="font-weight:600">🇸🇪 SWE</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">5</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">1</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">23</td>
+      <td><span style="font-weight:600">🇪🇸 ESP</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
+      <td class="right val-blue">4</td>
+      <td class="right">4</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">24</td>
+      <td><span style="font-weight:600">🏴󠁧󠁢󠁥󠁮󠁧󠁿 ENG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
+      <td class="right val-blue">4</td>
+      <td class="right">4</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">25</td>
+      <td><span style="font-weight:600">🇳🇱 NED</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
+      <td class="right val-blue">4</td>
+      <td class="right">9</td>
+      <td class="right val-rep">5</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">26</td>
+      <td><span style="font-weight:600">🇨🇼 CUW</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
+      <td class="right val-blue">4</td>
+      <td class="right">4</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">27</td>
+      <td><span style="font-weight:600">🇧🇦 BIH</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
+      <td class="right val-blue">4</td>
+      <td class="right">8</td>
+      <td class="right val-rep">4</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">28</td>
+      <td><span style="font-weight:600">🇪🇨 ECU</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
+      <td class="right val-blue">4</td>
+      <td class="right">7</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:40%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">29</td>
+      <td><span style="font-weight:600">🇫🇷 FRA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">6</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">30</td>
+      <td><span style="font-weight:600">🇩🇪 GER</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">8</td>
+      <td class="right val-rep">5</td>
+      <td class="right val-shield">1</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">31</td>
+      <td><span style="font-weight:600">🇲🇦 MAR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">6</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">32</td>
+      <td><span style="font-weight:600">🇮🇶 IRQ</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">4</td>
+      <td class="right val-rep">1</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">33</td>
+      <td><span style="font-weight:600">🇨🇮 CIV</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">5</td>
+      <td class="right val-rep">2</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">34</td>
+      <td><span style="font-weight:600">🇨🇭 SUI</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">9</td>
+      <td class="right val-rep">6</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">35</td>
+      <td><span style="font-weight:600">🇵🇦 PAN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">3</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">36</td>
+      <td><span style="font-weight:600">🏳️ ALG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">3</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">37</td>
+      <td><span style="font-weight:600">🇵🇾 PAR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">3</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">38</td>
+      <td><span style="font-weight:600">🇺🇸 USA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
+      <td class="right val-blue">3</td>
+      <td class="right">3</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">39</td>
+      <td><span style="font-weight:600">🇭🇹 HAI</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
+      <td class="right val-blue">2</td>
+      <td class="right">3</td>
+      <td class="right val-rep">1</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">40</td>
+      <td><span style="font-weight:600">🇦🇺 AUS</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
+      <td class="right val-blue">2</td>
+      <td class="right">6</td>
+      <td class="right val-rep">4</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">41</td>
+      <td><span style="font-weight:600">🇮🇷 IRN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
+      <td class="right val-blue">2</td>
+      <td class="right">3</td>
+      <td class="right val-rep">1</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">42</td>
+      <td><span style="font-weight:600">🇨🇿 CZE</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
+      <td class="right val-blue">2</td>
+      <td class="right">2</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">43</td>
+      <td><span style="font-weight:600">🇹🇷 TUR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
+      <td class="right val-blue">2</td>
+      <td class="right">5</td>
+      <td class="right val-rep">3</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">44</td>
+      <td><span style="font-weight:600">🇳🇿 NZL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
+      <td class="right val-blue">2</td>
+      <td class="right">3</td>
+      <td class="right val-rep">1</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">45</td>
+      <td><span style="font-weight:600">🇨🇩 COD</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
+      <td class="right val-blue">1</td>
+      <td class="right">1</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:10%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">46</td>
+      <td><span style="font-weight:600">🇯🇴 JOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
+      <td class="right val-blue">1</td>
+      <td class="right">1</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:10%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">47</td>
+      <td><span style="font-weight:600">🌟 FWC</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.FWC</span></td>
+      <td class="right val-blue">1</td>
+      <td class="right">1</td>
+      <td class="right val-rep">0</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:10%"></div></div></td>
+    </tr></tbody>
+      </table>
+    </div>
+
+  </div><!-- /page-consulta -->
+
+  <!-- ═══ PÁGINA 2: ATUALIZAÇÃO ═══ -->
+  <div class="page" id="page-acervo">
+
+    <!-- ATUALIZAR ESTOQUE -->
+    <div class="section-label">Atualizar estoque</div>
+    <div class="panel blue-top">
+      <div class="panel-title">Gerenciar acervo</div>
+      <div class="input-row">
+        <input type="text" id="hist-person" class="hist-person-input" placeholder="Nome (ex: João)">
+        <textarea id="sticker-input" placeholder="Códigos — ex: MEX1, CAN5, BIH13, QAT9 (vírgula, espaço ou linha)" style="flex:1;min-width:200px;min-height:48px;"></textarea>
+        <div class="btn-col">
+          <button class="btn btn-add" onclick="pedirSenha(&#39;add&#39;)">+ Entrou</button>
+          <button class="btn btn-remove" onclick="pedirSenha(&#39;remove&#39;)">− Saiu</button>
+        </div>
+      </div>
+      <div class="msg" id="update-msg"></div>
+      <div id="save-status" style="font-size:12px;margin-top:4px;font-weight:500;min-height:16px;"></div>
+    </div>
+
+    <!-- HISTÓRICO -->
+    <div class="section-label">Histórico de transações</div>
+    <div class="panel blue-top">
+      <div class="panel-title">Registro de entradas e saídas</div>
+      <div class="hist-table-wrap">
+        <table class="hist-table">
+          <thead><tr>
+            <th>Data/Hora</th><th>Tipo</th><th>Pessoa</th><th>Figurinhas</th><th class="right" style="text-align:right">Qtd</th>
+          </tr></thead>
+          <tbody id="hist-body"><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 17:18</td>
+    <td><span class="hist-badge out">− Saiu</span></td>
+    <td class="hist-person">Bady</td>
+    <td class="hist-codes">FWC5, QAT1, PAR19, AUS8, JPN8, JPN12, JPN16, SWE6, EGY11, EGY16, CPV11, URU1 +5 mais</td>
+    <td style="text-align:right;font-weight:600">17</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:46</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">GER1, SWE1, FWC5, FWC4</td>
+    <td style="text-align:right;font-weight:600">4</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:45</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">USA11, USA12, USA18</td>
+    <td style="text-align:right;font-weight:600">3</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:43</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">SWE2, SWE4, SWE6, SWE7, SWE16</td>
+    <td style="text-align:right;font-weight:600">5</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:41</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">POR5, POR6, POR13, POR18, POR19</td>
+    <td style="text-align:right;font-weight:600">5</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:41</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">PAR11, PAR16, PAR17, PAR19</td>
+    <td style="text-align:right;font-weight:600">4</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:40</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">ARG9, ARG10, ARG14</td>
+    <td style="text-align:right;font-weight:600">3</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:39</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">RafaSP</td>
+    <td class="hist-codes">ALG4, ALG7, ALG13</td>
+    <td style="text-align:right;font-weight:600">3</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:25</td>
+    <td><span class="hist-badge out">− Saiu</span></td>
+    <td class="hist-person">Lucas</td>
+    <td class="hist-codes">BRA1, BRA2</td>
+    <td style="text-align:right;font-weight:600">2</td>
+  </tr><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:25</td>
+    <td><span class="hist-badge in">+ Entrou</span></td>
+    <td class="hist-person">Lucas</td>
+    <td class="hist-codes">BRA1, BRA2</td>
+    <td style="text-align:right;font-weight:600">2</td>
+  </tr></tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;display:flex;justify-content:flex-end;">
+        <button class="btn btn-secondary" style="font-size:12px;padding:7px 14px;" onclick="pedirSenhaHist()">🗑 Limpar histórico</button>
+      </div>
+    </div>
+
+  </div><!-- /page-acervo -->
 
 </main>
 
@@ -1369,7 +1430,7 @@ function renderAll(){
   const top=Object.entries(by).sort((a,b)=>b[1].unique-a[1].unique)[0];
   if(top){document.getElementById('bn-top').textContent=top[0];document.getElementById('bn-top-sub').textContent=`${top[1].unique} distintas  ${FLAGS[top[0]]||''}`;}
   // date is loaded from GitHub on init
-  renderChart(by);renderRanking(by);renderZeroed(by);renderDetail(by);renderHistory();
+  renderRanking(by);renderZeroed(by);renderDetail(by);renderHistory();
 }
 
 // ── CHART ─────────────────────────────────────────
@@ -1532,6 +1593,14 @@ function verificarSenha(){
     atualizarDots('error');document.getElementById('pwd-modal').classList.add('pwd-shake');
     setTimeout(()=>{document.getElementById('pwd-modal').classList.remove('pwd-shake');pwdBuffer='';atualizarDots();document.getElementById('update-msg').textContent='⚠️ Senha incorreta.';document.getElementById('update-msg').className='msg err';fecharSenha();},400);
   }
+}
+
+function setPage(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + page).classList.add('active');
+  document.getElementById('tab-' + page).classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 loadTheme();loadStock();
