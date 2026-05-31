@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_3.html -->
+<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_4.html -->
 <html lang="pt-BR" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -2404,8 +2404,52 @@ function limparMinhaLista(){
 
 function copiarResultado(){
   if(!trocaHaveList.length)return;
-  const txt='Fala Lucas, beleza? Segue a relação das figurinhas que preciso de ti:\n\n'+trocaHaveList.join(', ')+'\n\n— Desenvolvido por Lucas Nascimento | Data Analyst Professional';
-  navigator.clipboard.writeText(txt).then(()=>{const b=document.querySelector('.copy-btn');const o=b.textContent;b.textContent='✅ Copiado!';setTimeout(()=>b.textContent=o,2000);}).catch(()=>prompt('Copie a lista:',txt));
+
+  // Classify each sticker
+  let fwc=[], escudos=[], tradicionais=[];
+  trocaHaveList.forEach(code=>{
+    const m=code.match(/^([A-Z]+)(\d+)$/);
+    if(!m){tradicionais.push(code);return;}
+    const [,country,numStr]=m;
+    const num=parseInt(numStr);
+    if(country==='FWC')             fwc.push(code);
+    else if(num===1)                escudos.push(code);
+    else                            tradicionais.push(code);
+  });
+
+  const totalGeral = fwc.length + escudos.length + tradicionais.length;
+
+  // Build message
+  let lines = [];
+  lines.push('Lucas, segue a relação das figurinhas que você possui em seu estoque que é do meu interesse:');
+  lines.push('');
+
+  // List all available grouped
+  const allCodes = [...fwc, ...escudos, ...tradicionais];
+  lines.push(allCodes.join(', '));
+  lines.push('');
+  lines.push('─────────────────────');
+  lines.push('Resumo:');
+  lines.push('');
+  lines.push(`🌟 Total de FWC:                 ${fwc.length}`);
+  lines.push(`🛡️  Total de Escudos:             ${escudos.length}`);
+  lines.push(`⚽ Total de Figuras Tradicionais: ${tradicionais.length}`);
+  lines.push(`📦 Total geral:                  ${totalGeral}`);
+  lines.push('');
+  lines.push('Bora negociar? 🤝');
+  lines.push('');
+  lines.push('─────────────────────');
+  lines.push('Gerado por Lucas Nascimento | Controle de Figurinhas Copa 2026');
+
+  const txt = lines.join('\n');
+  navigator.clipboard.writeText(txt)
+    .then(()=>{
+      const b=document.querySelector('.copy-btn');
+      const o=b.textContent;
+      b.textContent='✅ Copiado!';
+      setTimeout(()=>b.textContent=o,2000);
+    })
+    .catch(()=>prompt('Copie a mensagem:', txt));
 }
 
 // ── PASSWORD ──────────────────────────────────────
