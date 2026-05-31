@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_5.html -->
+<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_6.html -->
 <html lang="pt-BR" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -285,6 +285,43 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
 .heatmap-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
 @media(max-width:600px){ .heatmap-grid { grid-template-columns:repeat(2,1fr); } }
 @media(max-width:600px){ .scroll-hint{display:block !important;} }
+
+/* ── PHOTO IDENTIFICATION ─────────────────────────────────────────── */
+.photo-drop-area {
+  border:2px dashed var(--copa-blue); border-radius:14px;
+  padding:32px 20px; text-align:center; cursor:pointer;
+  transition:all .2s; background:var(--surface2); position:relative;
+}
+.photo-drop-area:hover, .photo-drop-area.dragover {
+  border-color:var(--copa-gold); background:rgba(240,165,0,.06);
+}
+.photo-drop-area input[type=file] { display:none; }
+.photo-drop-icon { font-size:36px; margin-bottom:10px; }
+.photo-drop-text { font-size:13px; color:var(--muted); line-height:1.6; }
+.photo-drop-text strong { color:var(--copa-blue); }
+.photo-previews { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+.photo-thumb-wrap { position:relative; width:100px; height:100px; border-radius:10px; overflow:hidden; border:2px solid var(--border); }
+.photo-thumb-wrap img { width:100%; height:100%; object-fit:cover; }
+.photo-thumb-remove { position:absolute; top:4px; right:4px; background:rgba(200,16,46,.85); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:11px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; }
+.photo-count { font-size:12px; color:var(--muted); margin-top:8px; }
+.btn-identify { width:100%; padding:13px; border-radius:12px; border:none; background:linear-gradient(135deg,var(--copa-blue),#1a4db3); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:1.5px; cursor:pointer; transition:all .2s; margin-top:14px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-identify:hover { opacity:.88; }
+.btn-identify:disabled { opacity:.5; cursor:not-allowed; }
+.photo-loading { text-align:center; padding:24px; font-size:14px; color:var(--copa-blue); font-weight:600; }
+.photo-loading-spinner { font-size:28px; animation:spin 1s linear infinite; display:inline-block; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.photo-result-box { background:var(--surface2); border:1px solid var(--border); border-radius:12px; padding:16px; margin-top:14px; }
+.photo-result-title { font-family:'Barlow Condensed',sans-serif; font-size:13px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:10px; }
+.photo-result-codes { font-size:13px; color:var(--text); font-weight:500; line-height:1.8; word-break:break-all; }
+.photo-result-count { font-size:12px; color:var(--muted); margin-top:8px; }
+.btn-add-codes { background:var(--green); color:#fff; border:none; border-radius:10px; padding:10px 20px; font-family:'Barlow',sans-serif; font-size:13px; font-weight:700; cursor:pointer; margin-top:12px; transition:all .15s; }
+.btn-add-codes:hover { opacity:.88; }
+.api-key-setup { background:var(--surface3); border:1px solid var(--border); border-radius:10px; padding:12px 16px; margin-bottom:16px; }
+.api-key-row { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+.api-key-row input { flex:1; min-width:200px; font-size:12px; padding:8px 12px; }
+.api-key-status { font-size:11px; font-weight:600; }
+.api-key-status.ok { color:var(--green); }
+.api-key-status.err { color:var(--copa-red); }
 </style>
 <script src="./index_files/chart.umd.js.baixados"></script>
 <script src="./index_files/xlsx.full.min.js.baixados"></script>
@@ -303,7 +340,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div>
     </div>
     <div class="header-right">
-      <div class="last-update">Atualizado: <strong id="last-update-date">30/05/2026 19:02</strong></div>
+      <div class="last-update">Atualizado: <strong id="last-update-date">31/05/2026 11:16</strong></div>
       <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
     </div>
   </div>
@@ -322,8 +359,8 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
 
     <!-- BIG NUMBERS -->
     <div class="bignums">
-      <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">535</div><div class="bignum-sub">repetidas no estoque</div></div>
-      <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">292</div><div class="bignum-sub">códigos únicos</div></div>
+      <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">525</div><div class="bignum-sub">repetidas no estoque</div></div>
+      <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">284</div><div class="bignum-sub">códigos únicos</div></div>
       <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">4</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
       <div class="bignum green-c"><div class="bignum-icon">🥇</div><div class="bignum-label">Maior acervo</div><div class="bignum-value" id="bn-top">COD</div><div class="bignum-sub" id="bn-top-sub">12 distintas  🇨🇩</div></div>
     <div class="bignum" style="border-top:4px solid #7c3aed"><div class="bignum-icon">🌟</div><div class="bignum-label">Figurinhas FWC</div><div class="bignum-value" style="color:#7c3aed" id="bn-fwc">15</div><div class="bignum-sub">especiais FIFA World Cup</div></div>
@@ -365,7 +402,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <div class="section-label">Seleções zeradas</div>
     <div class="panel">
       <p style="font-size:13px;color:var(--muted);margin-bottom:4px">Seleções sem nenhuma figurinha no estoque:</p>
-      <div class="zeroed-chips" id="zeroed-list"></div>
+      <div class="zeroed-chips" id="zeroed-list"><span class="zeroed-chip">🇧🇷 BRA</span><span class="zeroed-chip">🇵🇹 POR</span></div>
     </div>
 
     <!-- ACERVO DETALHADO -->
@@ -393,9 +430,9 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇺🇾</span>URU</h4>
-        <span class="c-stats">12 dist. · 28 total</span>
+        <span class="c-stats">12 dist. · 27 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sergio Rochet</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Santiago Mele</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nahitan Nandez</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU10<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Valverde</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU12<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Bentancur</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU14<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Manuel Ugarte</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU15<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolás de la Cruz</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU16<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Maxi Araujo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Darwin Núñez</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU18<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Viñas</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Aguirre</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU20<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Facundo Pellistri</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sergio Rochet</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Santiago Mele</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nahitan Nandez</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Valverde</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU12<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Bentancur</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU14<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Manuel Ugarte</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU15<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolás de la Cruz</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU16<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Maxi Araujo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Darwin Núñez</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU18<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Viñas</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Aguirre</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU20<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Facundo Pellistri</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇨🇿</span>CZE</h4>
@@ -414,12 +451,6 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <span class="c-stats">10 dist. · 17 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Daniel Muñoz</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Davinson Sánchez</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL8<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jhon Arias</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL10<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Luis Díaz</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rafael Santos Borré</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jhon Córdoba</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL13 </span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Óscar Murillo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Juan Cuadrado</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jáder Durán</span></span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇫🇷</span>FRA</h4>
-        <span class="c-stats">9 dist. · 12 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA6 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ibrahima Konaté</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lucas Digne</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aurélien Tchouaméni</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Manu Koné</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA13<sup>×3</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Michael Olise</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ousmane Dembélé</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Bradley Barcola</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Hugo Ekitike</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇸🇳</span>SEN</h4>
@@ -525,15 +556,15 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇧🇪</span>BEL</h4>
-        <span class="c-stats">6 dist. · 15 total</span>
+        <span class="c-stats">6 dist. · 14 total</span>
       </div>
-      <div class="country-card-body"><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL3<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Arthur Theate</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL7<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Maxim De Cuyper</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL10<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Amadou Onana</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolas Raskin</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL15<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kevin De Bruyne</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Romelu Lukaku</span></span></div>
+      <div class="country-card-body"><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL3<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Arthur Theate</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL7<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Maxim De Cuyper</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL10<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Amadou Onana</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolas Raskin</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kevin De Bruyne</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BEL20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Romelu Lukaku</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
-        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇦🇷</span>ARG</h4>
-        <span class="c-stats">6 dist. · 10 total</span>
+        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇫🇷</span>FRA</h4>
+        <span class="c-stats">6 dist. · 9 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Enzo Fernández</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG9<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Alexis Mac Allister</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG12<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Leandro Paredes</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG13<sup>×2</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nico Paz</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lautaro Martínez</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA6 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ibrahima Konaté</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lucas Digne</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Manu Koné</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA13<sup>×3</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Bradley Barcola</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">FRA19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Hugo Ekitike</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇭🇷</span>CRO</h4>
@@ -552,6 +583,12 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <span class="c-stats">6 dist. · 10 total</span>
       </div>
       <div class="country-card-body"><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR7<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Han-beom Lee</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR8<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tae-seok Lee</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">In-beom Hwang</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR12<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kang-in Lee</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jens Castrop</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Dong-gyeong Lee</span></span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇦🇷</span>ARG</h4>
+        <span class="c-stats">5 dist. · 9 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Enzo Fernández</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG9<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Alexis Mac Allister</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG12<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Leandro Paredes</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG13<sup>×2</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">ARG14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nico Paz</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇸🇦</span>KSA</h4>
@@ -644,12 +681,6 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAR11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Damián Bobadilla</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAR13<sup>×2</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAR17 </span></div>
     </div><div class="country-card">
       <div class="country-card-header">
-        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇧🇷</span>BRA</h4>
-        <span class="c-stats">3 dist. · 3 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BRA4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Marquinhos</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BRA9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lucas Paquetá</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">BRA13 </span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇪🇬</span>EGY</h4>
         <span class="c-stats">2 dist. · 2 total</span>
       </div>
@@ -666,12 +697,6 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <span class="c-stats">1 dist. · 1 total</span>
       </div>
       <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">JOR7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Musa Al-Taamari</span></span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇵🇹</span>POR</h4>
-        <span class="c-stats">1 dist. · 1 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">POR20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Diogo Jota</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇮🇷</span>IRN</h4>
@@ -724,8 +749,8 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">🥈</td>
       <td><span style="font-weight:600">🇺🇾 URU</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
       <td class="right val-blue">12</td>
-      <td class="right">28</td>
-      <td class="right val-rep">16</td>
+      <td class="right">27</td>
+      <td class="right val-rep">15</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td>
     </tr><tr>
@@ -754,14 +779,6 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td><div class="bar-bg"><div class="bar-fill" style="width:83%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">6</td>
-      <td><span style="font-weight:600">🇫🇷 FRA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
-      <td class="right val-blue">9</td>
-      <td class="right">12</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">7</td>
       <td><span style="font-weight:600">🇸🇳 SEN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
       <td class="right val-blue">9</td>
       <td class="right">17</td>
@@ -769,7 +786,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">8</td>
+      <td class="right" style="color:var(--muted);font-size:12px">7</td>
       <td><span style="font-weight:600">🇺🇿 UZB</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
       <td class="right val-blue">9</td>
       <td class="right">17</td>
@@ -777,7 +794,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">9</td>
+      <td class="right" style="color:var(--muted);font-size:12px">8</td>
       <td><span style="font-weight:600">🇹🇳 TUN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
       <td class="right val-blue">9</td>
       <td class="right">28</td>
@@ -785,7 +802,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">10</td>
+      <td class="right" style="color:var(--muted);font-size:12px">9</td>
       <td><span style="font-weight:600">🌟 FWC</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.FWC</span></td>
       <td class="right val-blue">9</td>
       <td class="right">15</td>
@@ -793,7 +810,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">11</td>
+      <td class="right" style="color:var(--muted);font-size:12px">10</td>
       <td><span style="font-weight:600">🇿🇦 RSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
       <td class="right val-blue">8</td>
       <td class="right">27</td>
@@ -801,7 +818,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">12</td>
+      <td class="right" style="color:var(--muted);font-size:12px">11</td>
       <td><span style="font-weight:600">🇨🇮 CIV</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
       <td class="right val-blue">8</td>
       <td class="right">12</td>
@@ -809,7 +826,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">13</td>
+      <td class="right" style="color:var(--muted);font-size:12px">12</td>
       <td><span style="font-weight:600">🇦🇺 AUS</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
       <td class="right val-blue">8</td>
       <td class="right">18</td>
@@ -817,7 +834,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">14</td>
+      <td class="right" style="color:var(--muted);font-size:12px">13</td>
       <td><span style="font-weight:600">🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
       <td class="right val-blue">8</td>
       <td class="right">10</td>
@@ -825,7 +842,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">15</td>
+      <td class="right" style="color:var(--muted);font-size:12px">14</td>
       <td><span style="font-weight:600">🇨🇭 SUI</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
       <td class="right val-blue">8</td>
       <td class="right">20</td>
@@ -833,7 +850,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">16</td>
+      <td class="right" style="color:var(--muted);font-size:12px">15</td>
       <td><span style="font-weight:600">🇨🇦 CAN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
       <td class="right val-blue">7</td>
       <td class="right">13</td>
@@ -841,7 +858,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">17</td>
+      <td class="right" style="color:var(--muted);font-size:12px">16</td>
       <td><span style="font-weight:600">🇩🇪 GER</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.E</span></td>
       <td class="right val-blue">7</td>
       <td class="right">14</td>
@@ -849,7 +866,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">18</td>
+      <td class="right" style="color:var(--muted);font-size:12px">17</td>
       <td><span style="font-weight:600">🇨🇻 CPV</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
       <td class="right val-blue">7</td>
       <td class="right">9</td>
@@ -857,7 +874,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">19</td>
+      <td class="right" style="color:var(--muted);font-size:12px">18</td>
       <td><span style="font-weight:600">🇧🇦 BIH</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
       <td class="right val-blue">7</td>
       <td class="right">14</td>
@@ -865,7 +882,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">1</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">20</td>
+      <td class="right" style="color:var(--muted);font-size:12px">19</td>
       <td><span style="font-weight:600">🇶🇦 QAT</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.B</span></td>
       <td class="right val-blue">7</td>
       <td class="right">20</td>
@@ -873,7 +890,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">21</td>
+      <td class="right" style="color:var(--muted);font-size:12px">20</td>
       <td><span style="font-weight:600">🇮🇶 IRQ</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
       <td class="right val-blue">7</td>
       <td class="right">9</td>
@@ -881,7 +898,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">22</td>
+      <td class="right" style="color:var(--muted);font-size:12px">21</td>
       <td><span style="font-weight:600">🇹🇷 TUR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
       <td class="right val-blue">7</td>
       <td class="right">14</td>
@@ -889,7 +906,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">23</td>
+      <td class="right" style="color:var(--muted);font-size:12px">22</td>
       <td><span style="font-weight:600">🇸🇪 SWE</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
       <td class="right val-blue">7</td>
       <td class="right">9</td>
@@ -897,23 +914,23 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">24</td>
+      <td class="right" style="color:var(--muted);font-size:12px">23</td>
       <td><span style="font-weight:600">🇧🇪 BEL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
       <td class="right val-blue">6</td>
-      <td class="right">15</td>
-      <td class="right val-rep">9</td>
+      <td class="right">14</td>
+      <td class="right val-rep">8</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">24</td>
+      <td><span style="font-weight:600">🇫🇷 FRA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
+      <td class="right val-blue">6</td>
+      <td class="right">9</td>
+      <td class="right val-rep">3</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">25</td>
-      <td><span style="font-weight:600">🇦🇷 ARG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
-      <td class="right val-blue">6</td>
-      <td class="right">10</td>
-      <td class="right val-rep">4</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">26</td>
       <td><span style="font-weight:600">🇭🇷 CRO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
       <td class="right val-blue">6</td>
       <td class="right">10</td>
@@ -921,7 +938,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">27</td>
+      <td class="right" style="color:var(--muted);font-size:12px">26</td>
       <td><span style="font-weight:600">🇯🇵 JPN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
       <td class="right val-blue">6</td>
       <td class="right">8</td>
@@ -929,13 +946,21 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">28</td>
+      <td class="right" style="color:var(--muted);font-size:12px">27</td>
       <td><span style="font-weight:600">🇰🇷 KOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
       <td class="right val-blue">6</td>
       <td class="right">10</td>
       <td class="right val-rep">4</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">28</td>
+      <td><span style="font-weight:600">🇦🇷 ARG</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
+      <td class="right val-blue">5</td>
+      <td class="right">9</td>
+      <td class="right val-rep">4</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:42%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">29</td>
       <td><span style="font-weight:600">🇸🇦 KSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
@@ -1058,14 +1083,6 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td><div class="bar-bg"><div class="bar-fill" style="width:25%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">44</td>
-      <td><span style="font-weight:600">🇧🇷 BRA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
-      <td class="right val-blue">3</td>
-      <td class="right">3</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:25%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">45</td>
       <td><span style="font-weight:600">🇪🇬 EGY</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
       <td class="right val-blue">2</td>
       <td class="right">2</td>
@@ -1073,7 +1090,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:17%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">46</td>
+      <td class="right" style="color:var(--muted);font-size:12px">45</td>
       <td><span style="font-weight:600">🇳🇿 NZL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
       <td class="right val-blue">1</td>
       <td class="right">1</td>
@@ -1081,7 +1098,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:8%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">47</td>
+      <td class="right" style="color:var(--muted);font-size:12px">46</td>
       <td><span style="font-weight:600">🇯🇴 JOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.J</span></td>
       <td class="right val-blue">1</td>
       <td class="right">1</td>
@@ -1089,15 +1106,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:8%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">48</td>
-      <td><span style="font-weight:600">🇵🇹 POR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
-      <td class="right val-blue">1</td>
-      <td class="right">1</td>
-      <td class="right val-rep">0</td>
-      <td class="right val-shield">—</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:8%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">49</td>
+      <td class="right" style="color:var(--muted);font-size:12px">47</td>
       <td><span style="font-weight:600">🇮🇷 IRN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.G</span></td>
       <td class="right val-blue">1</td>
       <td class="right">1</td>
@@ -1131,11 +1140,11 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. C</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
-        <div style="width:24%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
-          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">24%</span>
+        <div style="width:20%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
+          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">20%</span>
         </div>
       </div>
-      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">19/80</span>
+      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">16/80</span>
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. D</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
@@ -1179,27 +1188,27 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. I</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
-        <div style="width:36%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
-          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">36%</span>
+        <div style="width:33%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
+          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">33%</span>
         </div>
       </div>
-      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">29/80</span>
+      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">26/80</span>
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. J</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
-        <div style="width:18%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
-          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">18%</span>
+        <div style="width:16%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
+          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">16%</span>
         </div>
       </div>
-      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">14/80</span>
+      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">13/80</span>
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. K</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
-        <div style="width:40%;background:var(--copa-gold);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
-          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">40%</span>
+        <div style="width:39%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
+          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">39%</span>
         </div>
       </div>
-      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">32/80</span>
+      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">31/80</span>
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. L</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
@@ -1263,10 +1272,10 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div></div>
     </div><div style="grid-column:1/-1">
       <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Grupo C</div>
-      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(160,38,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
+      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(210,0,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
         <div style="font-size:16px">🇧🇷</div>
         <div>BRA</div>
-        <div style="font-size:13px;margin-top:2px">3</div>
+        <div style="font-size:13px;margin-top:2px">0</div>
       </div><div style="background:rgb(143,50,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
         <div style="font-size:16px">🇲🇦</div>
         <div>MAR</div>
@@ -1377,10 +1386,10 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div></div>
     </div><div style="grid-column:1/-1">
       <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Grupo I</div>
-      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(60,113,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
+      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(110,75,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
         <div style="font-size:16px">🇫🇷</div>
         <div>FRA</div>
-        <div style="font-size:13px;margin-top:2px">9</div>
+        <div style="font-size:13px;margin-top:2px">6</div>
       </div><div style="background:rgb(60,113,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
         <div style="font-size:16px">🇸🇳</div>
         <div>SEN</div>
@@ -1396,10 +1405,10 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div></div>
     </div><div style="grid-column:1/-1">
       <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Grupo J</div>
-      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(110,75,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
+      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(127,63,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
         <div style="font-size:16px">🇦🇷</div>
         <div>ARG</div>
-        <div style="font-size:13px;margin-top:2px">6</div>
+        <div style="font-size:13px;margin-top:2px">5</div>
       </div><div style="background:rgb(143,50,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
         <div style="font-size:16px">🏳️</div>
         <div>ALG</div>
@@ -1415,10 +1424,10 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div></div>
     </div><div style="grid-column:1/-1">
       <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Grupo K</div>
-      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(193,13,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
+      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(210,0,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
         <div style="font-size:16px">🇵🇹</div>
         <div>POR</div>
-        <div style="font-size:13px;margin-top:2px">1</div>
+        <div style="font-size:13px;margin-top:2px">0</div>
       </div><div style="background:rgb(10,150,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
         <div style="font-size:16px">🇨🇩</div>
         <div>COD</div>
@@ -1589,34 +1598,41 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">30/05/2026, 17:44</td>
       </tr><tr style="border-top:1px solid var(--border)">
         <td style="padding:9px 12px;color:var(--muted)">16</td>
+        <td style="padding:9px 12px;font-weight:600">Guguinha</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">10</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--green)">10</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">31/05/2026, 11:16</td>
+      </tr><tr style="border-top:1px solid var(--border)">
+        <td style="padding:9px 12px;color:var(--muted)">17</td>
         <td style="padding:9px 12px;font-weight:600">JuanSobrinho</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">9</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">29/05/2026, 23:04</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">17</td>
+        <td style="padding:9px 12px;color:var(--muted)">18</td>
         <td style="padding:9px 12px;font-weight:600">Lucas</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">4</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 16:25</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">18</td>
+        <td style="padding:9px 12px;color:var(--muted)">19</td>
         <td style="padding:9px 12px;font-weight:600">DanielSafra</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">3</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">29/05/2026, 17:24</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">19</td>
+        <td style="padding:9px 12px;color:var(--muted)">20</td>
         <td style="padding:9px 12px;font-weight:600">AmigoDeby</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">3</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 23:53</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">20</td>
+        <td style="padding:9px 12px;color:var(--muted)">21</td>
         <td style="padding:9px 12px;font-weight:600">LucasUpdate</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">2</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
@@ -1655,6 +1671,56 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div id="save-status" style="font-size:12px;margin-top:4px;font-weight:500;min-height:16px;"></div>
     </div>
 
+
+    <!-- IDENTIFICAR POR FOTO -->
+    <div class="section-label">Identificar por foto</div>
+    <div class="panel blue-top">
+      <div class="panel-title">📷 Reconhecimento automático de figurinhas</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">Tire fotos das figurinhas espalhadas na mesa. A IA identifica os códigos automaticamente e carrega no campo acima. Até <strong>5 fotos</strong> por vez.</p>
+
+      <!-- API Key setup -->
+      <div class="api-key-setup">
+        <p style="font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:1px">🔑 Chave da API Anthropic</p>
+        <p style="font-size:12px;color:var(--muted);margin-top:4px">Necessária para o reconhecimento de imagens. Obtenha grátis em <a href="https://console.anthropic.com/" target="_blank" style="color:var(--copa-blue)">console.anthropic.com</a></p>
+        <div class="api-key-row">
+          <input type="password" id="anthropic-key" class="search-input" placeholder="sk-ant-api03-..." style="font-size:12px;padding:8px 12px;">
+          <button class="btn btn-secondary" style="font-size:12px;padding:8px 14px;" onclick="salvarChaveApi()">💾 Salvar</button>
+          <span class="api-key-status" id="api-key-status"></span>
+        </div>
+      </div>
+
+      <!-- Drop area -->
+      <div class="photo-drop-area" id="photo-drop" onclick="document.getElementById(&#39;photo-file-input&#39;).click()" ondragover="photoDragOver(event)" ondragleave="photoDragLeave()" ondrop="photoDrop(event)">
+        <input type="file" id="photo-file-input" accept="image/*" multiple="" onchange="photoFilesSelected(event)">
+        <div class="photo-drop-icon">📸</div>
+        <div class="photo-drop-text">
+          <strong>Clique aqui</strong> ou arraste as fotos<br>
+          Até 5 imagens · JPG, PNG, WEBP
+        </div>
+      </div>
+
+      <!-- Previews -->
+      <div class="photo-previews" id="photo-previews"></div>
+      <div class="photo-count" id="photo-count"></div>
+
+      <!-- Identify button -->
+      <button class="btn-identify" id="btn-identify" onclick="identificarFiguras()" disabled="">
+        <span>🔍</span> <span id="btn-identify-text">Selecione ao menos 1 foto para identificar</span>
+      </button>
+
+      <!-- Loading & result -->
+      <div id="photo-loading" style="display:none" class="photo-loading">
+        <div class="photo-loading-spinner">⚙️</div><br>
+        Analisando fotos com IA... aguarde
+      </div>
+      <div id="photo-result" style="display:none" class="photo-result-box">
+        <div class="photo-result-title">✅ Figurinhas identificadas</div>
+        <div class="photo-result-codes" id="photo-result-codes"></div>
+        <div class="photo-result-count" id="photo-result-count"></div>
+        <button class="btn-add-codes" onclick="adicionarCodigosIdentificados()">⬆️ Carregar no campo de atualização</button>
+      </div>
+    </div>
+
     <!-- HISTÓRICO -->
     <div class="section-label">Histórico de transações</div>
     <div class="panel blue-top">
@@ -1665,6 +1731,13 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
             <th>Data/Hora</th><th>Ação</th><th>Tipo</th><th>Pessoa</th><th class="hist-col-codes">Figurinhas</th><th class="right" style="text-align:right">Qtd</th>
           </tr></thead>
           <tbody id="hist-body"><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">31/05/2026, 11:16</td>
+    <td><span class="hist-badge out">− Saiu</span></td>
+    <td style="font-size:12px;color:var(--muted)">Venda</td>
+    <td class="hist-person">Guguinha</td>
+    <td class="hist-codes hist-col-codes">POR20, URU10, BEL15, FRA15, FRA9, FRA14, BRA9, BRA4, ARG18, BRA13</td>
+    <td style="text-align:right;font-weight:600">10</td>
+  </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 19:02</td>
     <td><span class="hist-badge out">− Saiu</span></td>
     <td style="font-size:12px;color:var(--muted)">—</td>
@@ -2171,6 +2244,10 @@ const NAME_TO_CODE = {
   'PANAMA':'PAN','PANAMÁ':'PAN','FWC':'FWC',
 };
 
+function stripZero(n) {
+  return String(parseInt(n, 10));
+}
+
 function parseCodes(txt) {
   // Step 0 — normalize "SEN 10" / "SEN  10" → "SEN10"
   const upper = txt.toUpperCase();
@@ -2180,8 +2257,9 @@ function parseCodes(txt) {
   const hasColon = /[^:]+:\s*\d/.test(normalized);
 
   if (!hasColon) {
-    // Format 1 — plain inline codes: MEX1, QAT13, SEN10
-    return normalized.match(/\b([A-Z]{2,4})(\d{1,2})\b/g) || [];
+    // Format 1 — codes: MEX1, CZE05→CZE5, BRA03→BRA3
+    const raw = normalized.match(/\b([A-Z]{2,4})(\d{1,2})\b/g) || [];
+    return raw.map(c => c.replace(/([A-Z]{2,4})(\d{1,2})/, (_, l, n) => l + stripZero(n)));
   }
 
   const result = [];
@@ -2195,23 +2273,22 @@ function parseCodes(txt) {
     const nums = afterColon.match(/\d{1,2}/g);
     if (!nums || !nums.length) continue;
 
-    // Format 2 — short code: "MEX 🇲🇽: 1, 5"
+    // Format 2 — short code: "MEX 🇲🇽: 01, 05"
     const codeMatch = namePart.match(/^\s*([A-Z]{2,4})\b/);
     if (codeMatch) {
-      nums.forEach(n => result.push(codeMatch[1] + n));
+      nums.forEach(n => result.push(codeMatch[1] + stripZero(n)));
       continue;
     }
 
-    // Format 3 — full name in Portuguese/English: "Holanda: 1, 4, 10"
+    // Format 3 — full name: "Holanda: 01, 04, 10"
     const nameKey = namePart.replace(/[^A-ZÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ\s]/g, '').trim();
     let code = NAME_TO_CODE[nameKey];
     if (!code) {
-      // Partial match — try if name starts with or is contained in map key
       for (const [k, v] of Object.entries(NAME_TO_CODE)) {
         if (nameKey.startsWith(k) || k.startsWith(nameKey)) { code = v; break; }
       }
     }
-    if (code) nums.forEach(n => result.push(code + n));
+    if (code) nums.forEach(n => result.push(code + stripZero(n)));
   }
   return result;
 }
@@ -2662,6 +2739,191 @@ function exportarHistoricoXLSX(){
   XLSX.writeFile(wb,'historico_figurinhas_copa2026.xlsx');
 }
 
+
+// ── PHOTO IDENTIFICATION ──────────────────────────────────────────────
+let photoFiles = [];
+let identifiedCodes = [];
+
+function salvarChaveApi() {
+  const key = document.getElementById('anthropic-key').value.trim();
+  const status = document.getElementById('api-key-status');
+  if (!key.startsWith('sk-ant')) {
+    status.textContent = '❌ Chave inválida';
+    status.className = 'api-key-status err';
+    return;
+  }
+  try { localStorage.setItem('copa2026_apikey', key); } catch(e){}
+  status.textContent = '✅ Salva!';
+  status.className = 'api-key-status ok';
+  document.getElementById('anthropic-key').value = '●'.repeat(20);
+}
+
+function carregarChaveApi() {
+  try {
+    const k = localStorage.getItem('copa2026_apikey');
+    if (k) {
+      document.getElementById('anthropic-key').value = '●'.repeat(20);
+      document.getElementById('api-key-status').textContent = '✅ Chave configurada';
+      document.getElementById('api-key-status').className = 'api-key-status ok';
+    }
+  } catch(e) {}
+}
+
+function photoFilesSelected(e) { addPhotoFiles(Array.from(e.target.files)); }
+function photoDragOver(e) { e.preventDefault(); document.getElementById('photo-drop').classList.add('dragover'); }
+function photoDragLeave() { document.getElementById('photo-drop').classList.remove('dragover'); }
+function photoDrop(e) {
+  e.preventDefault();
+  document.getElementById('photo-drop').classList.remove('dragover');
+  addPhotoFiles(Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')));
+}
+
+function addPhotoFiles(files) {
+  const remaining = 5 - photoFiles.length;
+  const toAdd = files.slice(0, remaining);
+  toAdd.forEach(f => {
+    if (photoFiles.length >= 5) return;
+    photoFiles.push(f);
+  });
+  renderPhotoPreviews();
+}
+
+function removePhoto(idx) {
+  photoFiles.splice(idx, 1);
+  renderPhotoPreviews();
+}
+
+function renderPhotoPreviews() {
+  const container = document.getElementById('photo-previews');
+  const count = document.getElementById('photo-count');
+  const btn = document.getElementById('btn-identify');
+  const btnText = document.getElementById('btn-identify-text');
+
+  container.innerHTML = photoFiles.map((f, i) => {
+    const url = URL.createObjectURL(f);
+    return `<div class="photo-thumb-wrap">
+      <img src="${url}" alt="foto ${i+1}">
+      <button class="photo-thumb-remove" onclick="removePhoto(${i})">✕</button>
+    </div>`;
+  }).join('');
+
+  const n = photoFiles.length;
+  count.textContent = n > 0 ? `${n} foto${n>1?'s':''} selecionada${n>1?'s':''}` : '';
+  btn.disabled = n === 0;
+  btnText.textContent = n === 0
+    ? 'Selecione ao menos 1 foto para identificar'
+    : `🔍 Identificar figurinhas nas ${n} foto${n>1?'s':''}`;
+
+  // Reset file input so same file can be re-selected
+  document.getElementById('photo-file-input').value = '';
+}
+
+async function identificarFiguras() {
+  if (photoFiles.length === 0) return;
+
+  let apiKey = '';
+  try { apiKey = localStorage.getItem('copa2026_apikey') || ''; } catch(e) {}
+  if (!apiKey || !apiKey.startsWith('sk-ant')) {
+    alert('⚠️ Configure a chave da API Anthropic antes de usar esta função.');
+    return;
+  }
+
+  document.getElementById('photo-loading').style.display = 'block';
+  document.getElementById('photo-result').style.display = 'none';
+  document.getElementById('btn-identify').disabled = true;
+
+  try {
+    // Convert all images to base64
+    const imageContents = await Promise.all(photoFiles.map(async (file) => {
+      const base64 = await fileToBase64(file);
+      const mediaType = file.type || 'image/jpeg';
+      return { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } };
+    }));
+
+    // Build message with all images + prompt
+    const prompt = `Você está analisando fotos de figurinhas da Copa do Mundo FIFA 2026 da Panini.
+Identifique TODOS os códigos de figurinhas visíveis nas imagens.
+Os códigos têm formato: 2 a 4 letras maiúsculas seguidas de 1 ou 2 números. Exemplos: MEX1, BRA14, FRA6, SEN10, FWC3, ENG20.
+Cada figurinha tem seu código impresso na parte superior ou lateral.
+Retorne APENAS a lista de códigos separados por vírgula, sem nenhum texto adicional, sem explicações.
+Exemplo de resposta: MEX1, BRA14, FRA6, SEN10, NED4`;
+
+    const messages = [
+      {
+        role: 'user',
+        content: [
+          ...imageContents,
+          { type: 'text', text: prompt }
+        ]
+      }
+    ];
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        messages
+      })
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      throw new Error(err.error?.message || `HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+    const text = data.content?.map(c => c.text || '').join(' ') || '';
+
+    // Parse codes from response
+    identifiedCodes = parseCodes(text);
+
+    if (identifiedCodes.length === 0) {
+      throw new Error('Nenhum código identificado nas fotos. Tente com fotos mais nítidas.');
+    }
+
+    document.getElementById('photo-result-codes').textContent = identifiedCodes.join(', ');
+    document.getElementById('photo-result-count').textContent =
+      `${identifiedCodes.length} figurinha${identifiedCodes.length>1?'s':''} identificada${identifiedCodes.length>1?'s':''} em ${photoFiles.length} foto${photoFiles.length>1?'s':''}`;
+    document.getElementById('photo-result').style.display = 'block';
+
+  } catch(err) {
+    alert('❌ Erro ao identificar: ' + err.message);
+  } finally {
+    document.getElementById('photo-loading').style.display = 'none';
+    document.getElementById('btn-identify').disabled = false;
+  }
+}
+
+function adicionarCodigosIdentificados() {
+  if (!identifiedCodes.length) return;
+  const field = document.getElementById('sticker-input');
+  const current = field.value.trim();
+  field.value = current ? current + ', ' + identifiedCodes.join(', ') : identifiedCodes.join(', ');
+  // Scroll to update section
+  document.getElementById('sticker-input').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  // Visual feedback
+  const btn = document.querySelector('.btn-add-codes');
+  const orig = btn.textContent;
+  btn.textContent = '✅ Carregado no campo!';
+  setTimeout(() => btn.textContent = orig, 2000);
+}
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function setPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
@@ -2671,7 +2933,7 @@ function setPage(page) {
   if(page==='gestao'){const by=computeStats();renderCoverage(by);renderHeatmap(by);renderEvolution();renderPessoas();}
 }
 
-loadTheme();loadStock();
+loadTheme();loadStock();carregarChaveApi();
 </script>
 
 
