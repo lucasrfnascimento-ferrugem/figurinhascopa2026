@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_4.html -->
+<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_5.html -->
 <html lang="pt-BR" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -2140,30 +2140,78 @@ function setDetailGroup(g){
 }
 
 // ── PARSE ─────────────────────────────────────────
+// ── COUNTRY NAME → CODE MAP ──────────────────────────────────────────
+const NAME_TO_CODE = {
+  'MEXICO':'MEX','MÉXICO':'MEX','AFRICA DO SUL':'RSA','ÁFRICA DO SUL':'RSA',
+  'COREIA DO SUL':'KOR','REPUBLICA TCHECA':'CZE','REPÚBLICA TCHECA':'CZE',
+  'TCHEQUIA':'CZE','TCHÉQUIA':'CZE','REP. TCHECA':'CZE','CANADA':'CAN','CANADÁ':'CAN',
+  'BOSNIA E HERZEGOVINA':'BIH','BÓSNIA E HERZEGOVINA':'BIH','BOSNIA':'BIH','BÓSNIA':'BIH',
+  'CATAR':'QAT','QATAR':'QAT','SUICA':'SUI','SUÍÇA':'SUI','SUIÇA':'SUI',
+  'BRASIL':'BRA','BRAZIL':'BRA','MARROCOS':'MAR','HAITI':'HAI','HAITÍ':'HAI',
+  'ESCOCIA':'SCO','ESCÓCIA':'SCO','ESTADOS UNIDOS':'USA','EUA':'USA',
+  'PARAGUAI':'PAR','PARAGUAY':'PAR','AUSTRALIA':'AUS','AUSTRÁLIA':'AUS',
+  'TURQUIA':'TUR','ALEMANHA':'GER','GERMANY':'GER',
+  'CURACAO':'CUW','CURAÇAO':'CUW','CURAÇÃO':'CUW',
+  'COSTA DO MARFIM':'CIV','EQUADOR':'ECU','ECUADOR':'ECU',
+  'HOLANDA':'NED','PAÍSES BAIXOS':'NED','PAISES BAIXOS':'NED','NETHERLANDS':'NED',
+  'JAPAO':'JPN','JAPÃO':'JPN','JAPAN':'JPN','SUECIA':'SWE','SUÉCIA':'SWE','SWEDEN':'SWE',
+  'TUNISIA':'TUN','TUNÍSIA':'TUN','BELGICA':'BEL','BÉLGICA':'BEL','BELGIUM':'BEL',
+  'EGITO':'EGY','EGYPT':'EGY','IRA':'IRN','IRÃ':'IRN','IRAN':'IRN',
+  'NOVA ZELANDIA':'NZL','NOVA ZELÂNDIA':'NZL','NEW ZEALAND':'NZL',
+  'ESPANHA':'ESP','SPAIN':'ESP','CABO VERDE':'CPV','CAPE VERDE':'CPV',
+  'ARABIA SAUDITA':'KSA','ARÁBIA SAUDITA':'KSA','SAUDI ARABIA':'KSA',
+  'URUGUAI':'URU','URUGUAY':'URU','FRANCA':'FRA','FRANÇA':'FRA','FRANCE':'FRA',
+  'SENEGAL':'SEN','IRAQUE':'IRQ','IRAQ':'IRQ','NORUEGA':'NOR','NORWAY':'NOR',
+  'ARGENTINA':'ARG','ARGELIA':'ALG','ARGÉLIA':'ALG','ALGERIA':'ALG',
+  'AUSTRIA':'AUT','ÁUSTRIA':'AUT','JORDANIA':'JOR','JORDÂNIA':'JOR','JORDAN':'JOR',
+  'PORTUGAL':'POR','CONGO':'COD','RD CONGO':'COD','CONGO RD':'COD',
+  'REP. DEM. CONGO':'COD','UZBEQUISTAO':'UZB','UZBEQUISTÃO':'UZB','UZBEKISTAN':'UZB',
+  'COLOMBIA':'COL','COLÔMBIA':'COL','INGLATERRA':'ENG','ENGLAND':'ENG',
+  'CROACIA':'CRO','CROÁCIA':'CRO','CROATIA':'CRO','GANA':'GHA','GHANA':'GHA',
+  'PANAMA':'PAN','PANAMÁ':'PAN','FWC':'FWC',
+};
+
 function parseCodes(txt) {
+  // Step 0 — normalize "SEN 10" / "SEN  10" → "SEN10"
   const upper = txt.toUpperCase();
+  const normalized = upper.replace(/\b([A-Z]{2,4})\s+(\d{1,2})\b/g, '$1$2');
 
-  // Format 1 — inline codes: MEX1, QAT13, ENG9
-  // Only use this if we find codes without colon-based structure
-  const hasCountryColon = /^\s*[A-Z]{2,4}[^:]*:/m.test(upper);
+  // Detect which format we have
+  const hasColon = /[^:]+:\s*\d/.test(normalized);
 
-  if (!hasCountryColon) {
-    return upper.match(/\b([A-Z]{2,4})(\d{1,2})\b/g) || [];
+  if (!hasColon) {
+    // Format 1 — plain inline codes: MEX1, QAT13, SEN10
+    return normalized.match(/\b([A-Z]{2,4})(\d{1,2})\b/g) || [];
   }
 
-  // Format 2 — "COUNTRY <emoji/text>: num, num, num" per line
   const result = [];
-  const lines = upper.split('\n');
+  const lines = normalized.split('\n');
+
   for (const line of lines) {
-    const countryMatch = line.match(/^\s*([A-Z]{2,4})/);
-    if (!countryMatch) continue;
-    const country = countryMatch[1];
     const colonIdx = line.indexOf(':');
     if (colonIdx === -1) continue;
+    const namePart = line.slice(0, colonIdx).trim();
     const afterColon = line.slice(colonIdx + 1);
     const nums = afterColon.match(/\d{1,2}/g);
-    if (!nums) continue;
-    nums.forEach(n => result.push(country + n));
+    if (!nums || !nums.length) continue;
+
+    // Format 2 — short code: "MEX 🇲🇽: 1, 5"
+    const codeMatch = namePart.match(/^\s*([A-Z]{2,4})\b/);
+    if (codeMatch) {
+      nums.forEach(n => result.push(codeMatch[1] + n));
+      continue;
+    }
+
+    // Format 3 — full name in Portuguese/English: "Holanda: 1, 4, 10"
+    const nameKey = namePart.replace(/[^A-ZÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÇ\s]/g, '').trim();
+    let code = NAME_TO_CODE[nameKey];
+    if (!code) {
+      // Partial match — try if name starts with or is contained in map key
+      for (const [k, v] of Object.entries(NAME_TO_CODE)) {
+        if (nameKey.startsWith(k) || k.startsWith(nameKey)) { code = v; break; }
+      }
+    }
+    if (code) nums.forEach(n => result.push(code + n));
   }
   return result;
 }
