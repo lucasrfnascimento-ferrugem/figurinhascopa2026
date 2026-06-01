@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_8.html -->
+<!-- saved from url=(0058)file:///C:/Users/Lucas/Downloads/copa2026_dashboard_9.html -->
 <html lang="pt-BR" data-theme="light"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -216,6 +216,20 @@ textarea:focus, input[type=text]:focus { border-color:var(--copa-blue); }
 .hist-person { font-weight:600; color:var(--copa-blue); }
 [data-theme="dark"] .hist-person { color:#7eb3ff; }
 .hist-empty { text-align:center; padding:32px; color:var(--muted); font-size:13px; }
+.wish-team-block { margin-bottom:14px; }
+.wish-team-header { display:flex; align-items:center; gap:10px; margin-bottom:6px; }
+.wish-team-name { font-family:'Barlow Condensed',sans-serif; font-size:15px; font-weight:700; color:var(--text); }
+.wish-team-badge { font-size:12px; font-weight:600; padding:2px 10px; border-radius:6px; background:var(--surface3); color:var(--muted); }
+.wish-team-badge.low { background:var(--red-bg); color:#8a0015; }
+[data-theme="dark"] .wish-team-badge.low { color:#ff8099; }
+.wish-chips { display:flex; flex-wrap:wrap; gap:4px; }
+.wish-chip { padding:3px 8px; background:var(--surface2); border:1px solid var(--border); border-radius:6px; font-size:11px; font-weight:600; font-family:'Barlow Condensed',sans-serif; color:var(--muted); }
+.wish-result-box { max-height:400px; overflow-y:auto; padding:14px; background:var(--bg); border-radius:10px; border:1px solid var(--border); margin-top:14px; }
+.wish-empty { text-align:center; padding:32px; color:var(--muted); font-size:13px; }
+.btn-wish-copy { width:100%; padding:13px; border-radius:12px; border:none; background:linear-gradient(135deg,var(--copa-blue),#1a4db3); color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:16px; font-weight:700; letter-spacing:1.5px; cursor:pointer; transition:all .2s; margin-top:12px; display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-wish-copy:hover { opacity:.88; }
+.btn-wish-copy:disabled { opacity:.4; cursor:not-allowed; }
+
 .edit-btn { background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--muted); font-size:11px; padding:3px 8px; cursor:pointer; transition:all .15s; font-family:'Barlow',sans-serif; }
 .edit-btn:hover { border-color:var(--copa-blue); color:var(--copa-blue); background:var(--surface2); }
 /* Edit modal */
@@ -324,28 +338,28 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div>
     </div>
     <div class="header-right">
-      <div class="last-update">Atualizado: <strong id="last-update-date">31/05/2026 17:10</strong></div>
+      <div class="last-update">Atualizado: <strong id="last-update-date">31/05/2026 23:01</strong></div>
       <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙 Dark</button>
     </div>
   </div>
 </header>
 
 <nav class="nav-tabs">
-  <button class="nav-tab" onclick="setPage(&#39;consulta&#39;)" id="tab-consulta">🎴 Consulta de Figurinhas</button>
+  <button class="nav-tab active" onclick="setPage(&#39;consulta&#39;)" id="tab-consulta">🎴 Consulta de Figurinhas</button>
   <button class="nav-tab" onclick="setPage(&#39;gestao&#39;)" id="tab-gestao">📊 Gestão de Estoque</button>
-  <button class="nav-tab active" onclick="setPage(&#39;acervo&#39;)" id="tab-acervo">⚙️ Atualização de Acervo</button>
+  <button class="nav-tab" onclick="setPage(&#39;acervo&#39;)" id="tab-acervo">⚙️ Atualização de Acervo</button>
 </nav>
 
 <main>
 
   <!-- ═══ PÁGINA 1: CONSULTA ═══ -->
-  <div class="page" id="page-consulta">
+  <div class="page active" id="page-consulta">
 
     <!-- BIG NUMBERS -->
     <div class="bignums">
-      <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">514</div><div class="bignum-sub">repetidas no estoque</div></div>
-      <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">275</div><div class="bignum-sub">códigos únicos</div></div>
-      <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">3</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
+      <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">473</div><div class="bignum-sub">repetidas no estoque</div></div>
+      <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">274</div><div class="bignum-sub">códigos únicos</div></div>
+      <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">2</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
       <div class="bignum green-c"><div class="bignum-icon">🥇</div><div class="bignum-label">Maior acervo</div><div class="bignum-value" id="bn-top">URU</div><div class="bignum-sub" id="bn-top-sub">12 distintas  🇺🇾</div></div>
     <div class="bignum" style="border-top:4px solid #7c3aed"><div class="bignum-icon">🌟</div><div class="bignum-label">Figurinhas FWC</div><div class="bignum-value" style="color:#7c3aed" id="bn-fwc">15</div><div class="bignum-sub">especiais FIFA World Cup</div></div>
     </div>
@@ -408,15 +422,9 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <div id="detail-grid"><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇺🇾</span>URU</h4>
-        <span class="c-stats">12 dist. · 27 total</span>
+        <span class="c-stats">12 dist. · 22 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sergio Rochet</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Santiago Mele</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nahitan Nandez</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Valverde</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU12<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Bentancur</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU14<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Manuel Ugarte</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU15<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolás de la Cruz</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU16<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Maxi Araujo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Darwin Núñez</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU18<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Viñas</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Aguirre</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU20<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Facundo Pellistri</span></span></div>
-    </div><div class="country-card">
-      <div class="country-card-header">
-        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇺🇸</span>USA</h4>
-        <span class="c-stats">11 dist. · 14 total</span>
-      </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA1 </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Chris Richards</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tim Ream</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Antonee Robinson</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tyler Adams</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA11<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Christian Roldan</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Diego Luna</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Malik Tillman</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Christian Pulisic</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ricardo Pepi</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Haji Wright</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sergio Rochet</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Santiago Mele</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nahitan Nandez</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Valverde</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU12<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Bentancur</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU14<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Manuel Ugarte</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU15<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolás de la Cruz</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Maxi Araujo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Darwin Núñez</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU18<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Federico Viñas</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rodrigo Aguirre</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">URU20<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Facundo Pellistri</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇨🇩</span>COD</h4>
@@ -426,15 +434,21 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇨🇴</span>COL</h4>
-        <span class="c-stats">10 dist. · 17 total</span>
+        <span class="c-stats">10 dist. · 14 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Daniel Muñoz</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Davinson Sánchez</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL8<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jhon Arias</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL10<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Luis Díaz</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rafael Santos Borré</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jhon Córdoba</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL13 </span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Óscar Murillo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Juan Cuadrado</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jáder Durán</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Daniel Muñoz</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Davinson Sánchez</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL8<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jhon Arias</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL10<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Luis Díaz</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Rafael Santos Borré</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jhon Córdoba</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL13 </span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Óscar Murillo</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Juan Cuadrado</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">COL20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jáder Durán</span></span></div>
+    </div><div class="country-card">
+      <div class="country-card-header">
+        <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇺🇸</span>USA</h4>
+        <span class="c-stats">10 dist. · 11 total</span>
+      </div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Chris Richards</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tim Ream</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Antonee Robinson</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tyler Adams</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Christian Roldan</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Diego Luna</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Malik Tillman</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Christian Pulisic</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ricardo Pepi</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">USA19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Haji Wright</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇸🇳</span>SEN</h4>
-        <span class="c-stats">9 dist. · 17 total</span>
+        <span class="c-stats">9 dist. · 11 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN5<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Abdoulaye Seck</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN7<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">El Hadji Malick Diouf</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kalidou Koulibaly</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN9<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Idrissa Gana Gueye</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Habib Diarra</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN13<sup>×3</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lamine Camara</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN19<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolas Jackson</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN20<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Krepin Diatta</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN5 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Abdoulaye Seck</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">El Hadji Malick Diouf</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kalidou Koulibaly</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN9<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Idrissa Gana Gueye</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Habib Diarra</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN13<sup>×2</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lamine Camara</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nicolas Jackson</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SEN20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Krepin Diatta</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇨🇿</span>CZE</h4>
@@ -456,9 +470,9 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇺🇿</span>UZB</h4>
-        <span class="c-stats">8 dist. · 16 total</span>
+        <span class="c-stats">8 dist. · 12 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB3<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Otabek Shukurov</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB7<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Abbosbek Fayzullaev</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sherzod Nasrullayev</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Khurshid Tursunov</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB13<sup>×4</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nodirbek Abdusalomov</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sanjar Tursunov</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB18<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Otabek Jurayev</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Otabek Shukurov</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB7<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Abbosbek Fayzullaev</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB9 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sherzod Nasrullayev</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Khurshid Tursunov</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB13<sup>×3</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nodirbek Abdusalomov</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Sanjar Tursunov</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">UZB18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Otabek Jurayev</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇨🇮</span>CIV</h4>
@@ -468,15 +482,15 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇦🇺</span>AUS</h4>
-        <span class="c-stats">8 dist. · 18 total</span>
+        <span class="c-stats">8 dist. · 13 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Joe Gauci</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aziz Behich</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jackson Irvine</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS13<sup>×7</sup> </span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Connor Metcalfe</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS16<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Patrick Yazbek</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nestory Irankunda</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS20<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Mohamed Touré</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Joe Gauci</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aziz Behich</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jackson Irvine</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS13<sup>×6</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Connor Metcalfe</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Patrick Yazbek</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Nestory Irankunda</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">AUS20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Mohamed Touré</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🏴󠁧󠁢󠁳󠁣󠁴󠁿</span>SCO</h4>
-        <span class="c-stats">8 dist. · 10 total</span>
+        <span class="c-stats">8 dist. · 8 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO2<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Angus Gunn</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO3<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jack Hendry</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kieran Tierney</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO5 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aaron Hickey</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO13 </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">John McGinn</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lyndon Dykes</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ben Doak</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Angus Gunn</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jack Hendry</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kieran Tierney</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO5 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aaron Hickey</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO13 </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">John McGinn</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Lyndon Dykes</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SCO20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ben Doak</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇨🇭</span>SUI</h4>
@@ -516,9 +530,9 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇮🇶</span>IRQ</h4>
-        <span class="c-stats">7 dist. · 9 total</span>
+        <span class="c-stats">7 dist. · 7 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Hussein Ali</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ5<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Akam Hashem</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Youssef Amyn</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Marko Farji</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Osama Rashid</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aymen Hussein</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ20<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Mohanad Ali</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ4 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Hussein Ali</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ5 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Akam Hashem</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ14 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Youssef Amyn</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Marko Farji</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ17 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Osama Rashid</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Aymen Hussein</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">IRQ20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Mohanad Ali</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇹🇷</span>TUR</h4>
@@ -552,15 +566,15 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇰🇷</span>KOR</h4>
-        <span class="c-stats">6 dist. · 10 total</span>
+        <span class="c-stats">6 dist. · 6 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR7<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Han-beom Lee</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR8<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tae-seok Lee</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">In-beom Hwang</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR12<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kang-in Lee</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR15<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jens Castrop</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Dong-gyeong Lee</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Han-beom Lee</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR8 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Tae-seok Lee</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">In-beom Hwang</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kang-in Lee</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR15 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Jens Castrop</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KOR16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Dong-gyeong Lee</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇸🇪</span>SWE</h4>
-        <span class="c-stats">6 dist. · 8 total</span>
+        <span class="c-stats">6 dist. · 6 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Victor Johansson</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Isak Hien</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE5<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Emil Holm</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE7<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Gustaf Lagerbielke</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Mattias Svanberg</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Anthony Elanga</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE2 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Victor Johansson</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Isak Hien</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE5 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Emil Holm</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE7 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Gustaf Lagerbielke</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE12 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Mattias Svanberg</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">SWE18 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Anthony Elanga</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇦🇷</span>ARG</h4>
@@ -576,15 +590,15 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇸🇦</span>KSA</h4>
-        <span class="c-stats">5 dist. · 13 total</span>
+        <span class="c-stats">5 dist. · 10 total</span>
       </div>
-      <div class="country-card-body"><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA9<sup>×4</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Musab Aljuwayr</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ziyad Aljohani</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA11<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Abdullah Alkhaibari</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA13<sup>×5</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Salem Aldawsari</span></span></div>
+      <div class="country-card-body"><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA9<sup>×3</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Musab Aljuwayr</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA10 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ziyad Aljohani</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Abdullah Alkhaibari</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA13<sup>×4</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">KSA16 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Salem Aldawsari</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇵🇦</span>PAN</h4>
-        <span class="c-stats">5 dist. · 8 total</span>
+        <span class="c-stats">5 dist. · 6 total</span>
       </div>
-      <div class="country-card-body"><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN3<sup>×2</sup> <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Luis Mejía</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kevin Kelsy</span></span><span class="chip qn" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN13<sup>×3</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Gabriel Torres</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ronaldo Deago</span></span></div>
+      <div class="country-card-body"><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN3 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Luis Mejía</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN11 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Kevin Kelsy</span></span><span class="chip q2" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN13<sup>×2</sup> </span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN19 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Gabriel Torres</span></span><span class="chip q1" style="display:inline-flex;flex-direction:column;padding:4px 8px;">PAN20 <span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">Ronaldo Deago</span></span></div>
     </div><div class="country-card">
       <div class="country-card-header">
         <h4><span style="font-size:20px;margin-right:6px;line-height:1">🇳🇱</span>NED</h4>
@@ -724,20 +738,12 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">🥇</td>
       <td><span style="font-weight:600">🇺🇾 URU</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
       <td class="right val-blue">12</td>
-      <td class="right">27</td>
-      <td class="right val-rep">15</td>
+      <td class="right">22</td>
+      <td class="right val-rep">10</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:100%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">🥈</td>
-      <td><span style="font-weight:600">🇺🇸 USA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
-      <td class="right val-blue">11</td>
-      <td class="right">14</td>
-      <td class="right val-rep">3</td>
-      <td class="right val-shield">1</td>
-      <td><div class="bar-bg"><div class="bar-fill" style="width:92%"></div></div></td>
-    </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">🥉</td>
       <td><span style="font-weight:600">🇨🇩 COD</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
       <td class="right val-blue">10</td>
       <td class="right">14</td>
@@ -745,19 +751,27 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:83%"></div></div></td>
     </tr><tr>
-      <td class="right" style="color:var(--muted);font-size:12px">4</td>
+      <td class="right" style="color:var(--muted);font-size:12px">🥉</td>
       <td><span style="font-weight:600">🇨🇴 COL</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
       <td class="right val-blue">10</td>
-      <td class="right">17</td>
-      <td class="right val-rep">7</td>
+      <td class="right">14</td>
+      <td class="right val-rep">4</td>
+      <td class="right val-shield">—</td>
+      <td><div class="bar-bg"><div class="bar-fill" style="width:83%"></div></div></td>
+    </tr><tr>
+      <td class="right" style="color:var(--muted);font-size:12px">4</td>
+      <td><span style="font-weight:600">🇺🇸 USA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
+      <td class="right val-blue">10</td>
+      <td class="right">11</td>
+      <td class="right val-rep">1</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:83%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">5</td>
       <td><span style="font-weight:600">🇸🇳 SEN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
       <td class="right val-blue">9</td>
-      <td class="right">17</td>
-      <td class="right val-rep">8</td>
+      <td class="right">11</td>
+      <td class="right val-rep">2</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:75%"></div></div></td>
     </tr><tr>
@@ -788,8 +802,8 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">9</td>
       <td><span style="font-weight:600">🇺🇿 UZB</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.K</span></td>
       <td class="right val-blue">8</td>
-      <td class="right">16</td>
-      <td class="right val-rep">8</td>
+      <td class="right">12</td>
+      <td class="right val-rep">4</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
@@ -804,16 +818,16 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">11</td>
       <td><span style="font-weight:600">🇦🇺 AUS</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.D</span></td>
       <td class="right val-blue">8</td>
-      <td class="right">18</td>
-      <td class="right val-rep">10</td>
+      <td class="right">13</td>
+      <td class="right val-rep">5</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">12</td>
       <td><span style="font-weight:600">🏴󠁧󠁢󠁳󠁣󠁴󠁿 SCO</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.C</span></td>
       <td class="right val-blue">8</td>
-      <td class="right">10</td>
-      <td class="right val-rep">2</td>
+      <td class="right">8</td>
+      <td class="right val-rep">0</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:67%"></div></div></td>
     </tr><tr>
@@ -868,8 +882,8 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">19</td>
       <td><span style="font-weight:600">🇮🇶 IRQ</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.I</span></td>
       <td class="right val-blue">7</td>
-      <td class="right">9</td>
-      <td class="right val-rep">2</td>
+      <td class="right">7</td>
+      <td class="right val-rep">0</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:58%"></div></div></td>
     </tr><tr>
@@ -916,16 +930,16 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">25</td>
       <td><span style="font-weight:600">🇰🇷 KOR</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.A</span></td>
       <td class="right val-blue">6</td>
-      <td class="right">10</td>
-      <td class="right val-rep">4</td>
+      <td class="right">6</td>
+      <td class="right val-rep">0</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">26</td>
       <td><span style="font-weight:600">🇸🇪 SWE</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.F</span></td>
       <td class="right val-blue">6</td>
-      <td class="right">8</td>
-      <td class="right val-rep">2</td>
+      <td class="right">6</td>
+      <td class="right val-rep">0</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div></td>
     </tr><tr>
@@ -948,16 +962,16 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <td class="right" style="color:var(--muted);font-size:12px">29</td>
       <td><span style="font-weight:600">🇸🇦 KSA</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.H</span></td>
       <td class="right val-blue">5</td>
-      <td class="right">13</td>
-      <td class="right val-rep">8</td>
+      <td class="right">10</td>
+      <td class="right val-rep">5</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:42%"></div></div></td>
     </tr><tr>
       <td class="right" style="color:var(--muted);font-size:12px">30</td>
       <td><span style="font-weight:600">🇵🇦 PAN</span><span style="font-size:10px;color:var(--muted);margin-left:4px">Gr.L</span></td>
       <td class="right val-blue">5</td>
-      <td class="right">8</td>
-      <td class="right val-rep">3</td>
+      <td class="right">6</td>
+      <td class="right val-rep">1</td>
       <td class="right val-shield">—</td>
       <td><div class="bar-bg"><div class="bar-fill" style="width:42%"></div></div></td>
     </tr><tr>
@@ -1131,11 +1145,11 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. D</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
-        <div style="width:36%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
-          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">36%</span>
+        <div style="width:35%;background:var(--copa-red);height:18px;border-radius:6px;transition:width .4s;display:flex;align-items:center;padding:0 8px">
+          <span style="font-size:10px;color:#fff;font-weight:700;white-space:nowrap">35%</span>
         </div>
       </div>
-      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">29/80</span>
+      <span style="width:60px;text-align:right;font-weight:600;color:var(--text)">28/80</span>
     </div><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;font-size:12px">
       <span style="width:52px;font-family:Barlow Condensed,sans-serif;font-weight:700;color:var(--muted)">Gr. E</span>
       <div style="flex:1;background:var(--surface3);border-radius:6px;height:18px;overflow:hidden">
@@ -1274,10 +1288,10 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div></div>
     </div><div style="grid-column:1/-1">
       <div style="font-size:11px;color:var(--muted);font-weight:700;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px">Grupo D</div>
-      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(27,138,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
+      <div class="heatmap-grid" style="gap:6px;margin-bottom:14px"><div style="background:rgb(43,125,30);border-radius:8px;padding:8px 6px;text-align:center;color:#fff;font-size:11px;font-weight:700">
         <div style="font-size:16px">🇺🇸</div>
         <div>USA</div>
-        <div style="font-size:13px;margin-top:2px">11</div>
+        <div style="font-size:13px;margin-top:2px">10</div>
       </div><div style="background:rgb(160,38,30);border-radius:8px;padding:8px 6px;text-align:center;color:var(--text);font-size:11px;font-weight:700">
         <div style="font-size:16px">🇵🇾</div>
         <div>PAR</div>
@@ -1485,7 +1499,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <td style="padding:9px 12px;color:var(--muted)">🥈</td>
         <td style="padding:9px 12px;font-weight:600">AndreOliveira</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">192</td>
-        <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--green)">192</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">30/05/2026, 19:02</td>
       </tr><tr style="border-top:1px solid var(--border)">
@@ -1539,90 +1553,97 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">30/05/2026, 17:19</td>
       </tr><tr style="border-top:1px solid var(--border)">
         <td style="padding:9px 12px;color:var(--muted)">10</td>
+        <td style="padding:9px 12px;font-weight:600">JefersonUber</td>
+        <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">41</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">41</td>
+        <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">31/05/2026, 23:01</td>
+      </tr><tr style="border-top:1px solid var(--border)">
+        <td style="padding:9px 12px;color:var(--muted)">11</td>
         <td style="padding:9px 12px;font-weight:600">LucasAquisicaoI&amp;J</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">34</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">30/05/2026, 17:25</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">11</td>
+        <td style="padding:9px 12px;color:var(--muted)">12</td>
         <td style="padding:9px 12px;font-weight:600">LucasAquisicaoG&amp;H</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">34</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">30/05/2026, 17:21</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">12</td>
+        <td style="padding:9px 12px;color:var(--muted)">13</td>
         <td style="padding:9px 12px;font-weight:600">RafaSP</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">27</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 16:46</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">13</td>
+        <td style="padding:9px 12px;color:var(--muted)">14</td>
         <td style="padding:9px 12px;font-weight:600">Matheus</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">26</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 20:18</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">14</td>
+        <td style="padding:9px 12px;color:var(--muted)">15</td>
         <td style="padding:9px 12px;font-weight:600">MatheusGuardiano</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">23</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 23:00</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">15</td>
+        <td style="padding:9px 12px;color:var(--muted)">16</td>
         <td style="padding:9px 12px;font-weight:600">LucasAquisicaoFWC</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">22</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">30/05/2026, 17:44</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">16</td>
+        <td style="padding:9px 12px;color:var(--muted)">17</td>
         <td style="padding:9px 12px;font-weight:600">Rafa SP</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">11</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">11</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">31/05/2026, 17:10</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">17</td>
+        <td style="padding:9px 12px;color:var(--muted)">18</td>
         <td style="padding:9px 12px;font-weight:600">Guguinha</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">10</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">10</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">31/05/2026, 11:16</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">18</td>
+        <td style="padding:9px 12px;color:var(--muted)">19</td>
         <td style="padding:9px 12px;font-weight:600">JuanSobrinho</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">9</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">29/05/2026, 23:04</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">19</td>
+        <td style="padding:9px 12px;color:var(--muted)">20</td>
         <td style="padding:9px 12px;font-weight:600">Lucas</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">4</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 16:25</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">20</td>
+        <td style="padding:9px 12px;color:var(--muted)">21</td>
         <td style="padding:9px 12px;font-weight:600">DanielSafra</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">3</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">29/05/2026, 17:24</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">21</td>
+        <td style="padding:9px 12px;color:var(--muted)">22</td>
         <td style="padding:9px 12px;font-weight:600">AmigoDeby</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">3</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--copa-gold)">0</td>
         <td style="padding:9px 12px;text-align:right;color:var(--muted);font-size:11px">28/05/2026, 23:53</td>
       </tr><tr style="border-top:1px solid var(--border)">
-        <td style="padding:9px 12px;color:var(--muted)">22</td>
+        <td style="padding:9px 12px;color:var(--muted)">23</td>
         <td style="padding:9px 12px;font-weight:600">LucasUpdate</td>
         <td style="padding:9px 12px;text-align:right;font-weight:700;color:var(--copa-blue)">2</td>
         <td style="padding:9px 12px;text-align:right;color:var(--green)">0</td>
@@ -1633,10 +1654,31 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
   </table></div>
     </div>
 
+
+    <!-- LISTA DE FIGURINHAS FALTANTES -->
+    <div class="section-label">Lista de faltantes para compra</div>
+    <div class="panel blue-top" style="margin-bottom:24px">
+      <div class="panel-title">Gerar lista de prioridade</div>
+      <p style="font-size:13px;color:var(--muted);margin-bottom:14px;line-height:1.6">
+        Informe a quantidade máxima de figurinhas e o sistema gera uma lista das que você <strong>não possui</strong>, ordenada das seleções com <strong>menos distintas</strong> para as com mais.
+      </p>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <label style="font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Quantidade:</label>
+          <input type="number" id="wish-qty" min="1" max="994" value="50" style="width:90px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:&#39;Barlow&#39;,sans-serif;font-size:14px;padding:8px 12px;outline:none;text-align:center;">
+        </div>
+        <button class="btn btn-gold" onclick="gerarListaFaltantes()" style="padding:10px 24px;">⚡ Gerar lista</button>
+        <button class="btn btn-secondary" onclick="limparListaFaltantes()" style="padding:10px 16px;">Limpar</button>
+      </div>
+      <div id="wish-summary" style="font-size:12px;color:var(--muted);min-height:18px;margin-bottom:4px"></div>
+      <div id="wish-result" class="wish-result-box" style="display:none"></div>
+      <button class="btn-wish-copy" id="btn-wish-copy" onclick="copiarListaFaltantes()" style="display:none">📋 Copiar lista para WhatsApp</button>
+    </div>
+
   </div><!-- /page-gestao -->
 
   <!-- ═══ PÁGINA 2: ATUALIZAÇÃO ═══ -->
-  <div class="page active" id="page-acervo">
+  <div class="page" id="page-acervo">
 
     <!-- ATUALIZAR ESTOQUE -->
     <div class="section-label">Atualizar estoque</div>
@@ -1671,13 +1713,21 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
             <th>Data/Hora</th><th>Ação</th><th>Tipo</th><th>Pessoa</th><th class="hist-col-codes">Figurinhas</th><th class="right" style="text-align:right">Qtd</th><th></th>
           </tr></thead>
           <tbody id="hist-body"><tr>
+    <td style="color:var(--muted);white-space:nowrap;font-size:11px">31/05/2026, 23:01</td>
+    <td><span class="hist-badge out">− Saiu</span></td>
+    <td style="font-size:12px;color:var(--muted)">Troca</td>
+    <td class="hist-person">JefersonUber</td>
+    <td class="hist-codes hist-col-codes">COL8, COL10, COL11, SEN5, SEN7, SEN9, SEN13, SEN19, SEN20, IRQ5, IRQ20, UZB3 +29 mais</td>
+    <td style="text-align:right;font-weight:600">41</td>
+    <td><button class="edit-btn" onclick="abrirEditModal(0)">✏️</button></td>
+  </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">31/05/2026, 17:10</td>
     <td><span class="hist-badge out">− Saiu</span></td>
     <td style="font-size:12px;color:var(--muted)">Troca</td>
     <td class="hist-person">Rafa SP</td>
     <td class="hist-codes hist-col-codes">CRO20, CZE3, CZE1, UZB5, USA1, TUN3, TUN4, SWE17, COD5, COD14, COD18</td>
     <td style="text-align:right;font-weight:600">11</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(0)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(1)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">31/05/2026, 11:16</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1685,15 +1735,15 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Guguinha</td>
     <td class="hist-codes hist-col-codes">POR20, URU10, BEL15, FRA15, FRA9, FRA14, BRA9, BRA4, ARG18, BRA13</td>
     <td style="text-align:right;font-weight:600">10</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(1)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(2)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 19:02</td>
     <td><span class="hist-badge out">− Saiu</span></td>
-    <td style="font-size:12px;color:var(--muted)">—</td>
+    <td style="font-size:12px;color:var(--muted)">Venda</td>
     <td class="hist-person">AndreOliveira</td>
     <td class="hist-codes hist-col-codes">MEX3, RSA1, KOR4, KOR5, KOR8, KOR15, CZE3, CZE11, CZE14, CZE15, CZE19, CZE20 +180 mais</td>
     <td style="text-align:right;font-weight:600">192</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(2)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(3)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:44</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1701,7 +1751,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoFWC</td>
     <td class="hist-codes hist-col-codes">FWC0, FWC4, FWC4, FWC5, FWC5, FWC6, FWC7, FWC9, FWC9, FWC9, FWC9, FWC12 +10 mais</td>
     <td style="text-align:right;font-weight:600">22</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(3)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(4)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:39</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1709,7 +1759,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoK&amp;L</td>
     <td class="hist-codes hist-col-codes">POR13, COD2, COD2, COD3, COD3, COD8, COD10, COD11, COD14, COD15, COD15, COD16 +34 mais</td>
     <td style="text-align:right;font-weight:600">46</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(4)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(5)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:25</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1717,7 +1767,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoI&amp;J</td>
     <td class="hist-codes hist-col-codes">FRA6, FRA7, FRA11, FRA15, FRA16, FRA19, FRA19, FRA20, SEN2, SEN6, SEN10, SEN13 +22 mais</td>
     <td style="text-align:right;font-weight:600">34</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(5)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(6)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:21</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1725,7 +1775,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoG&amp;H</td>
     <td class="hist-codes hist-col-codes">BEL7, BEL16, BEL20, EGY8, EGY12, EGY13, EGY14, IRN20, ESP5, ESP9, ESP13, ESP14 +22 mais</td>
     <td style="text-align:right;font-weight:600">34</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(6)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(7)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:19</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1733,7 +1783,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoE&amp;F</td>
     <td class="hist-codes hist-col-codes">GER4</td>
     <td style="text-align:right;font-weight:600">1</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(7)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(8)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:16</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1741,7 +1791,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoE&amp;F</td>
     <td class="hist-codes hist-col-codes">GER4, GER5, GER8, GER8, GER9, CUW12, CUW13, CUW14, CIV5, CIV8, CIV12, CIV13 +29 mais</td>
     <td style="text-align:right;font-weight:600">41</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(8)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(9)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:10</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1749,7 +1799,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoC&amp;D</td>
     <td class="hist-codes hist-col-codes">BRA4, BRA5, BRA13, MAR4, MAR5, MAR9, HAI5, SCO2, SCO17, SCO18, USA1, USA1 +33 mais</td>
     <td style="text-align:right;font-weight:600">45</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(9)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(10)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:04</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1757,7 +1807,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoA&amp;B</td>
     <td class="hist-codes hist-col-codes">RSA3, RSA5, KOR4, KOR5, CZE1, CZE3, CZE4, CZE5, CZE7, CZE7, CZE8, CZE8 +38 mais</td>
     <td style="text-align:right;font-weight:600">50</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(10)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(11)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 17:03</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1765,7 +1815,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoA&amp;B</td>
     <td class="hist-codes hist-col-codes">RSA3, RSA5, KOR4, KOR5, CZE3, CZE8, CZE9, CZE20, CZE7, CZE8, CZE1, CZE7 +33 mais</td>
     <td style="text-align:right;font-weight:600">45</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(11)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(12)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">30/05/2026, 16:56</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1773,7 +1823,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoA&amp;B</td>
     <td class="hist-codes hist-col-codes">RSA3, RSA5, KOR4, KOR5, CZE3, CZE8, CZE9, CZE20, CZE7, CZE8, CZE1, CZE7 +33 mais</td>
     <td style="text-align:right;font-weight:600">45</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(12)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(13)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">29/05/2026, 23:04</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1781,7 +1831,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">JuanSobrinho</td>
     <td class="hist-codes hist-col-codes">ARG1, TUR1, GHA1, FWC00, FWC9, FWC10, FWC11, FWC14, BRA14</td>
     <td style="text-align:right;font-weight:600">9</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(13)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(14)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">29/05/2026, 17:40</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1789,7 +1839,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicao</td>
     <td class="hist-codes hist-col-codes">UZB18, FRA14, POR5, JPN18, KSA9, SWE12, NED13, USA14, FWC11, FWC10, ENG13, AUT5 +56 mais</td>
     <td style="text-align:right;font-weight:600">68</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(14)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(15)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">29/05/2026, 17:24</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1797,7 +1847,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">DanielSafra</td>
     <td class="hist-codes hist-col-codes">GER8, IRN13, SWE1</td>
     <td style="text-align:right;font-weight:600">3</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(15)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(16)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">29/05/2026, 09:39</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1805,7 +1855,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaMenor</td>
     <td class="hist-codes hist-col-codes">MEX4, MEX9, MEX10, RSA5, KOR5, KOR16, KOR20, CZE13, CAN3, CAN7, CAN11, BIH11 +83 mais</td>
     <td style="text-align:right;font-weight:600">95</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(16)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(17)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 23:53</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1813,7 +1863,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">AmigoDeby</td>
     <td class="hist-codes hist-col-codes">IRQ14</td>
     <td style="text-align:right;font-weight:600">1</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(17)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(18)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 23:39</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1821,7 +1871,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasUpdate</td>
     <td class="hist-codes hist-col-codes">BRA14, BRA9</td>
     <td style="text-align:right;font-weight:600">2</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(18)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(19)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 23:00</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1829,7 +1879,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">MatheusGuardiano</td>
     <td class="hist-codes hist-col-codes">FWC2, CAN16, BIH3, BIH8, SUI5, TUR3, TUR7, CUW15, CIV5, SWE16, BEL11, BEL16 +11 mais</td>
     <td style="text-align:right;font-weight:600">23</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(19)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(20)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 22:38</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1837,7 +1887,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Bady</td>
     <td class="hist-codes hist-col-codes">SWE1, SCO4, COD1, COD6, COD9, COD14, BIH3, BIH9, BIH16, IRQ20, IRQ7, SUI4 +14 mais</td>
     <td style="text-align:right;font-weight:600">26</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(20)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(21)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 21:49</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1845,7 +1895,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Bady</td>
     <td class="hist-codes hist-col-codes">HAI7, HAI16, FRA20, ARG3, ALG18</td>
     <td style="text-align:right;font-weight:600">5</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(21)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(22)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 21:23</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1853,7 +1903,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicaoAtual</td>
     <td class="hist-codes hist-col-codes">IRQ2, IRQ9, IRQ14, IRQ18, TUN18, TUN14, QAT13, QAT16, QAT20, JOR12, JOR20, CZE4 +123 mais</td>
     <td style="text-align:right;font-weight:600">135</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(22)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(23)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 21:19</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1861,7 +1911,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicao</td>
     <td class="hist-codes hist-col-codes">IRAQ2, IRAQ9, IRAQ14, IRAQ18, TUN18, TUN14, CATA13, CATA16, CATA20, JORD12, JORD20, REP4 +111 mais</td>
     <td style="text-align:right;font-weight:600">123</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(23)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(24)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 21:18</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1869,7 +1919,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">LucasAquisicao</td>
     <td class="hist-codes hist-col-codes">IRAQ2, IRAQ9, IRAQ14, IRAQ18, TUN18, TUN14, CATA13, CATA16, CATA20, JORD12, JORD20, REP4 +111 mais</td>
     <td style="text-align:right;font-weight:600">123</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(24)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(25)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 20:18</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1877,7 +1927,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Matheus</td>
     <td class="hist-codes hist-col-codes">CZE11, CAN11, BIH8, CUW15, SWE2, SWE16, BEL11, NZL11, CPV3, CPV7, JOR7, GHA4 +1 mais</td>
     <td style="text-align:right;font-weight:600">13</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(25)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(26)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 20:18</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1885,7 +1935,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Matheus</td>
     <td class="hist-codes hist-col-codes">CZE11, CAN11, BIH8, CUW15, SWE2, SWE16, BEL11, NZL11, CPV3, CPV7, JOR7, GHA4 +1 mais</td>
     <td style="text-align:right;font-weight:600">13</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(26)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(27)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 18:43</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1893,7 +1943,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">AmigoDeby</td>
     <td class="hist-codes hist-col-codes">IRQ6, IRQ15</td>
     <td style="text-align:right;font-weight:600">2</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(27)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(28)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 17:18</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1901,7 +1951,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Bady</td>
     <td class="hist-codes hist-col-codes">FWC5, QAT1, PAR19, AUS8, JPN8, JPN12, JPN16, SWE6, EGY11, EGY16, CPV11, URU1 +5 mais</td>
     <td style="text-align:right;font-weight:600">17</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(28)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(29)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:46</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1909,7 +1959,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">GER1, SWE1, FWC5, FWC4</td>
     <td style="text-align:right;font-weight:600">4</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(29)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(30)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:45</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1917,7 +1967,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">USA11, USA12, USA18</td>
     <td style="text-align:right;font-weight:600">3</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(30)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(31)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:43</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1925,7 +1975,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">SWE2, SWE4, SWE6, SWE7, SWE16</td>
     <td style="text-align:right;font-weight:600">5</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(31)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(32)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:41</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1933,7 +1983,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">POR5, POR6, POR13, POR18, POR19</td>
     <td style="text-align:right;font-weight:600">5</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(32)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(33)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:41</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1941,7 +1991,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">PAR11, PAR16, PAR17, PAR19</td>
     <td style="text-align:right;font-weight:600">4</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(33)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(34)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:40</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1949,7 +1999,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">ARG9, ARG10, ARG14</td>
     <td style="text-align:right;font-weight:600">3</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(34)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(35)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:39</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1957,7 +2007,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">RafaSP</td>
     <td class="hist-codes hist-col-codes">ALG4, ALG7, ALG13</td>
     <td style="text-align:right;font-weight:600">3</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(35)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(36)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:25</td>
     <td><span class="hist-badge out">− Saiu</span></td>
@@ -1965,7 +2015,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Lucas</td>
     <td class="hist-codes hist-col-codes">BRA1, BRA2</td>
     <td style="text-align:right;font-weight:600">2</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(36)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(37)">✏️</button></td>
   </tr><tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">28/05/2026, 16:25</td>
     <td><span class="hist-badge in">+ Entrou</span></td>
@@ -1973,7 +2023,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <td class="hist-person">Lucas</td>
     <td class="hist-codes hist-col-codes">BRA1, BRA2</td>
     <td style="text-align:right;font-weight:600">2</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(37)">✏️</button></td>
+    <td><button class="edit-btn" onclick="abrirEditModal(38)">✏️</button></td>
   </tr></tbody>
         </table>
       </div>
@@ -2788,6 +2838,115 @@ function exportarHistoricoXLSX(){
   const cols=[{wch:18},{wch:10},{wch:10},{wch:20},{wch:60},{wch:10}];
   ws['!cols']=cols;
   XLSX.writeFile(wb,'historico_figurinhas_copa2026.xlsx');
+}
+
+// ── WISH LIST — LISTA DE FALTANTES ────────────────────────────────────
+const CODE_TO_NAME_PT = {
+  MEX:'México',RSA:'África do Sul',KOR:'Coreia do Sul',CZE:'República Tcheca',
+  CAN:'Canadá',BIH:'Bósnia e Herzegovina',QAT:'Catar',SUI:'Suíça',
+  BRA:'Brasil',MAR:'Marrocos',HAI:'Haiti',SCO:'Escócia',
+  USA:'Estados Unidos',PAR:'Paraguai',AUS:'Austrália',TUR:'Turquia',
+  GER:'Alemanha',CUW:'Curaçao',CIV:'Costa do Marfim',ECU:'Equador',
+  NED:'Holanda',JPN:'Japão',SWE:'Suécia',TUN:'Tunísia',
+  BEL:'Bélgica',EGY:'Egito',IRN:'Irã',NZL:'Nova Zelândia',
+  ESP:'Espanha',CPV:'Cabo Verde',KSA:'Arábia Saudita',URU:'Uruguai',
+  FRA:'França',SEN:'Senegal',IRQ:'Iraque',NOR:'Noruega',
+  ARG:'Argentina',ALG:'Argélia',AUT:'Áustria',JOR:'Jordânia',
+  POR:'Portugal',COD:'Congo RD',UZB:'Uzbequistão',COL:'Colômbia',
+  ENG:'Inglaterra',CRO:'Croácia',GHA:'Gana',PAN:'Panamá',FWC:'FWC ⭐'
+};
+
+const TOTAL_PER_TEAM = 20;
+let wishData = [];
+
+function gerarListaFaltantes() {
+  const qty = Math.max(1, parseInt(document.getElementById('wish-qty').value) || 50);
+  const by = computeStats();
+  const teams = [...ALL_COUNTRIES, 'FWC'];
+
+  // Build missing list per team
+  const teamMissing = [];
+  for (const code of teams) {
+    const owned = by[code] ? by[code].unique : 0;
+    const missing = [];
+    for (let n = 1; n <= TOTAL_PER_TEAM; n++) {
+      const key = code + n;
+      if (!stock[key] || stock[key] <= 0) missing.push(n);
+    }
+    if (missing.length > 0) {
+      teamMissing.push({ code, name: CODE_TO_NAME_PT[code]||code, owned, missing });
+    }
+  }
+
+  // Sort: least owned first, then alphabetical
+  teamMissing.sort((a,b) => a.owned - b.owned || a.name.localeCompare(b.name));
+
+  // Apply quantity limit
+  let remaining = qty;
+  wishData = [];
+  for (const team of teamMissing) {
+    if (remaining <= 0) break;
+    const slice = team.missing.slice(0, remaining);
+    wishData.push({ ...team, slice });
+    remaining -= slice.length;
+  }
+
+  // Render
+  const box = document.getElementById('wish-result');
+  const total = wishData.reduce((s,t) => s+t.slice.length, 0);
+
+  if (!wishData.length) {
+    box.innerHTML = '<div class="wish-empty">🎉 Você tem todas as figurinhas!</div>';
+  } else {
+    box.innerHTML = wishData.map(t => {
+      const badgeCls = t.owned <= 3 ? 'low' : '';
+      const codes = t.slice.map(n => `<span class="wish-chip">${t.code}${n}</span>`).join('');
+      return `<div class="wish-team-block">
+        <div class="wish-team-header">
+          <span class="wish-team-name">${FLAGS[t.code]||''} ${t.name}</span>
+          <span class="wish-team-badge ${badgeCls}">${t.owned}/${TOTAL_PER_TEAM}</span>
+        </div>
+        <div class="wish-chips">${codes}</div>
+      </div>`;
+    }).join('<hr style="border:none;border-top:1px solid var(--border);margin:12px 0">');
+  }
+
+  document.getElementById('wish-summary').textContent =
+    `${total} figurinhas faltantes · ${wishData.length} seleções · limite: ${qty}`;
+  box.style.display = 'block';
+  document.getElementById('btn-wish-copy').style.display = wishData.length ? 'flex' : 'none';
+}
+
+function limparListaFaltantes() {
+  wishData = [];
+  document.getElementById('wish-result').style.display = 'none';
+  document.getElementById('btn-wish-copy').style.display = 'none';
+  document.getElementById('wish-summary').textContent = '';
+  document.getElementById('wish-qty').value = '50';
+}
+
+function copiarListaFaltantes() {
+  if (!wishData.length) return;
+  const lines = [];
+  lines.push('Lista de figurinhas faltantes em meu acervo por ordem de prioridade das seleções com menos figurinhas distintas:');
+  lines.push('');
+  wishData.forEach(t => {
+    lines.push(`${t.name} (${t.owned}/${TOTAL_PER_TEAM})`);
+    lines.push(t.slice.map(n => t.code+n).join(', '));
+    lines.push('');
+  });
+  lines.push('─────────────────────');
+  lines.push('Gerado por Lucas Nascimento | Controle de Figurinhas Copa 2026');
+
+  const txt = lines.join('\n');
+  navigator.clipboard.writeText(txt)
+    .then(() => {
+      const b = document.getElementById('btn-wish-copy');
+      const orig = b.textContent;
+      b.textContent = '✅ Lista copiada!';
+      setTimeout(() => b.textContent = orig, 2500);
+    })
+    .catch(() => prompt('Copie a lista:', txt));
 }
 
 function setPage(page) {
