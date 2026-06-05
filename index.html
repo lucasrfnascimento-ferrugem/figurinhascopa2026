@@ -324,6 +324,35 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
 .api-key-status { font-size:11px; font-weight:600; }
 .api-key-status.ok { color:var(--green); }
 .api-key-status.err { color:var(--copa-red); }
+
+/* ── SOCIETY MODAL ───────────────────────────────── */
+.soc-overlay { display:none; position:fixed; inset:0; background:rgba(0,10,40,.75); z-index:9997; align-items:center; justify-content:center; }
+.soc-overlay.active { display:flex; }
+.soc-modal { background:var(--surface); border-radius:18px; border:2px solid var(--copa-gold); padding:28px 32px; width:700px; max-width:96vw; max-height:90vh; overflow-y:auto; animation:popIn .2s ease; }
+.soc-modal h3 { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text); margin-bottom:4px; }
+.soc-subtitle { font-size:12px; color:var(--muted); margin-bottom:20px; }
+.soc-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:20px; }
+.soc-table thead tr { background:linear-gradient(90deg,var(--copa-blue),#001f6b); }
+.soc-table thead th { padding:10px 14px; color:rgba(255,255,255,.8); font-family:'Barlow Condensed',sans-serif; font-size:12px; text-transform:uppercase; letter-spacing:1px; text-align:left; font-weight:600; }
+.soc-table thead th.right { text-align:right; }
+.soc-table tbody tr { border-top:1px solid var(--border); transition:background .1s; }
+.soc-table tbody tr:hover { background:var(--surface2); }
+.soc-table td { padding:10px 14px; }
+.soc-table td.right { text-align:right; font-weight:600; }
+.soc-rotation-badge { display:inline-block; padding:3px 10px; border-radius:6px; font-size:11px; font-weight:700; background:var(--copa-gold); color:#3d2600; margin-left:8px; }
+.soc-partner-name { font-weight:700; font-size:14px; }
+.soc-stat-added { color:var(--green); font-weight:600; }
+.soc-stat-sold { color:var(--copa-red); font-weight:600; }
+.soc-stat-stock { color:var(--copa-blue); font-weight:600; }
+.soc-stat-value { color:var(--text); }
+.soc-stat-parte { color:var(--copa-gold); font-weight:700; }
+.soc-summary { background:var(--surface2); border-radius:10px; padding:14px 16px; font-size:13px; }
+.soc-summary-row { display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid var(--border); }
+.soc-summary-row:last-child { border-bottom:none; font-weight:700; font-size:14px; }
+.soc-close { width:100%; padding:11px; border-radius:10px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:'Barlow',sans-serif; font-size:13px; cursor:pointer; margin-top:14px; transition:all .15s; }
+.soc-close:hover { border-color:var(--copa-blue); color:var(--copa-blue); }
+.btn-society { display:flex; align-items:center; gap:8px; padding:9px 18px; background:linear-gradient(135deg,var(--copa-gold),#d4900a); color:#3d2600; border:none; border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:700; letter-spacing:1px; cursor:pointer; transition:all .15s; }
+.btn-society:hover { opacity:.88; }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -520,7 +549,9 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
   <div class="page" id="page-acervo">
 
     <!-- ATUALIZAR ESTOQUE -->
-    <div class="section-label">Atualizar estoque</div>
+    <div class="section-label">Atualizar estoque
+      <button class="btn-society" onclick="pedirSenhaSociedade()" style="font-size:12px;padding:7px 14px;margin-left:auto">🤝 Sociedade</button>
+    </div>
     <div class="panel blue-top">
       <div class="panel-title">Gerenciar acervo</div>
       <div class="input-row">
@@ -593,6 +624,28 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <button class="btn btn-secondary" onclick="fecharEditModal()">Cancelar</button>
       <button class="btn btn-add" onclick="pedirSenhaEdit()">💾 Salvar</button>
     </div>
+  </div>
+</div>
+
+<!-- SOCIETY MODAL -->
+<div class="soc-overlay" id="soc-overlay">
+  <div class="soc-modal">
+    <h3>🤝 Painel da Sociedade</h3>
+    <p class="soc-subtitle">Controle de figurinhas e receita entre os sócios · Acesso restrito</p>
+    <div id="soc-rotation-info" style="margin-bottom:16px;font-size:13px;color:var(--muted)"></div>
+    <table class="soc-table">
+      <thead><tr>
+        <th>Sócio</th>
+        <th class="right">Qtd Inicial</th>
+        <th class="right">Qtd Vendida</th>
+        <th class="right">Em Estoque</th>
+        <th class="right">Valor Vendido</th>
+        <th class="right">Parte (1/3)</th>
+      </tr></thead>
+      <tbody id="soc-tbody"></tbody>
+    </table>
+    <div class="soc-summary" id="soc-summary"></div>
+    <button class="soc-close" onclick="fecharSociedade()">Fechar</button>
   </div>
 </div>
 
@@ -748,6 +801,8 @@ async function loadStock(){
     const data = await ghRead();
     stock   = data.stock   || JSON.parse(JSON.stringify(INITIAL));
     history = data.history || [];
+    // Only use stored society if start date matches; otherwise force reset
+    society = (data.society && data.society.startDate===SOCIETY_START_DATE) ? data.society : null;
     const saved = data.lastUpdate || '';
     document.getElementById('last-update-date').textContent = saved || 'Nunca';
     // cache locally as backup
@@ -767,6 +822,21 @@ async function loadStock(){
       document.getElementById('last-update-date').textContent = 'Sem conexão';
     }
   }
+  // Init/reset society
+  const totalCurrentStock = Object.values(stock).reduce((s,v)=>s+v,0);
+  // Reset if no society, or if start date changed
+  if(!society || society.startDate !== SOCIETY_START_DATE){
+    initSociety(JSON.parse(JSON.stringify(stock)));
+  }
+  // Replay history (only entries on or after start date)
+  if(society && !society._replayed){
+    society._replayed=true;
+    [...history].reverse().forEach(h=>{
+      const entryDate = parseBRDate(h.ts||'');
+      if(entryDate < SOCIETY_CUTOFF) return; // skip old transactions
+      processSocietyEntry(h.type, h.person||'', h.codes||[]);
+    });
+  }
   buildGroupBtns();
   renderAll();
 }
@@ -774,7 +844,7 @@ async function saveStock(){
   const now = new Date();
   const ds = now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   document.getElementById('last-update-date').textContent = ds;
-  const payload = { stock, history: history.slice(0,200), lastUpdate: ds };
+  const payload = { stock, history: history.slice(0,200), society, lastUpdate: ds };
   // always save to localStorage as backup
   try { localStorage.setItem('copa2026_cache', JSON.stringify(payload)); } catch(e){}
   scheduleSave(payload);
@@ -905,6 +975,7 @@ function updateStickers(action,person,txType){
     const entry={ts:new Date().toLocaleString('pt-BR',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),type:action,txType:txType||'—',person:person||'—',codes:done,count:done.length};
     history.unshift(entry);saveHistory();
   }
+  if(society) processSocietyEntry(action, person||'', done);
   saveStock();renderAll();
   let t=action==='add'?`✅ ${done.length} adicionada(s): ${done.slice(0,6).join(', ')}${done.length>6?'…':''}`:`✅ ${done.length} removida(s)`;
   if(notFound.length)t+=` · ⚠️ Não encontradas: ${notFound.join(', ')}`;
@@ -1123,21 +1194,22 @@ function excluirTransacao() {
   const h = history[deleteIndex];
   if (!h) { deleteIndex = null; return; }
 
-  // Reverse the transaction in stock
+  // ── Reverse main stock ────────────────────────────────────────────
   const codes = h.codes || [];
   if (h.type === 'add') {
-    // Was added to stock → remove from stock
     codes.forEach(code => {
       if (stock[code] > 0) { stock[code]--; if (stock[code] === 0) delete stock[code]; }
     });
   } else {
-    // Was removed from stock → restore to stock
     codes.forEach(code => { stock[code] = (stock[code] || 0) + 1; });
   }
 
-  // Remove from history
+  // ── Remove from history ───────────────────────────────────────────
   history.splice(deleteIndex, 1);
   deleteIndex = null;
+
+  // ── Reverse society: re-replay remaining history from scratch ─────
+  if (society) resetAndReplaySociety();
 
   saveHistory();
   saveStock();
@@ -1213,6 +1285,7 @@ function salvarEdicaoHistorico() {
   history[editIndex].count  = newCodes.length;
 
   fecharEditModal();
+  if (society) resetAndReplaySociety();
   saveHistory();
   saveStock();
   renderAll();
@@ -1342,6 +1415,7 @@ function verificarSenha(){
     if(action==='clearHist'){history=[];saveHistory();renderHistory();}
     else if(action==='editHist'){salvarEdicaoHistorico();}
     else if(action==='deleteHist'){excluirTransacao();}
+    else if(action==='openSociety'){abrirSociedade();}
     else{const person=document.getElementById('hist-person').value.trim()||'—';const txType=document.getElementById('hist-type')?.value||'—';updateStickers(action,person,txType);}
   }else{
     atualizarDots('error');document.getElementById('pwd-modal').classList.add('pwd-shake');
@@ -1593,6 +1667,172 @@ function copiarListaFaltantes() {
     })
     .catch(() => prompt('Copie a lista:', txt));
 }
+
+
+// ── SOCIETY ───────────────────────────────────────────────────────────
+const PARTNERS = ['Lucas','Rafa','Maylson'];
+const SOCIETY_START_DATE = '05/06/2026';
+let society = null;
+
+function parseBRDate(ts) {
+  const m = ts ? ts.match(/(\d{2})\/(\d{2})\/(\d{4})/) : null;
+  if (!m) return new Date(0);
+  return new Date(parseInt(m[3]), parseInt(m[2])-1, parseInt(m[1]));
+}
+const SOCIETY_CUTOFF = parseBRDate(SOCIETY_START_DATE);
+
+function initSociety(currentStock) {
+  const lucasStock = {};
+  for(const [code, qty] of Object.entries(currentStock)){
+    if(qty > 0) lucasStock[code] = qty;
+  }
+  const lucasTotal = Object.values(lucasStock).reduce((s,v)=>s+v, 0);
+  society = {
+    startDate: SOCIETY_START_DATE,
+    _replayed: false,
+    rotation: 0,
+    baseline: JSON.parse(JSON.stringify(lucasStock)), // snapshot of Lucas stock at society start
+    partnerStock: { Lucas: JSON.parse(JSON.stringify(lucasStock)), Rafa: {}, Maylson: {} },
+    partners: {
+      Lucas:   { added: lucasTotal, sold: 0, soldValue: 0 },
+      Rafa:    { added: 0, sold: 0, soldValue: 0 },
+      Maylson: { added: 0, sold: 0, soldValue: 0 }
+    }
+  };
+}
+
+// Resets society to baseline and re-replays all history from start date
+// Called after any transaction deletion or edit
+function resetAndReplaySociety() {
+  if(!society || !society.baseline) return;
+  // Restore partnerStock to baseline
+  society.partnerStock = {
+    Lucas:   JSON.parse(JSON.stringify(society.baseline)),
+    Rafa:    {},
+    Maylson: {}
+  };
+  society.rotation = 0;
+  // Reset counters
+  const baselineTotal = Object.values(society.baseline).reduce((s,v)=>s+v, 0);
+  society.partners.Lucas   = { added: baselineTotal, sold: 0, soldValue: 0 };
+  society.partners.Rafa    = { added: 0, sold: 0, soldValue: 0 };
+  society.partners.Maylson = { added: 0, sold: 0, soldValue: 0 };
+  // Re-replay all history from start date (oldest first)
+  [...history].reverse().forEach(h => {
+    if(parseBRDate(h.ts||'') < SOCIETY_CUTOFF) return;
+    processSocietyEntry(h.type, h.person||'', h.codes||[]);
+  });
+}
+
+function stickerPrice(code) {
+  const m = code.match(/^([A-Z]+)(\d+)$/);
+  if(!m) return 1.50;
+  const [,country, numStr] = m;
+  return (country==='FWC' || parseInt(numStr)===1) ? 3.00 : 1.50;
+}
+
+function processSocietyEntry(type, person, codes) {
+  if(!society) return;
+  if(type === 'add') {
+    if(person && person.toUpperCase().startsWith('S_')) {
+      // Entry from a named partner (S_Rafa, S_Maylson, S_Lucas)
+      const rawName = person.slice(2).trim();
+      const match = PARTNERS.find(p => p.toLowerCase() === rawName.toLowerCase());
+      if(match) {
+        codes.forEach(code => {
+          society.partnerStock[match][code] = (society.partnerStock[match][code] || 0) + 1;
+          society.partners[match].added++;
+        });
+      }
+    } else {
+      // Regular addition (no S_ prefix) → attributed to Lucas
+      codes.forEach(code => {
+        society.partnerStock.Lucas[code] = (society.partnerStock.Lucas[code] || 0) + 1;
+        society.partners.Lucas.added++;
+      });
+    }
+    return;
+  }
+  if(type === 'remove') {
+    codes.forEach(code => {
+      const price = stickerPrice(code);
+      // Rotation: start from current position, cycle through all partners
+      // First one who HAS this sticker gets the sale attributed
+      // Rotation advances to AFTER whoever sold, for the next sale
+      let attributed = false;
+      for(let i = 0; i < PARTNERS.length; i++) {
+        const idx = (society.rotation + i) % PARTNERS.length;
+        const partner = PARTNERS[idx];
+        if((society.partnerStock[partner][code] || 0) > 0) {
+          society.partnerStock[partner][code]--;
+          if(society.partnerStock[partner][code] === 0)
+            delete society.partnerStock[partner][code];
+          society.partners[partner].sold++;
+          society.partners[partner].soldValue += price;
+          // Advance rotation to the partner AFTER this one
+          society.rotation = (idx + 1) % PARTNERS.length;
+          attributed = true;
+          break;
+        }
+      }
+      // No one has this sticker — attribute to Lucas, don't advance rotation
+      if(!attributed) {
+        society.partners.Lucas.sold++;
+        society.partners.Lucas.soldValue += price;
+      }
+    });
+  }
+}
+
+function renderSocietyModal() {
+  if(!society) return;
+  const inStock = {};
+  PARTNERS.forEach(p => {
+    inStock[p] = Object.values(society.partnerStock[p] || {}).reduce((s,v)=>s+v, 0);
+  });
+  let totalSold=0, totalValue=0;
+  PARTNERS.forEach(p => { totalSold += society.partners[p].sold; totalValue += society.partners[p].soldValue; });
+  const parte = totalValue / 3;
+
+  const rotPartner = PARTNERS[society.rotation % PARTNERS.length];
+  const COLORS = {Lucas:'var(--copa-blue)', Rafa:'var(--copa-gold)', Maylson:'var(--green)'};
+  const rotCircle = PARTNERS.map((p,i) => {
+    const active = p === rotPartner;
+    const col = COLORS[p];
+    return `<span style="font-weight:${active?'700':'400'};color:${active?col:'var(--muted)'};
+      ${active?`background:${col}22;padding:2px 10px;border-radius:6px;border:1.5px solid ${col}`:''}">${p}</span>`;
+  }).join(' <span style="color:var(--muted)">→</span> ');
+  document.getElementById('soc-rotation-info').innerHTML =
+    `<div style="margin-bottom:6px"><strong>Próxima venda:</strong> ${rotCircle}</div>
+     <span style="font-size:11px;color:var(--muted)">Rodízio avança após cada venda. Se o sócio da vez não tiver a figurinha, passa para o próximo que tiver.</span>`;
+
+  document.getElementById('soc-tbody').innerHTML = PARTNERS.map(p => {
+    const d = society.partners[p];
+    return `<tr>
+      <td><span class="soc-partner-name" style="color:${COLORS[p]}">👤 ${p}</span></td>
+      <td class="right soc-stat-added">${d.added}</td>
+      <td class="right soc-stat-sold">${d.sold}</td>
+      <td class="right soc-stat-stock">${inStock[p]}</td>
+      <td class="right soc-stat-value">${d.soldValue.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</td>
+      <td class="right soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</td>
+    </tr>`;
+  }).join('');
+
+  const totalStock = Object.values(inStock).reduce((s,v)=>s+v, 0);
+  document.getElementById('soc-summary').innerHTML = `
+    <div class="soc-summary-row"><span>Total em estoque (todos os sócios)</span><span style="font-weight:600;color:var(--copa-blue)">${totalStock}</span></div>
+    <div class="soc-summary-row"><span>Total figurinhas vendidas</span><span style="font-weight:600;color:var(--copa-red)">${totalSold}</span></div>
+    <div class="soc-summary-row"><span>Receita total de vendas</span><span style="font-weight:600">${totalValue.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>
+    <div class="soc-summary-row"><span>💰 Parte de cada sócio (1/3)</span><span class="soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>
+  `;
+}
+
+function pedirSenhaSociedade() {
+  pwdAction = 'openSociety'; pwdBuffer = ''; atualizarDots();
+  document.getElementById('pwd-overlay').classList.add('active');
+}
+function fecharSociedade() { document.getElementById('soc-overlay').classList.remove('active'); }
+function abrirSociedade()  { renderSocietyModal(); document.getElementById('soc-overlay').classList.add('active'); }
 
 function setPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
