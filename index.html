@@ -1725,19 +1725,13 @@ function processSocietyEntry(type, person, codes) {
     if(person && person.toUpperCase().startsWith('S_')) {
       const rawName = person.slice(2).trim();
       const match = PARTNERS.find(p => p.toLowerCase() === rawName.toLowerCase());
-      if(match && match !== 'Lucas') {
+      if(match) {
         codes.forEach(code => {
-          // Move from Lucas to partner (item was already in Lucas's baseline)
-          if((society.partnerStock.Lucas[code] || 0) > 0) {
-            society.partnerStock.Lucas[code]--;
-            if(society.partnerStock.Lucas[code] === 0) delete society.partnerStock.Lucas[code];
-            society.partners.Lucas.added--;
-          }
+          // Each partner owns their stickers independently — no subtraction from others
           society.partnerStock[match][code] = (society.partnerStock[match][code] || 0) + 1;
           society.partners[match].added++;
         });
       }
-      // S_Lucas: items already in Lucas's partnerStock — no change needed
     } else {
       // Regular add without S_ prefix → Lucas gets new items
       codes.forEach(code => {
