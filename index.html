@@ -234,6 +234,8 @@ textarea:focus, input[type=text]:focus { border-color:var(--copa-blue); }
 
 .edit-btn { background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--muted); font-size:11px; padding:3px 8px; cursor:pointer; transition:all .15s; font-family:'Barlow',sans-serif; }
 .edit-btn:hover { border-color:var(--copa-blue); color:var(--copa-blue); background:var(--surface2); }
+.del-btn { background:transparent; border:1px solid var(--border); border-radius:6px; color:var(--muted); font-size:11px; padding:3px 7px; cursor:pointer; transition:all .15s; font-family:'Barlow',sans-serif; margin-left:4px; }
+.del-btn:hover { border-color:var(--copa-red); color:var(--copa-red); background:var(--red-bg); }
 /* Edit modal */
 .edit-overlay { display:none; position:fixed; inset:0; background:rgba(0,10,40,.7); z-index:9998; align-items:center; justify-content:center; }
 .edit-overlay.active { display:flex; }
@@ -528,7 +530,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
             <option value="Venda">💰 Venda</option>
             <option value="Troca">🔄 Troca</option>
             <option value="Compra">🛒 Compra</option>
-            <option value="Atualização">🆙 Atualização</option>
+            <option value="Atualizacao">🆙 Atualização</option>
           </select>
         </div>
         <textarea id="sticker-input" placeholder="Códigos — ex: MEX1, CAN5, BIH13, QAT9 (vírgula, espaço ou linha)" style="flex:1;min-width:200px;min-height:56px;"></textarea>
@@ -574,7 +576,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <option value="Venda">💰 Venda</option>
         <option value="Troca">🔄 Troca</option>
         <option value="Compra">🛒 Compra</option>
-        <option value="Atualização">🔄 Atualização</option>
+        <option value="Atualizacao">🔄 Atualização</option>
         <option value="—">— Não informado</option>
       </select>
     </div>
@@ -1075,18 +1077,60 @@ function renderDetail(by){
 function renderHistory(){
   const tbody=document.getElementById('hist-body');
   if(!history.length){tbody.innerHTML=`<tr><td colspan="7" class="hist-empty">Nenhuma transação registrada ainda.</td></tr>`;return;}
+  const TIPO_LABEL={'Venda':'💰 Venda','Troca':'🔄 Troca','Compra':'🛒 Compra','Atualizacao':'🔄 Atualização','—':'—'};
   tbody.innerHTML=history.map((h,i)=>{
     const preview=h.codes.slice(0,5).join(', ')+(h.codes.length>5?` <span style="color:var(--muted)">+${h.codes.length-5} mais</span>`:'');
+    const tipoLabel=TIPO_LABEL[h.txType]||h.txType||'—';
     return `<tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">${h.ts}</td>
     <td><span class="hist-badge ${h.type==='add'?'in':'out'}">${h.type==='add'?'+ Entrou':'− Saiu'}</span></td>
-    <td style="font-size:12px;color:var(--muted)">${h.txType||'—'}</td>
+    <td style="font-size:12px;color:var(--muted)">${tipoLabel}</td>
     <td class="hist-person">${h.person}</td>
     <td class="hist-codes" style="font-size:11px;color:var(--text);max-width:220px;word-break:break-word">${preview}</td>
     <td style="text-align:right;font-weight:600">${h.count}</td>
-    <td><button class="edit-btn" onclick="abrirEditModal(${i})">✏️</button></td>
+    <td style="white-space:nowrap">
+      <button class="edit-btn" onclick="abrirEditModal(${i})">✏️</button>
+      <button class="del-btn" onclick="pedirSenhaExcluir(${i})" title="Apagar e reverter transação">🗑️</button>
+    </td>
   </tr>`;
   }).join('');
+}
+
+// ── DELETE HISTORY ─────────────────────────────────
+let deleteIndex = null;
+
+function pedirSenhaExcluir(idx) {
+  deleteIndex = idx;
+  pwdAction = 'deleteHist';
+  pwdBuffer = '';
+  atualizarDots();
+  document.getElementById('pwd-overlay').classList.add('active');
+}
+
+function excluirTransacao() {
+  if (deleteIndex === null) return;
+  const h = history[deleteIndex];
+  if (!h) { deleteIndex = null; return; }
+
+  // Reverse the transaction in stock
+  const codes = h.codes || [];
+  if (h.type === 'add') {
+    // Was added to stock → remove from stock
+    codes.forEach(code => {
+      if (stock[code] > 0) { stock[code]--; if (stock[code] === 0) delete stock[code]; }
+    });
+  } else {
+    // Was removed from stock → restore to stock
+    codes.forEach(code => { stock[code] = (stock[code] || 0) + 1; });
+  }
+
+  // Remove from history
+  history.splice(deleteIndex, 1);
+  deleteIndex = null;
+
+  saveHistory();
+  saveStock();
+  renderAll();
 }
 
 // ── EDIT HISTORY ──────────────────────────────────
@@ -1286,6 +1330,7 @@ function verificarSenha(){
     const action=pwdAction;fecharSenha();
     if(action==='clearHist'){history=[];saveHistory();renderHistory();}
     else if(action==='editHist'){salvarEdicaoHistorico();}
+    else if(action==='deleteHist'){excluirTransacao();}
     else{const person=document.getElementById('hist-person').value.trim()||'—';const txType=document.getElementById('hist-type')?.value||'—';updateStickers(action,person,txType);}
   }else{
     atualizarDots('error');document.getElementById('pwd-modal').classList.add('pwd-shake');
