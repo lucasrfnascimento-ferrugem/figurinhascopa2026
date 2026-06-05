@@ -1048,7 +1048,7 @@ function renderDetail(by){
       for(const [code,qty] of Object.entries(d.codes)){
         const codeNum=parseInt(code.match(/\d+$/)?.[0]||'0');
         let searchLabel='';
-        if(codeNum===1)        searchLabel='escudo';
+        if(codeNum===1&&codeCountry!=='FWC') searchLabel='escudo';
         else if(codeNum===13)  searchLabel='perfilada';
         else                   searchLabel=(PLAYERS[code]||'').toLowerCase();
         if(code.toLowerCase().includes(search)||searchLabel.includes(search))filteredCodes[code]=qty;
@@ -1066,7 +1066,7 @@ function renderDetail(by){
         const codeNum=parseInt(code.match(/\d+$/)?.[0]||'0');
         const codeCountry=code.match(/^[A-Z]+/)?.[0]||'';
         let labelText='';
-        if(codeNum===1)                         labelText='Escudo';
+        if(codeNum===1&&codeCountry!=='FWC')      labelText='Escudo';
         else if(codeNum===13)                   labelText='Perfilada';
         else if(PLAYERS[code])                  labelText=PLAYERS[code];
         const player=labelText?`<span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">${labelText}</span>`:'';
