@@ -814,8 +814,8 @@ async function loadStock(){
     const data = await ghRead();
     stock   = data.stock   || JSON.parse(JSON.stringify(INITIAL));
     history = data.history || [];
-    // Load society but force re-replay on every page load
-    society = (data.society && data.society.startDate===SOCIETY_START_DATE) ? {...data.society, _replayed: false} : null;
+    // Society is always rebuilt from history on load — ignore saved computed values
+    society = null; // force full rebuild below
     const saved = data.lastUpdate || '';
     document.getElementById('last-update-date').textContent = saved || 'Nunca';
     // cache locally as backup
@@ -836,20 +836,8 @@ async function loadStock(){
     }
   }
   // Init/reset society
-  const totalCurrentStock = Object.values(stock).reduce((s,v)=>s+v,0);
-  // Reset if no society, or if start date changed
-  if(!society || society.startDate !== SOCIETY_START_DATE){
-    initSociety(JSON.parse(JSON.stringify(stock)));
-  }
-  // Replay history (only entries on or after start date)
-  if(society && !society._replayed){
-    society._replayed=true;
-    [...history].reverse().forEach(h=>{
-      const entryDate = parseBRDate(h.ts||'');
-      if(entryDate < SOCIETY_CUTOFF) return; // skip old transactions
-      processSocietyEntry(h.type, h.person||'', h.codes||[]);
-    });
-  }
+  // Always rebuild society fresh from current stock + history
+  resetAndReplaySociety();
   buildGroupBtns();
   renderAll();
 }
@@ -858,7 +846,8 @@ async function saveStock(){
   const ds = now.toLocaleDateString('pt-BR')+' '+now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
   document.getElementById('last-update-date').textContent = ds;
   // Always save society with _replayed=false so next load always rebuilds from history
-  const societyToSave = society ? {...society, _replayed: false} : null;
+  // Society is rebuilt from history on every load - only save rotation position
+  const societyToSave = society ? { startDate: society.startDate, rotation: society.rotation } : null;
   const payload = { stock, history: history.slice(0,200), society: societyToSave, lastUpdate: ds };
   // always save to localStorage as backup
   try { localStorage.setItem('copa2026_cache', JSON.stringify(payload)); } catch(e){}
@@ -1696,6 +1685,7 @@ function parseBRDate(ts) {
 }
 const SOCIETY_CUTOFF = parseBRDate(SOCIETY_START_DATE);
 
+// Initialise a blank society using current stock as Lucas's starting point
 function initSociety(currentStock) {
   const lucasStock = {};
   for(const [code, qty] of Object.entries(currentStock)){
@@ -1704,9 +1694,7 @@ function initSociety(currentStock) {
   const lucasTotal = Object.values(lucasStock).reduce((s,v)=>s+v, 0);
   society = {
     startDate: SOCIETY_START_DATE,
-    _replayed: false,
     rotation: 0,
-    baseline: JSON.parse(JSON.stringify(lucasStock)), // snapshot of Lucas stock at society start
     partnerStock: { Lucas: JSON.parse(JSON.stringify(lucasStock)), Rafa: {}, Maylson: {} },
     partners: {
       Lucas:   { added: lucasTotal, sold: 0, soldValue: 0 },
@@ -1716,27 +1704,15 @@ function initSociety(currentStock) {
   };
 }
 
-// Resets society to baseline and re-replays all history from start date
-// Called after any transaction deletion or edit
+// Full rebuild: reset to Lucas=all current stock, then replay history
 function resetAndReplaySociety() {
-  if(!society || !society.baseline) return;
-  // Restore partnerStock to baseline
-  society.partnerStock = {
-    Lucas:   JSON.parse(JSON.stringify(society.baseline)),
-    Rafa:    {},
-    Maylson: {}
-  };
-  society.rotation = 0;
-  // Reset counters
-  const baselineTotal = Object.values(society.baseline).reduce((s,v)=>s+v, 0);
-  society.partners.Lucas   = { added: baselineTotal, sold: 0, soldValue: 0 };
-  society.partners.Rafa    = { added: 0, sold: 0, soldValue: 0 };
-  society.partners.Maylson = { added: 0, sold: 0, soldValue: 0 };
-  // Re-replay all history from start date (oldest first)
-  [...history].reverse().forEach(h => {
-    if(parseBRDate(h.ts||'') < SOCIETY_CUTOFF) return;
-    processSocietyEntry(h.type, h.person||'', h.codes||[]);
-  });
+  // Re-init from current aggregate stock (all → Lucas)
+  initSociety(JSON.parse(JSON.stringify(stock)));
+  // Replay relevant history oldest→newest
+  const relevant = history
+    .filter(h => parseBRDate(h.ts||'') >= SOCIETY_CUTOFF)
+    .slice().reverse();
+  relevant.forEach(h => processSocietyEntry(h.type, h.person||'', h.codes||[]));
 }
 
 function stickerPrice(code) {
@@ -1748,19 +1724,26 @@ function stickerPrice(code) {
 
 function processSocietyEntry(type, person, codes) {
   if(!society) return;
+
   if(type === 'add') {
     if(person && person.toUpperCase().startsWith('S_')) {
-      // Entry from a named partner (S_Rafa, S_Maylson, S_Lucas)
       const rawName = person.slice(2).trim();
       const match = PARTNERS.find(p => p.toLowerCase() === rawName.toLowerCase());
-      if(match) {
+      if(match && match !== 'Lucas') {
         codes.forEach(code => {
+          // Move from Lucas to partner (item was already in Lucas's baseline)
+          if((society.partnerStock.Lucas[code] || 0) > 0) {
+            society.partnerStock.Lucas[code]--;
+            if(society.partnerStock.Lucas[code] === 0) delete society.partnerStock.Lucas[code];
+            society.partners.Lucas.added--;
+          }
           society.partnerStock[match][code] = (society.partnerStock[match][code] || 0) + 1;
           society.partners[match].added++;
         });
       }
+      // S_Lucas: items already in Lucas's partnerStock — no change needed
     } else {
-      // Regular addition (no S_ prefix) → attributed to Lucas
+      // Regular add without S_ prefix → Lucas gets new items
       codes.forEach(code => {
         society.partnerStock.Lucas[code] = (society.partnerStock.Lucas[code] || 0) + 1;
         society.partners.Lucas.added++;
@@ -1768,29 +1751,25 @@ function processSocietyEntry(type, person, codes) {
     }
     return;
   }
+
   if(type === 'remove') {
+    // Rotation: start from current position, first partner who HAS the sticker gets the sale
     codes.forEach(code => {
       const price = stickerPrice(code);
-      // Rotation: start from current position, cycle through all partners
-      // First one who HAS this sticker gets the sale attributed
-      // Rotation advances to AFTER whoever sold, for the next sale
       let attributed = false;
       for(let i = 0; i < PARTNERS.length; i++) {
         const idx = (society.rotation + i) % PARTNERS.length;
         const partner = PARTNERS[idx];
         if((society.partnerStock[partner][code] || 0) > 0) {
           society.partnerStock[partner][code]--;
-          if(society.partnerStock[partner][code] === 0)
-            delete society.partnerStock[partner][code];
+          if(society.partnerStock[partner][code] === 0) delete society.partnerStock[partner][code];
           society.partners[partner].sold++;
           society.partners[partner].soldValue += price;
-          // Advance rotation to the partner AFTER this one
           society.rotation = (idx + 1) % PARTNERS.length;
           attributed = true;
           break;
         }
       }
-      // No one has this sticker — attribute to Lucas, don't advance rotation
       if(!attributed) {
         society.partners.Lucas.sold++;
         society.partners.Lucas.soldValue += price;
@@ -1803,20 +1782,21 @@ function renderSocietyModal() {
   if(!society) return;
   const inStock = {};
   PARTNERS.forEach(p => {
-    inStock[p] = Object.values(society.partnerStock[p] || {}).reduce((s,v)=>s+v, 0);
+    inStock[p] = Object.values(society.partnerStock[p]||{}).reduce((s,v)=>s+v, 0);
   });
   let totalSold=0, totalValue=0;
-  PARTNERS.forEach(p => { totalSold += society.partners[p].sold; totalValue += society.partners[p].soldValue; });
-  const parte = totalValue / 3;
+  PARTNERS.forEach(p=>{ totalSold+=society.partners[p].sold; totalValue+=society.partners[p].soldValue; });
+  const parte = totalValue/3;
 
   const rotPartner = PARTNERS[society.rotation % PARTNERS.length];
   const COLORS = {Lucas:'var(--copa-blue)', Rafa:'var(--copa-gold)', Maylson:'var(--green)'};
-  const rotCircle = PARTNERS.map((p,i) => {
-    const active = p === rotPartner;
+  const rotCircle = PARTNERS.map(p => {
+    const active = p===rotPartner;
     const col = COLORS[p];
     return `<span style="font-weight:${active?'700':'400'};color:${active?col:'var(--muted)'};
       ${active?`background:${col}22;padding:2px 10px;border-radius:6px;border:1.5px solid ${col}`:''}">${p}</span>`;
   }).join(' <span style="color:var(--muted)">→</span> ');
+
   document.getElementById('soc-rotation-info').innerHTML =
     `<div style="margin-bottom:6px"><strong>Próxima venda:</strong> ${rotCircle}</div>
      <span style="font-size:11px;color:var(--muted)">Rodízio avança após cada venda. Se o sócio da vez não tiver a figurinha, passa para o próximo que tiver.</span>`;
@@ -1833,41 +1813,32 @@ function renderSocietyModal() {
     </tr>`;
   }).join('');
 
-  const totalStock = Object.values(inStock).reduce((s,v)=>s+v, 0);
+  const totalStock = Object.values(inStock).reduce((s,v)=>s+v,0);
   document.getElementById('soc-summary').innerHTML = `
     <div class="soc-summary-row"><span>Total em estoque (todos os sócios)</span><span style="font-weight:600;color:var(--copa-blue)">${totalStock}</span></div>
     <div class="soc-summary-row"><span>Total figurinhas vendidas</span><span style="font-weight:600;color:var(--copa-red)">${totalSold}</span></div>
     <div class="soc-summary-row"><span>Receita total de vendas</span><span style="font-weight:600">${totalValue.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>
-    <div class="soc-summary-row"><span>💰 Parte de cada sócio (1/3)</span><span class="soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>
-  `;
+    <div class="soc-summary-row"><span>💰 Parte de cada sócio (1/3)</span><span class="soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>`;
 }
 
 function pedirSenhaZerarSociedade() {
   if(!confirm('Isso vai zerar todos os dados da sociedade (vendas, saldos, rodízio). Confirma?')) return;
-  pwdAction = 'zerarSociedade'; pwdBuffer = ''; atualizarDots();
+  pwdAction = 'zerarSociedade'; pwdBuffer=''; atualizarDots();
   document.getElementById('pwd-overlay').classList.add('active');
 }
-
 function zerarSociedade() {
-  // Re-initialize baseline from current stock and clear all partner data
-  initSociety(JSON.parse(JSON.stringify(stock)));
-  // Replay only S_ entries from history to restore partner stock (not sales)
-  [...history].reverse().forEach(h => {
-    if(parseBRDate(h.ts||'') < SOCIETY_CUTOFF) return;
-    if(h.type === 'add') processSocietyEntry(h.type, h.person||'', h.codes||[]);
-  });
+  resetAndReplaySociety();
   fecharSociedade();
   saveStock();
-  renderSocietyModal();
-  alert('Sociedade zerada! Histórico de vendas resetado. Entradas dos sócios mantidas.');
+  alert('Sociedade reconstruída do zero a partir do histórico atual.');
 }
-
 function pedirSenhaSociedade() {
-  pwdAction = 'openSociety'; pwdBuffer = ''; atualizarDots();
+  pwdAction='openSociety'; pwdBuffer=''; atualizarDots();
   document.getElementById('pwd-overlay').classList.add('active');
 }
 function fecharSociedade() { document.getElementById('soc-overlay').classList.remove('active'); }
 function abrirSociedade()  { renderSocietyModal(); document.getElementById('soc-overlay').classList.add('active'); }
+
 
 function setPage(page) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
