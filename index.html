@@ -202,7 +202,6 @@ textarea:focus, input[type=text]:focus { border-color:var(--copa-blue); }
 /* ── HISTÓRICO ───────────────────────────────────── */
 .hist-table-wrap { overflow-x:auto; max-height:320px; overflow-y:auto; border-radius:10px; border:1px solid var(--border); }
 .hist-table { width:100%; border-collapse:collapse; font-size:12px; min-width:480px; }
-@media(max-width:600px){ .hist-col-codes { display:none; } }
 .hist-table thead th { background:var(--surface3); padding:9px 12px; text-align:left; font-family:'Barlow Condensed',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; position:sticky; top:0; z-index:1; }
 .hist-table tbody tr { border-top:1px solid var(--border); transition:background .1s; }
 .hist-table tbody tr:hover { background:var(--surface2); }
@@ -238,7 +237,7 @@ textarea:focus, input[type=text]:focus { border-color:var(--copa-blue); }
 /* Edit modal */
 .edit-overlay { display:none; position:fixed; inset:0; background:rgba(0,10,40,.7); z-index:9998; align-items:center; justify-content:center; }
 .edit-overlay.active { display:flex; }
-.edit-modal { background:var(--surface); border-radius:16px; border:2px solid var(--copa-blue); padding:28px 32px; width:360px; max-width:94vw; animation:popIn .2s ease; }
+.edit-modal { background:var(--surface); border-radius:16px; border:2px solid var(--copa-blue); padding:28px 32px; width:460px; max-width:96vw; animation:popIn .2s ease; }
 .edit-modal h3 { font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text); margin-bottom:4px; }
 .edit-modal .edit-meta { font-size:12px; color:var(--muted); margin-bottom:18px; }
 .edit-field { margin-bottom:14px; }
@@ -528,8 +527,8 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
           <select id="hist-type" style="background:var(--bg);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-family:'Barlow',sans-serif;font-size:13px;padding:9px 14px;outline:none;width:100%;cursor:pointer;">
             <option value="Venda">💰 Venda</option>
             <option value="Troca">🔄 Troca</option>
-            <option value="Atualização">🆙 Atualização</option>
             <option value="Compra">🛒 Compra</option>
+            <option value="Atualização">🔄 Atualização</option>
           </select>
         </div>
         <textarea id="sticker-input" placeholder="Códigos — ex: MEX1, CAN5, BIH13, QAT9 (vírgula, espaço ou linha)" style="flex:1;min-width:200px;min-height:56px;"></textarea>
@@ -549,7 +548,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <div class="hist-table-wrap">
         <table class="hist-table">
           <thead><tr>
-            <th>Data/Hora</th><th>Ação</th><th>Tipo</th><th>Pessoa</th><th class="hist-col-codes">Figurinhas</th><th class="right" style="text-align:right">Qtd</th><th></th>
+            <th>Data/Hora</th><th>Ação</th><th>Tipo</th><th>Pessoa</th><th>Figurinhas</th><th class="right" style="text-align:right">Qtd</th><th></th>
           </tr></thead>
           <tbody id="hist-body"></tbody>
         </table>
@@ -575,12 +574,18 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <option value="Venda">💰 Venda</option>
         <option value="Troca">🔄 Troca</option>
         <option value="Compra">🛒 Compra</option>
+        <option value="Atualização">🔄 Atualização</option>
         <option value="—">— Não informado</option>
       </select>
     </div>
     <div class="edit-field">
       <label>Pessoa</label>
       <input type="text" id="edit-pessoa" placeholder="Nome da pessoa">
+    </div>
+    <div class="edit-field">
+      <label>Figurinhas</label>
+      <textarea id="edit-codes" rows="3" style="width:100%;resize:vertical;" placeholder="Códigos — ex: MEX1, BRA14, SEN7"></textarea>
+      <p style="font-size:11px;color:var(--muted);margin-top:4px">⚠️ Ao editar, o estoque será recalculado automaticamente.</p>
     </div>
     <div class="edit-actions">
       <button class="btn btn-secondary" onclick="fecharEditModal()">Cancelar</button>
@@ -1070,15 +1075,18 @@ function renderDetail(by){
 function renderHistory(){
   const tbody=document.getElementById('hist-body');
   if(!history.length){tbody.innerHTML=`<tr><td colspan="7" class="hist-empty">Nenhuma transação registrada ainda.</td></tr>`;return;}
-  tbody.innerHTML=history.map((h,i)=>`<tr>
+  tbody.innerHTML=history.map((h,i)=>{
+    const preview=h.codes.slice(0,5).join(', ')+(h.codes.length>5?` <span style="color:var(--muted)">+${h.codes.length-5} mais</span>`:'');
+    return `<tr>
     <td style="color:var(--muted);white-space:nowrap;font-size:11px">${h.ts}</td>
     <td><span class="hist-badge ${h.type==='add'?'in':'out'}">${h.type==='add'?'+ Entrou':'− Saiu'}</span></td>
     <td style="font-size:12px;color:var(--muted)">${h.txType||'—'}</td>
     <td class="hist-person">${h.person}</td>
-    <td class="hist-codes hist-col-codes">${h.codes.slice(0,12).join(', ')}${h.codes.length>12?` +${h.codes.length-12} mais`:''}</td>
+    <td class="hist-codes" style="font-size:11px;color:var(--text);max-width:220px;word-break:break-word">${preview}</td>
     <td style="text-align:right;font-weight:600">${h.count}</td>
     <td><button class="edit-btn" onclick="abrirEditModal(${i})">✏️</button></td>
-  </tr>`).join('');
+  </tr>`;
+  }).join('');
 }
 
 // ── EDIT HISTORY ──────────────────────────────────
@@ -1094,6 +1102,7 @@ function abrirEditModal(idx) {
   tipoSel.value = h.txType || '—';
   if (!tipoSel.value) tipoSel.value = '—';
   document.getElementById('edit-pessoa').value = h.person || '';
+  document.getElementById('edit-codes').value = (h.codes || []).join(', ');
   document.getElementById('edit-overlay').classList.add('active');
 }
 
@@ -1112,13 +1121,46 @@ function pedirSenhaEdit() {
 
 function salvarEdicaoHistorico() {
   if (editIndex === null) return;
-  history[editIndex].txType  = document.getElementById('edit-tipo').value;
-  history[editIndex].person  = document.getElementById('edit-pessoa').value.trim() || '—';
+  const h = history[editIndex];
+
+  // Parse new codes
+  const newCodes = parseCodes(document.getElementById('edit-codes').value);
+  const oldCodes = h.codes || [];
+
+  // Calculate diff
+  const oldSet = new Set(oldCodes);
+  const newSet = new Set(newCodes);
+  const removedFromTx = oldCodes.filter(c => !newSet.has(c));
+  const addedToTx    = newCodes.filter(c => !oldSet.has(c));
+
+  if (h.type === 'add') {
+    // Transaction was "Entrou" — codes were added to stock
+    // Undo removed codes (reduce stock)
+    removedFromTx.forEach(code => {
+      if (stock[code] > 0) { stock[code]--; if (stock[code] === 0) delete stock[code]; }
+    });
+    // Apply added codes (increase stock)
+    addedToTx.forEach(code => { stock[code] = (stock[code] || 0) + 1; });
+  } else {
+    // Transaction was "Saiu" — codes were removed from stock
+    // Undo removed codes (restore to stock)
+    removedFromTx.forEach(code => { stock[code] = (stock[code] || 0) + 1; });
+    // Apply added codes (remove from stock)
+    addedToTx.forEach(code => {
+      if (stock[code] > 0) { stock[code]--; if (stock[code] === 0) delete stock[code]; }
+    });
+  }
+
+  // Save updated history entry
+  history[editIndex].txType = document.getElementById('edit-tipo').value;
+  history[editIndex].person = document.getElementById('edit-pessoa').value.trim() || '—';
+  history[editIndex].codes  = newCodes;
+  history[editIndex].count  = newCodes.length;
+
   fecharEditModal();
   saveHistory();
   saveStock();
-  renderHistory();
-  renderPessoas();
+  renderAll();
 }
 
 // ── TROCA ─────────────────────────────────────────
