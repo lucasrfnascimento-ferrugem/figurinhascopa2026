@@ -1046,8 +1046,12 @@ function renderDetail(by){
     entries=entries.map(([c,d])=>{
       const filteredCodes={};
       for(const [code,qty] of Object.entries(d.codes)){
-        const playerName=(PLAYERS[code]||'').toLowerCase();
-        if(code.toLowerCase().includes(search)||playerName.includes(search))filteredCodes[code]=qty;
+        const codeNum=parseInt(code.match(/\d+$/)?.[0]||'0');
+        let searchLabel='';
+        if(codeNum===1)        searchLabel='escudo';
+        else if(codeNum===13)  searchLabel='perfilada';
+        else                   searchLabel=(PLAYERS[code]||'').toLowerCase();
+        if(code.toLowerCase().includes(search)||searchLabel.includes(search))filteredCodes[code]=qty;
       }
       if(Object.keys(filteredCodes).length===0)return null;
       return [c,{...d,codes:filteredCodes}];
