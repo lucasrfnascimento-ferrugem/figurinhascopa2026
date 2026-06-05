@@ -655,10 +655,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <tbody id="soc-tbody"></tbody>
     </table>
     <div class="soc-summary" id="soc-summary"></div>
-    <div style="display:flex;gap:8px;margin-top:14px">
-      <button class="soc-close" onclick="fecharSociedade()" style="flex:1">Fechar</button>
-      <button class="soc-close" onclick="pedirSenhaZerarSociedade()" style="flex:0 0 auto;color:var(--copa-red);border-color:var(--copa-red)">🔄 Zerar sociedade</button>
-    </div>
+    <button class="soc-close" onclick="fecharSociedade()">Fechar</button>
   </div>
 </div>
 
@@ -1419,7 +1416,6 @@ function verificarSenha(){
     else if(action==='editHist'){salvarEdicaoHistorico();}
     else if(action==='deleteHist'){excluirTransacao();}
     else if(action==='openSociety'){abrirSociedade();}
-    else if(action==='zerarSociedade'){zerarSociedade();}
     else{const person=document.getElementById('hist-person').value.trim()||'—';const txType=document.getElementById('hist-type')?.value||'—';updateStickers(action,person,txType);}
   }else{
     atualizarDots('error');document.getElementById('pwd-modal').classList.add('pwd-shake');
@@ -1821,17 +1817,7 @@ function renderSocietyModal() {
     <div class="soc-summary-row"><span>💰 Parte de cada sócio (1/3)</span><span class="soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>`;
 }
 
-function pedirSenhaZerarSociedade() {
-  if(!confirm('Isso vai zerar todos os dados da sociedade (vendas, saldos, rodízio). Confirma?')) return;
-  pwdAction = 'zerarSociedade'; pwdBuffer=''; atualizarDots();
-  document.getElementById('pwd-overlay').classList.add('active');
-}
-function zerarSociedade() {
-  resetAndReplaySociety();
-  fecharSociedade();
-  saveStock();
-  alert('Sociedade reconstruída do zero a partir do histórico atual.');
-}
+
 function pedirSenhaSociedade() {
   pwdAction='openSociety'; pwdBuffer=''; atualizarDots();
   document.getElementById('pwd-overlay').classList.add('active');
