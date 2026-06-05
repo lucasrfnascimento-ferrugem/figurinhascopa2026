@@ -1047,6 +1047,7 @@ function renderDetail(by){
       const filteredCodes={};
       for(const [code,qty] of Object.entries(d.codes)){
         const codeNum=parseInt(code.match(/\d+$/)?.[0]||'0');
+        const codeCountry=code.match(/^[A-Z]+/)?.[0]||'';
         let searchLabel='';
         if(codeNum===1&&codeCountry!=='FWC') searchLabel='escudo';
         else if(codeNum===13)  searchLabel='perfilada';
