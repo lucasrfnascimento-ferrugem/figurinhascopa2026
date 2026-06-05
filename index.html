@@ -1198,20 +1198,30 @@ function limparMinhaLista(){
   try{localStorage.removeItem(SK_LISTA);document.getElementById('minha-lista-info').textContent='🗑 Lista apagada.';}catch{}
 }
 
-function abrirWhatsapp(){
-  if(!trocaHaveList.length)return;
+// ── PRICE CALCULATION ────────────────────────────────
+function calcularPreco(fwc, escudos, tradicionais) {
+  const total = (fwc.length + escudos.length) * 3.00 + tradicionais.length * 1.50;
+  return total.toLocaleString('pt-BR', {style:'currency', currency:'BRL'});
+}
+
+function classificarCodigos(lista) {
   const fwc=[], escudos=[], tradicionais=[];
-  trocaHaveList.forEach(code=>{
+  lista.forEach(code=>{
     const m=code.match(/^([A-Z]+)(\d+)$/);
     if(!m){tradicionais.push(code);return;}
-    const[,country,numStr]=m;const num=parseInt(numStr);
-    if(country==='FWC')fwc.push(code);
-    else if(num===1)escudos.push(code);
-    else tradicionais.push(code);
+    const[,country,numStr]=m; const num=parseInt(numStr);
+    if(country==='FWC') fwc.push(code);
+    else if(num===1)    escudos.push(code);
+    else                tradicionais.push(code);
   });
-  const total=fwc.length+escudos.length+tradicionais.length;
-  const all=[...fwc,...escudos,...tradicionais];
-  const msg=[
+  return {fwc, escudos, tradicionais};
+}
+
+function montarMensagem(fwc, escudos, tradicionais) {
+  const total = fwc.length + escudos.length + tradicionais.length;
+  const valor = calcularPreco(fwc, escudos, tradicionais);
+  const all   = [...fwc, ...escudos, ...tradicionais];
+  return [
     'Lucas, segue a relação das figurinhas que você possui em seu estoque que é do meu interesse:',
     '',
     all.join(', '),
@@ -1224,55 +1234,28 @@ function abrirWhatsapp(){
     `⚽ Total de Figuras Tradicionais: ${tradicionais.length}`,
     `📦 Total geral:                  ${total}`,
     '',
+    `💰 Valor a pagar:                ${valor}`,
+    `   (FWC e Escudos = R$ 3,00 · Tradicionais = R$ 1,50)`,
+    '',
     'Bora negociar? 🤝',
     '',
     '─────────────────────',
     'Gerado por Lucas Nascimento | Controle de Figurinhas Copa 2026'
   ].join('\n');
+}
+
+function abrirWhatsapp(){
+  if(!trocaHaveList.length)return;
+  const {fwc, escudos, tradicionais} = classificarCodigos(trocaHaveList);
+  const msg = montarMensagem(fwc, escudos, tradicionais);
   const url='https://wa.me/5511981503805?text='+encodeURIComponent(msg);
   window.open(url,'_blank');
 }
 
 function copiarResultado(){
   if(!trocaHaveList.length)return;
-
-  // Classify each sticker
-  let fwc=[], escudos=[], tradicionais=[];
-  trocaHaveList.forEach(code=>{
-    const m=code.match(/^([A-Z]+)(\d+)$/);
-    if(!m){tradicionais.push(code);return;}
-    const [,country,numStr]=m;
-    const num=parseInt(numStr);
-    if(country==='FWC')             fwc.push(code);
-    else if(num===1)                escudos.push(code);
-    else                            tradicionais.push(code);
-  });
-
-  const totalGeral = fwc.length + escudos.length + tradicionais.length;
-
-  // Build message
-  let lines = [];
-  lines.push('Lucas, segue a relação das figurinhas que você possui em seu estoque que é do meu interesse:');
-  lines.push('');
-
-  // List all available grouped
-  const allCodes = [...fwc, ...escudos, ...tradicionais];
-  lines.push(allCodes.join(', '));
-  lines.push('');
-  lines.push('─────────────────────');
-  lines.push('Resumo:');
-  lines.push('');
-  lines.push(`🌟 Total de FWC:                 ${fwc.length}`);
-  lines.push(`🛡️  Total de Escudos:             ${escudos.length}`);
-  lines.push(`⚽ Total de Figuras Tradicionais: ${tradicionais.length}`);
-  lines.push(`📦 Total geral:                  ${totalGeral}`);
-  lines.push('');
-  lines.push('Bora negociar? 🤝');
-  lines.push('');
-  lines.push('─────────────────────');
-  lines.push('Gerado por Lucas Nascimento | Controle de Figurinhas Copa 2026');
-
-  const txt = lines.join('\n');
+  const {fwc, escudos, tradicionais} = classificarCodigos(trocaHaveList);
+  const txt = montarMensagem(fwc, escudos, tradicionais);
   navigator.clipboard.writeText(txt)
     .then(()=>{
       const b=document.querySelector('.copy-btn');
@@ -1282,6 +1265,7 @@ function copiarResultado(){
     })
     .catch(()=>prompt('Copie a mensagem:', txt));
 }
+
 
 // ── PASSWORD ──────────────────────────────────────
 const PWD='6010';let pwdBuffer='',pwdAction=null;
