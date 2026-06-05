@@ -200,20 +200,22 @@ textarea:focus, input[type=text]:focus { border-color:var(--copa-blue); }
 .minha-lista-info { font-size:11px; color:var(--muted); margin-top:6px; }
 
 /* ── HISTÓRICO ───────────────────────────────────── */
-.hist-table-wrap { overflow-x:auto; max-height:320px; overflow-y:auto; border-radius:10px; border:1px solid var(--border); }
-.hist-table { width:100%; border-collapse:collapse; font-size:12px; min-width:420px; table-layout:fixed; }
+.hist-table-wrap { overflow-x:auto; overflow-y:auto; max-height:340px; border-radius:10px; border:1px solid var(--border); -webkit-overflow-scrolling:touch; }
+.hist-table { width:100%; border-collapse:collapse; font-size:12px; min-width:750px; table-layout:fixed; }
 .hist-table thead th { background:var(--surface3); padding:8px 10px; text-align:left; font-family:'Barlow Condensed',sans-serif; font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); font-weight:600; position:sticky; top:0; z-index:1; overflow:hidden; white-space:nowrap; }
 /* Fixed column widths */
-.hist-table th:nth-child(1), .hist-table td:nth-child(1) { width:130px; }  /* Data/Hora */
-.hist-table th:nth-child(2), .hist-table td:nth-child(2) { width:80px; }   /* Ação */
-.hist-table th:nth-child(3), .hist-table td:nth-child(3) { width:110px; }  /* Tipo */
-.hist-table th:nth-child(4), .hist-table td:nth-child(4) { width:100px; }  /* Pessoa */
-.hist-table th:nth-child(5), .hist-table td:nth-child(5) { width:auto; }   /* Figurinhas — flexible */
-.hist-table th:nth-child(6), .hist-table td:nth-child(6) { width:45px; text-align:right; } /* Qtd */
-.hist-table th:nth-child(7), .hist-table td:nth-child(7) { width:60px; text-align:center; } /* Ações */
+.hist-table th:nth-child(1), .hist-table td:nth-child(1) { width:130px; min-width:130px; }
+.hist-table th:nth-child(2), .hist-table td:nth-child(2) { width:75px;  min-width:75px; }
+.hist-table th:nth-child(3), .hist-table td:nth-child(3) { width:105px; min-width:105px; }
+.hist-table th:nth-child(4), .hist-table td:nth-child(4) { width:95px;  min-width:95px; }
+.hist-table th:nth-child(5), .hist-table td:nth-child(5) { width:180px; min-width:140px; }
+.hist-table th:nth-child(6), .hist-table td:nth-child(6) { width:45px;  min-width:45px; text-align:right; }
+.hist-table th:nth-child(7), .hist-table td:nth-child(7) { width:72px;  min-width:72px; text-align:center; overflow:visible; }
 .hist-table tbody tr { border-top:1px solid var(--border); transition:background .1s; }
 .hist-table tbody tr:hover { background:var(--surface2); }
 .hist-table td { padding:7px 10px; vertical-align:middle; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.hist-table td:nth-child(5) { white-space:normal; word-break:break-word; }
+.hist-table td:nth-child(7) { overflow:visible; text-overflow:unset; white-space:nowrap; }
 .hist-badge { display:inline-block; padding:2px 8px; border-radius:5px; font-size:11px; font-weight:700; font-family:'Barlow Condensed',sans-serif; }
 .hist-badge.in { background:var(--green-bg); color:#085c39; }
 .hist-badge.out { background:var(--red-bg); color:#8a0015; }
@@ -1183,9 +1185,8 @@ function renderHistory(){
     <td class="hist-person" title="${h.person}" style="overflow:hidden;text-overflow:ellipsis;max-width:100px">${h.person}</td>
     <td class="hist-codes" style="font-size:11px;color:var(--text);white-space:normal;word-break:break-word;">${preview}</td>
     <td style="text-align:right;font-weight:600">${h.count}</td>
-    <td style="white-space:nowrap">
-      <button class="edit-btn" onclick="abrirEditModal(${i})">✏️</button>
-      <button class="del-btn" onclick="pedirSenhaExcluir(${i})" title="Apagar e reverter transação">🗑️</button>
+    <td style="white-space:nowrap;overflow:visible;text-overflow:unset">
+      <button class="edit-btn" onclick="abrirEditModal(${i})">✏️</button><button class="del-btn" onclick="pedirSenhaExcluir(${i})" title="Apagar e reverter transação">🗑️</button>
     </td>
   </tr>`;
   }).join('');
