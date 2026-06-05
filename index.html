@@ -363,7 +363,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
     <div class="bignums">
       <div class="bignum red"><div class="bignum-icon">🗂️</div><div class="bignum-label">Total de figurinhas</div><div class="bignum-value" id="bn-total">—</div><div class="bignum-sub">repetidas no estoque</div></div>
       <div class="bignum blue"><div class="bignum-icon">🎯</div><div class="bignum-label">Figurinhas distintas</div><div class="bignum-value" id="bn-unique">—</div><div class="bignum-sub">códigos únicos</div></div>
-      <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">—</div><div class="bignum-sub">figurinhas terminadas em 1</div></div>
+      <div class="bignum gold"><div class="bignum-icon">🛡️</div><div class="bignum-label">Escudos de time</div><div class="bignum-value" id="bn-shields">—</div><div class="bignum-sub" id="bn-shields-sub">figurinhas terminadas em 1</div></div>
       <div class="bignum green-c"><div class="bignum-icon">🥇</div><div class="bignum-label">Maior acervo</div><div class="bignum-value" id="bn-top">—</div><div class="bignum-sub" id="bn-top-sub">seleção com mais distintas</div></div>
     <div class="bignum" style="border-top:4px solid #7c3aed"><div class="bignum-icon">🌟</div><div class="bignum-label">Figurinhas FWC</div><div class="bignum-value" style="color:#7c3aed" id="bn-fwc">—</div><div class="bignum-sub">especiais FIFA World Cup</div></div>
     </div>
@@ -576,7 +576,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
         <option value="Venda">💰 Venda</option>
         <option value="Troca">🔄 Troca</option>
         <option value="Compra">🛒 Compra</option>
-        <option value="Atualizacao">🔄 Atualização</option>
+        <option value="Atualizacao">🆙 Atualização</option>
         <option value="—">— Não informado</option>
       </select>
     </div>
@@ -920,7 +920,7 @@ function computeStats(){
     const[,country,numStr]=m;const num=parseInt(numStr);
     if(!by[country])by[country]={total:0,unique:0,repeated:0,shields:0,codes:{}};
     by[country].total+=qty;by[country].unique++;by[country].repeated+=qty-1;
-    if(num===1)by[country].shields++;
+    if(num===1 && country!=="FWC")by[country].shields++;
     by[country].codes[code]=qty;
   }
   return by;
@@ -1059,7 +1059,13 @@ function renderDetail(by){
       .sort((a,b)=>parseInt(a[0].match(/\d+/)[0])-parseInt(b[0].match(/\d+/)[0]))
       .map(([code,qty])=>{
         const cls=qty===1?'q1':qty===2?'q2':'qn';
-        const player=PLAYERS[code]?`<span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">${PLAYERS[code]}</span>`:'';
+        const codeNum=parseInt(code.match(/\d+$/)?.[0]||'0');
+        const codeCountry=code.match(/^[A-Z]+/)?.[0]||'';
+        let labelText='';
+        if(codeNum===1)                         labelText='Escudo';
+        else if(codeNum===13)                   labelText='Perfilada';
+        else if(PLAYERS[code])                  labelText=PLAYERS[code];
+        const player=labelText?`<span style="font-size:9px;display:block;opacity:.7;line-height:1.2;margin-top:1px">${labelText}</span>`:'';
         return `<span class="chip ${cls}" style="display:inline-flex;flex-direction:column;padding:4px 8px;">${code}${qty>1?`<sup>×${qty}</sup>`:''} ${player}</span>`;
       }).join('');
     const countryFlag=FLAGS[c]||'🏳️';
@@ -1077,7 +1083,7 @@ function renderDetail(by){
 function renderHistory(){
   const tbody=document.getElementById('hist-body');
   if(!history.length){tbody.innerHTML=`<tr><td colspan="7" class="hist-empty">Nenhuma transação registrada ainda.</td></tr>`;return;}
-  const TIPO_LABEL={'Venda':'💰 Venda','Troca':'🔄 Troca','Compra':'🛒 Compra','Atualizacao':'🔄 Atualização','—':'—'};
+  const TIPO_LABEL={'Venda':'💰 Venda','Troca':'🔄 Troca','Compra':'🛒 Compra','Atualizacao':'🆙 Atualização','—':'—'};
   tbody.innerHTML=history.map((h,i)=>{
     const preview=h.codes.slice(0,5).join(', ')+(h.codes.length>5?` <span style="color:var(--muted)">+${h.codes.length-5} mais</span>`:'');
     const tipoLabel=TIPO_LABEL[h.txType]||h.txType||'—';
