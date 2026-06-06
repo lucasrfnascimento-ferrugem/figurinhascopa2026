@@ -1707,6 +1707,7 @@ function resetAndReplaySociety() {
   // Reset running tallies
   let rot = society.rotation = 0;
   const ps    = { Lucas:{}, Rafa:{}, Maylson:{} }; // running current stock per partner
+  const lastTradeOut = {}; // personKey → partner who gave stickers in most recent Saiu+Troca
   const added = { Lucas:0,  Rafa:0,  Maylson:0  };
   const sold  = { Lucas:0,  Rafa:0,  Maylson:0  };
   const sv    = { Lucas:0,  Rafa:0,  Maylson:0  };
@@ -1718,35 +1719,75 @@ function resetAndReplaySociety() {
 
   relevant.forEach(h => {
     if(h.type === 'add') {
-      // Determine which partner gets credit
+      const isTrade = (h.txType === 'Troca');
       let target = 'Lucas';
-      if(h.person && h.person.toUpperCase().startsWith('S_')) {
+
+      if(isTrade) {
+        // TROCA ENTROU — goes to same partner who gave stickers in matching Saiu+Troca
+        const personKey = (h.person || '—').toLowerCase();
+        target = lastTradeOut[personKey] || 'Lucas';
+        delete lastTradeOut[personKey]; // consume the match
+      } else if(h.person && h.person.toUpperCase().startsWith('S_')) {
+        // S_Partner: Atualização / Compra → attributed to named partner
         const raw = h.person.slice(2).trim();
         const match = PARTNERS.find(p => p.toLowerCase() === raw.toLowerCase());
         if(match) target = match;
       }
+
       h.codes.forEach(code => {
         ps[target][code] = (ps[target][code] || 0) + 1;
-        added[target]++;
+        if(!isTrade) added[target]++; // trades don't count toward initial contribution
       });
     } else if(h.type === 'remove') {
-      h.codes.forEach(code => {
-        const price = stickerPrice(code);
-        let done = false;
-        for(let i = 0; i < 3; i++) {
-          const idx = (rot + i) % 3;
-          const p   = PARTNERS[idx];
-          if((ps[p][code] || 0) > 0) {
-            ps[p][code]--;
-            if(ps[p][code] === 0) delete ps[p][code];
-            sold[p]++; sv[p] += price;
-            rot = (idx + 1) % 3;
-            done = true; break;
+      const isTrade = (h.txType === 'Troca');
+
+      if(isTrade) {
+        // TROCA SAIU — find owner via rotation (no revenue), record partner for matching Entrou
+        const personKey = (h.person || '—').toLowerCase();
+        const tradedCodes = h.codes || [];
+
+        // Use rotation to find which partner owns each sticker (no revenue counted)
+        const partnersCharged = new Set();
+        tradedCodes.forEach(code => {
+          for(let i = 0; i < 3; i++) {
+            const idx = (rot + i) % 3;
+            const p   = PARTNERS[idx];
+            if((ps[p][code] || 0) > 0) {
+              ps[p][code]--;
+              if(ps[p][code] === 0) delete ps[p][code];
+              partnersCharged.add(p);
+              rot = (idx + 1) % 3;
+              break;
+            }
           }
-        }
-        // Sticker not found in any partner (pre-society sale) → Lucas by default
-        if(!done) { sold.Lucas++; sv.Lucas += price; }
-      });
+        });
+
+        // Record the dominant partner for this trade (most stickers came from them)
+        // For simplicity: record the first partner charged, so incoming goes to them
+        const tradePrimary = partnersCharged.size === 1
+          ? [...partnersCharged][0]
+          : 'Lucas'; // if mixed, default to Lucas
+        lastTradeOut[personKey] = tradePrimary;
+
+      } else {
+        // VENDA / OUTRO — rotation with revenue
+        h.codes.forEach(code => {
+          const price = stickerPrice(code);
+          let done = false;
+          for(let i = 0; i < 3; i++) {
+            const idx = (rot + i) % 3;
+            const p   = PARTNERS[idx];
+            if((ps[p][code] || 0) > 0) {
+              ps[p][code]--;
+              if(ps[p][code] === 0) delete ps[p][code];
+              sold[p]++; sv[p] += price;
+              rot = (idx + 1) % 3;
+              done = true; break;
+            }
+          }
+          if(!done) { sold.Lucas++; sv.Lucas += price; }
+        });
+      }
     }
   });
 
