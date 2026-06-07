@@ -338,7 +338,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
 /* ── SOCIETY MODAL ───────────────────────────────── */
 .soc-overlay { display:none; position:fixed; inset:0; background:rgba(0,10,40,.75); z-index:9997; align-items:center; justify-content:center; }
 .soc-overlay.active { display:flex; }
-.soc-modal { background:var(--surface); border-radius:18px; border:2px solid var(--copa-gold); padding:28px 32px; width:700px; max-width:96vw; max-height:90vh; overflow-y:auto; animation:popIn .2s ease; }
+.soc-modal { background:var(--surface); border-radius:18px; border:2px solid var(--copa-gold); padding:28px 32px; width:820px; max-width:96vw; max-height:90vh; overflow-y:auto; animation:popIn .2s ease; }
 .soc-modal h3 { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--text); margin-bottom:4px; }
 .soc-subtitle { font-size:12px; color:var(--muted); margin-bottom:20px; }
 .soc-table { width:100%; border-collapse:collapse; font-size:13px; margin-bottom:20px; }
@@ -647,6 +647,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       <thead><tr>
         <th>Sócio</th>
         <th class="right">Qtd Inicial</th>
+        <th class="right" style="color:#e07b39">Qtd Trocada</th>
         <th class="right">Qtd Vendida</th>
         <th class="right">Em Estoque</th>
         <th class="right">Valor Vendido</th>
@@ -1671,7 +1672,8 @@ function copiarListaFaltantes() {
 
 
 // ── SOCIETY ───────────────────────────────────────────────────────────
-const PARTNERS = ['Lucas','Rafa','Maylson'];
+const PARTNERS     = ['Lucas','Rafa','Maylson'];
+const ALL_ENTITIES = ['Lucas','Rafa','Maylson','Estoque'];
 const SOCIETY_START_DATE = '05/06/2026';
 let society = null;
 
@@ -1691,189 +1693,179 @@ function stickerPrice(code) {
 
 function initSociety() {
   society = { startDate: SOCIETY_START_DATE, rotation: 0,
-    partnerStock: { Lucas:{}, Rafa:{}, Maylson:{} },
+    partnerStock: { Lucas:{}, Rafa:{}, Maylson:{}, Estoque:{} },
     partners: {
-      Lucas:   { added:0, sold:0, soldValue:0 },
-      Rafa:    { added:0, sold:0, soldValue:0 },
-      Maylson: { added:0, sold:0, soldValue:0 }
+      Lucas:   { added:0, sold:0, traded:0, soldValue:0 },
+      Rafa:    { added:0, sold:0, traded:0, soldValue:0 },
+      Maylson: { added:0, sold:0, traded:0, soldValue:0 },
+      Estoque: { added:0, sold:0, traded:0, soldValue:0 }
     }
   };
 }
 
-// Full rebuild every time — always produces correct state
+// ── RULES ─────────────────────────────────────────────────────────────
+// ENTROU + Atualização + S_Partner → added++, to partner stock
+// ENTROU + Troca (any)             → Estoque.added++, to Estoque stock
+// ENTROU + Compra/other + S_       → added++, to named partner
+//
+// SAIU + Venda       → rotation, sold++, revenue, rotation advances
+// SAIU + Troca       → rotation, traded++, NO revenue, rotation does NOT advance
+// SAIU + Atualização → deduct from stock only (silent adjustment, no counters)
+
 function resetAndReplaySociety() {
   if(!society) initSociety();
 
-  // Reset running tallies
   let rot = society.rotation = 0;
-  const ps    = { Lucas:{}, Rafa:{}, Maylson:{} }; // running current stock per partner
-  const lastTradeOut = {}; // personKey → partner who gave stickers in most recent Saiu+Troca
-  const added = { Lucas:0,  Rafa:0,  Maylson:0  };
-  const sold  = { Lucas:0,  Rafa:0,  Maylson:0  };
-  const sv    = { Lucas:0,  Rafa:0,  Maylson:0  };
+  const ps     = { Lucas:{}, Rafa:{}, Maylson:{}, Estoque:{} };
+  const added  = { Lucas:0,  Rafa:0,  Maylson:0,  Estoque:0 };
+  const sold   = { Lucas:0,  Rafa:0,  Maylson:0,  Estoque:0 };
+  const traded = { Lucas:0,  Rafa:0,  Maylson:0,  Estoque:0 };
+  const sv     = { Lucas:0,  Rafa:0,  Maylson:0,  Estoque:0 };
 
-  // Replay history oldest → newest
   const relevant = history
     .filter(h => parseBRDate(h.ts||'') >= SOCIETY_CUTOFF)
     .slice().reverse();
 
   relevant.forEach(h => {
-    if(h.type === 'add') {
-      const isTrade = (h.txType === 'Troca');
-      let target = 'Lucas';
+    const txType = h.txType || '—';
 
-      if(isTrade) {
-        // TROCA ENTROU — goes to same partner who gave stickers in matching Saiu+Troca
-        const personKey = (h.person || '—').toLowerCase();
-        target = lastTradeOut[personKey] || 'Lucas';
-        delete lastTradeOut[personKey]; // consume the match
+    // ── ENTROU ────────────────────────────────────────────────────────
+    if(h.type === 'add') {
+      let target = 'Lucas';
+      if(txType === 'Troca') {
+        target = 'Estoque'; // received in trade → stash
       } else if(h.person && h.person.toUpperCase().startsWith('S_')) {
-        // S_Partner: Atualização / Compra → attributed to named partner
         const raw = h.person.slice(2).trim();
-        const match = PARTNERS.find(p => p.toLowerCase() === raw.toLowerCase());
+        const match = ALL_ENTITIES.find(p => p.toLowerCase() === raw.toLowerCase());
         if(match) target = match;
       }
-
-      h.codes.forEach(code => {
+      (h.codes||[]).forEach(code => {
         ps[target][code] = (ps[target][code] || 0) + 1;
-        if(!isTrade) added[target]++; // trades don't count toward initial contribution
+        added[target]++;
       });
-    } else if(h.type === 'remove') {
-      const isTrade = (h.txType === 'Troca');
+    }
 
-      if(isTrade) {
-        // TROCA SAIU — find owner via rotation (no revenue), record partner for matching Entrou
-        const personKey = (h.person || '—').toLowerCase();
-        const tradedCodes = h.codes || [];
+    // ── SAIU ──────────────────────────────────────────────────────────
+    else if(h.type === 'remove') {
+      const isVenda  = (txType === 'Venda');
+      const isTroca  = (txType === 'Troca');
+      const isAjuste = (txType === 'Atualização' || txType === 'Atualizacao');
 
-        // Use rotation to find which partner owns each sticker (no revenue counted)
-        const partnersCharged = new Set();
-        tradedCodes.forEach(code => {
-          for(let i = 0; i < 3; i++) {
-            const idx = (rot + i) % 3;
-            const p   = PARTNERS[idx];
-            if((ps[p][code] || 0) > 0) {
-              ps[p][code]--;
-              if(ps[p][code] === 0) delete ps[p][code];
-              partnersCharged.add(p);
-              rot = (idx + 1) % 3;
-              break;
+      (h.codes||[]).forEach(code => {
+        const price = stickerPrice(code);
+
+        // Find entity that owns this sticker (rotation order)
+        let done = false;
+        for(let i = 0; i < ALL_ENTITIES.length; i++) {
+          const idx    = (rot + i) % ALL_ENTITIES.length;
+          const entity = ALL_ENTITIES[idx];
+          if((ps[entity][code] || 0) > 0) {
+            ps[entity][code]--;
+            if(ps[entity][code] === 0) delete ps[entity][code];
+
+            if(isVenda) {
+              sold[entity]++;
+              sv[entity] += price;
+              rot = (idx + 1) % ALL_ENTITIES.length; // advance rotation
+            } else if(isTroca) {
+              traded[entity]++;            // count as traded
+              // no revenue, rotation stays
+            } else if(isAjuste) {
+              // silent adjustment: just remove from stock, no counters
+            } else {
+              // unknown type → treat as sale
+              sold[entity]++;
+              sv[entity] += price;
+              rot = (idx + 1) % ALL_ENTITIES.length;
             }
+            done = true; break;
           }
-        });
-
-        // Record the dominant partner for this trade (most stickers came from them)
-        // For simplicity: record the first partner charged, so incoming goes to them
-        const tradePrimary = partnersCharged.size === 1
-          ? [...partnersCharged][0]
-          : 'Lucas'; // if mixed, default to Lucas
-        lastTradeOut[personKey] = tradePrimary;
-
-      } else {
-        // VENDA / OUTRO — rotation with revenue
-        h.codes.forEach(code => {
-          const price = stickerPrice(code);
-          let done = false;
-          for(let i = 0; i < 3; i++) {
-            const idx = (rot + i) % 3;
-            const p   = PARTNERS[idx];
-            if((ps[p][code] || 0) > 0) {
-              ps[p][code]--;
-              if(ps[p][code] === 0) delete ps[p][code];
-              sold[p]++; sv[p] += price;
-              rot = (idx + 1) % 3;
-              done = true; break;
-            }
-          }
-          if(!done) { sold.Lucas++; sv.Lucas += price; }
-        });
-      }
+        }
+        // Sticker not found (pre-society) → Lucas silent deduct
+        if(!done && isVenda) { sold.Lucas++; sv.Lucas += price; }
+        else if(!done && isTroca) { traded.Lucas++; }
+      });
     }
   });
 
-  // Lucas's current stock = aggregate stock − Rafa's current − Maylson's current
-  // (pre-society Lucas stickers live here; not tracked in history)
+  // Lucas current = aggregate - other entities
   const lucasCurrent = JSON.parse(JSON.stringify(stock));
-  ['Rafa','Maylson'].forEach(p => {
+  ['Rafa','Maylson','Estoque'].forEach(p => {
     Object.entries(ps[p]).forEach(([code,qty]) => {
-      if(lucasCurrent[code]) {
-        lucasCurrent[code] -= qty;
-        if(lucasCurrent[code] <= 0) delete lucasCurrent[code];
-      }
+      if(lucasCurrent[code]) { lucasCurrent[code] -= qty; if(lucasCurrent[code]<=0) delete lucasCurrent[code]; }
     });
   });
-  // Also subtract Lucas history-adds that are already in lucasCurrent
-  // (they're in aggregate stock AND in ps.Lucas — avoid double counting)
   Object.entries(ps.Lucas).forEach(([code,qty]) => {
-    if(lucasCurrent[code]) {
-      lucasCurrent[code] -= qty;
-      if(lucasCurrent[code] <= 0) delete lucasCurrent[code];
-    }
+    if(lucasCurrent[code]) { lucasCurrent[code] -= qty; if(lucasCurrent[code]<=0) delete lucasCurrent[code]; }
   });
+  const lucasCurTotal = Object.values(lucasCurrent).reduce((s,v)=>s+v,0);
+  const lucasFull = {...lucasCurrent};
+  Object.entries(ps.Lucas).forEach(([code,qty]) => { lucasFull[code] = (lucasFull[code]||0)+qty; });
+  const lucasAdded = lucasCurTotal + added.Lucas + sold.Lucas + traded.Lucas;
 
-  const lucasCurrentTotal = Object.values(lucasCurrent).reduce((s,v)=>s+v, 0);
-  // Lucas added = his pre-society stock + his history adds
-  // pre-society = lucasCurrent + his sold (sales deducted from aggregate but were originally his)
-  const lucasAdded = lucasCurrentTotal + added.Lucas + sold.Lucas;
-
-  // Merge Lucas partnerStock: pre-society stock + history adds
-  const lucasFull = JSON.parse(JSON.stringify(lucasCurrent));
-  Object.entries(ps.Lucas).forEach(([code,qty]) => {
-    lucasFull[code] = (lucasFull[code] || 0) + qty;
+  society.rotation     = rot;
+  society.partnerStock = { Lucas:lucasFull, Rafa:ps.Rafa, Maylson:ps.Maylson, Estoque:ps.Estoque };
+  ALL_ENTITIES.forEach(p => {
+    society.partners[p] = {
+      added:   p==='Lucas' ? lucasAdded : added[p],
+      sold:    sold[p],
+      traded:  traded[p],
+      soldValue: sv[p]
+    };
   });
-
-  // Commit
-  society.rotation       = rot;
-  society.partnerStock   = { Lucas: lucasFull, Rafa: ps.Rafa, Maylson: ps.Maylson };
-  society.partners.Lucas   = { added: lucasAdded, sold: sold.Lucas,   soldValue: sv.Lucas   };
-  society.partners.Rafa    = { added: added.Rafa,  sold: sold.Rafa,   soldValue: sv.Rafa    };
-  society.partners.Maylson = { added: added.Maylson, sold: sold.Maylson, soldValue: sv.Maylson };
 }
 
-// Called on live transactions — just re-run the full rebuild
-function processSocietyEntry(type, person, codes) {
-  // No-op: live updates call resetAndReplaySociety after saving
-}
+function processSocietyEntry() { /* no-op — caller uses resetAndReplaySociety */ }
 
 function renderSocietyModal() {
   if(!society) return;
-  const inStock = {};
-  PARTNERS.forEach(p => {
-    inStock[p] = Object.values(society.partnerStock[p]||{}).reduce((s,v)=>s+v, 0);
-  });
-  let totalSold=0, totalValue=0;
-  PARTNERS.forEach(p => { totalSold+=society.partners[p].sold; totalValue+=society.partners[p].soldValue; });
-  const parte = totalValue/3;
 
-  const rotPartner = PARTNERS[society.rotation % PARTNERS.length];
-  const COLORS = {Lucas:'var(--copa-blue)', Rafa:'var(--copa-gold)', Maylson:'var(--green)'};
-  const rotCircle = PARTNERS.map(p => {
-    const active = p===rotPartner, col=COLORS[p];
+  let totalRevenue=0, totalSold=0, totalTraded=0;
+  ALL_ENTITIES.forEach(p => {
+    totalRevenue += society.partners[p].soldValue;
+    totalSold    += society.partners[p].sold;
+    totalTraded  += society.partners[p].traded;
+  });
+  const parte = totalRevenue / 3;
+
+  const rotPartner = ALL_ENTITIES[society.rotation % ALL_ENTITIES.length];
+  const COLORS = {Lucas:'var(--copa-blue)', Rafa:'var(--copa-gold)', Maylson:'var(--green)', Estoque:'#9333ea'};
+  const rotCircle = ALL_ENTITIES.map(p => {
+    const active=p===rotPartner, col=COLORS[p];
     return `<span style="font-weight:${active?700:400};color:${active?col:'var(--muted)'};
-      ${active?`background:${col}22;padding:2px 10px;border-radius:6px;border:1.5px solid ${col}`:''}">${p}</span>`;
+      ${active?`background:${col}22;padding:2px 8px;border-radius:6px;border:1.5px solid ${col}`:''}">${p}</span>`;
   }).join(' <span style="color:var(--muted)">→</span> ');
 
   document.getElementById('soc-rotation-info').innerHTML =
     `<div style="margin-bottom:6px"><strong>Próxima venda:</strong> ${rotCircle}</div>
-     <span style="font-size:11px;color:var(--muted)">Rodízio avança após cada venda. Se o sócio da vez não tiver a figurinha, passa para o próximo que tiver.</span>`;
+     <span style="font-size:11px;color:var(--muted)">Rodízio avança só em Vendas. Trocas e Ajustes não avançam.</span>`;
 
-  document.getElementById('soc-tbody').innerHTML = PARTNERS.map(p => {
+  document.getElementById('soc-tbody').innerHTML = ALL_ENTITIES.map(p => {
     const d = society.partners[p];
-    return `<tr>
-      <td><span class="soc-partner-name" style="color:${COLORS[p]}">👤 ${p}</span></td>
+    const isEstoque = p==='Estoque';
+    // Em Estoque = Qtd Inicial - (Qtd Trocada + Qtd Vendida)
+    const emEstoque = Math.max(0, d.added - d.traded - d.sold);
+    const parteDisplay = isEstoque
+      ? '<span style="color:var(--muted);font-size:11px">—</span>'
+      : parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    return `<tr${isEstoque?' style="border-top:2px dashed var(--border)"':''}>
+      <td><span class="soc-partner-name" style="color:${COLORS[p]}">${isEstoque?'📦':'👤'} ${p}
+        ${isEstoque?'<span style="font-size:10px;color:var(--muted)"> (trocas)</span>':''}</span></td>
       <td class="right soc-stat-added">${d.added}</td>
+      <td class="right" style="color:#e07b39;font-weight:600">${d.traded}</td>
       <td class="right soc-stat-sold">${d.sold}</td>
-      <td class="right soc-stat-stock">${inStock[p]}</td>
+      <td class="right soc-stat-stock">${emEstoque}</td>
       <td class="right soc-stat-value">${d.soldValue.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</td>
-      <td class="right soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</td>
+      <td class="right soc-stat-parte">${parteDisplay}</td>
     </tr>`;
   }).join('');
 
-  const totalStock = Object.values(inStock).reduce((s,v)=>s+v,0);
+  const totalStock = ALL_ENTITIES.reduce((s,p)=>s+Math.max(0,society.partners[p].added-society.partners[p].traded-society.partners[p].sold),0);
   document.getElementById('soc-summary').innerHTML = `
-    <div class="soc-summary-row"><span>Total em estoque (todos os sócios)</span><span style="font-weight:600;color:var(--copa-blue)">${totalStock}</span></div>
+    <div class="soc-summary-row"><span>Total em estoque calculado</span><span style="font-weight:600;color:var(--copa-blue)">${totalStock}</span></div>
+    <div class="soc-summary-row"><span>Total figurinhas trocadas</span><span style="font-weight:600;color:#e07b39">${totalTraded}</span></div>
     <div class="soc-summary-row"><span>Total figurinhas vendidas</span><span style="font-weight:600;color:var(--copa-red)">${totalSold}</span></div>
-    <div class="soc-summary-row"><span>Receita total de vendas</span><span style="font-weight:600">${totalValue.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>
+    <div class="soc-summary-row"><span>Receita total de vendas</span><span style="font-weight:600">${totalRevenue.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>
     <div class="soc-summary-row"><span>💰 Parte de cada sócio (1/3)</span><span class="soc-stat-parte">${parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}</span></div>`;
 }
 
