@@ -1768,10 +1768,10 @@ function resetAndReplaySociety() {
               sv[entity] += price;
               rot = (idx + 1) % ALL_ENTITIES.length; // advance rotation
             } else if(isTroca) {
-              traded[entity]++;            // count as traded
-              // no revenue, rotation stays
+              traded[entity]++;  // count as traded, no revenue, rotation stays
             } else if(isAjuste) {
-              // silent adjustment: just remove from stock, no counters
+              if(added[entity] > 0) added[entity]--; // reduces Qtd Inicial of the owner
+              // no revenue, rotation stays
             } else {
               // unknown type → treat as sale
               sold[entity]++;
@@ -1781,9 +1781,10 @@ function resetAndReplaySociety() {
             done = true; break;
           }
         }
-        // Sticker not found (pre-society) → Lucas silent deduct
-        if(!done && isVenda) { sold.Lucas++; sv.Lucas += price; }
-        else if(!done && isTroca) { traded.Lucas++; }
+        // Sticker not found (pre-society) → Lucas by default
+        if(!done && isVenda)  { sold.Lucas++;  sv.Lucas += price; }
+        else if(!done && isTroca)  { traded.Lucas++;  }
+        else if(!done && isAjuste) { if(added.Lucas>0) added.Lucas--; }
       });
     }
   });
@@ -1801,7 +1802,10 @@ function resetAndReplaySociety() {
   const lucasCurTotal = Object.values(lucasCurrent).reduce((s,v)=>s+v,0);
   const lucasFull = {...lucasCurrent};
   Object.entries(ps.Lucas).forEach(([code,qty]) => { lucasFull[code] = (lucasFull[code]||0)+qty; });
+  // lucasAdded = current physical stock + all outflows (sold/traded/adjusted)
+  // adjusted is already deducted from added[], so we just use current formula:
   const lucasAdded = lucasCurTotal + added.Lucas + sold.Lucas + traded.Lucas;
+  // Note: Atualização saiu decremented added[], so lucasAdded already reflects adjustments
 
   society.rotation     = rot;
   society.partnerStock = { Lucas:lucasFull, Rafa:ps.Rafa, Maylson:ps.Maylson, Estoque:ps.Estoque };
@@ -1844,7 +1848,8 @@ function renderSocietyModal() {
     const d = society.partners[p];
     const isEstoque = p==='Estoque';
     // Em Estoque = Qtd Inicial - (Qtd Trocada + Qtd Vendida)
-    const emEstoque = Math.max(0, d.added - d.traded - d.sold);
+    // Em Estoque: use physical partnerStock sum (always matches aggregate stock)
+    const emEstoque = Object.values(society.partnerStock[p]||{}).reduce((s,v)=>s+v, 0);
     const parteDisplay = isEstoque
       ? '<span style="color:var(--muted);font-size:11px">—</span>'
       : parte.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
@@ -1860,7 +1865,9 @@ function renderSocietyModal() {
     </tr>`;
   }).join('');
 
-  const totalStock = ALL_ENTITIES.reduce((s,p)=>s+Math.max(0,society.partners[p].added-society.partners[p].traded-society.partners[p].sold),0);
+  // Total = sum of all physical partnerStock = always equals aggregate stock
+  const totalStock = ALL_ENTITIES.reduce((s,p)=>
+    s + Object.values(society.partnerStock[p]||{}).reduce((a,v)=>a+v,0), 0);
   document.getElementById('soc-summary').innerHTML = `
     <div class="soc-summary-row"><span>Total em estoque calculado</span><span style="font-weight:600;color:var(--copa-blue)">${totalStock}</span></div>
     <div class="soc-summary-row"><span>Total figurinhas trocadas</span><span style="font-weight:600;color:#e07b39">${totalTraded}</span></div>
