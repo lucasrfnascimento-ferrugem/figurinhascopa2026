@@ -724,14 +724,20 @@ function setSaveStatus(state) {
 }
 
 async function ghRead() {
-  // Fetch SHA via API (small request, needed for future writes)
+  // Step 1: Get SHA via Trees API (works for ANY file size — no 1MB limit)
   try {
-    const rMeta = await fetch(GH_URL, {
+    const treeUrl = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/git/trees/main`;
+    const tRes = await fetch(treeUrl, {
       headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
     });
-    if (rMeta.ok) { const meta = await rMeta.json(); _fileSha = meta.sha; }
-  } catch(e) {}
-  // Read content via raw URL — no 1MB limit, much faster
+    if (tRes.ok) {
+      const tree = await tRes.json();
+      const entry = (tree.tree || []).find(f => f.path === GH_FILE);
+      if (entry) _fileSha = entry.sha;
+    }
+  } catch(e) { console.warn('SHA fetch failed:', e); }
+
+  // Step 2: Read content via raw URL (no size limit, fast CDN)
   const rawUrl = GH_RAW_URL + '?t=' + Date.now();
   const r = await fetch(rawUrl, { cache: 'no-store' });
   if (r.status === 404) return {};
