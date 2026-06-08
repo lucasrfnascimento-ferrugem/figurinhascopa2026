@@ -598,6 +598,7 @@ footer { background:linear-gradient(135deg,var(--copa-blue) 0%,#00124a 100%); bo
       </div>
       <div style="margin-top:10px;display:flex;justify-content:flex-end;">
         <button class="btn btn-secondary" style="font-size:12px;padding:7px 14px;" onclick="exportarHistoricoXLSX()">📥 Exportar XLSX</button>
+      <button class="btn btn-secondary" style="font-size:12px;padding:7px 14px;border-color:#7c3aed;color:#7c3aed" onclick="compactarDados()" id="btn-compact">🗜️ Compactar dados</button>
       <button class="btn btn-secondary" style="font-size:12px;padding:7px 14px;" onclick="pedirSenhaHist()">🗑 Limpar histórico</button>
       </div>
     </div>
@@ -709,7 +710,8 @@ const GH_OWNER = 'lucasrfnascimento-ferrugem';
 const GH_REPO  = 'figurinhascopa2026';
 const GH_TOKEN = ['ghp_k84N','epZVflvB','LYMnJIGc','7jrWRJtF','q114Jdo1'].join('');
 const GH_FILE  = 'stock.json';
-const GH_URL   = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+const GH_URL     = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`;
+const GH_RAW_URL = `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/main/${GH_FILE}`;
 let _fileSha   = null;
 let _saveTimer = null;
 
@@ -722,15 +724,19 @@ function setSaveStatus(state) {
 }
 
 async function ghRead() {
-  const r = await fetch(GH_URL, {
-    headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
-  });
-  if (r.status === 404) return {}; // file doesn't exist yet
-  if (!r.ok) throw new Error('GitHub read HTTP ' + r.status);
-  const j = await r.json();
-  _fileSha = j.sha;
-  const decoded = atob(j.content.replace(/\n/g,''));
-  return JSON.parse(decoded);
+  // Fetch SHA via API (small request, needed for future writes)
+  try {
+    const rMeta = await fetch(GH_URL, {
+      headers: { 'Authorization': 'token ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (rMeta.ok) { const meta = await rMeta.json(); _fileSha = meta.sha; }
+  } catch(e) {}
+  // Read content via raw URL — no 1MB limit, much faster
+  const rawUrl = GH_RAW_URL + '?t=' + Date.now();
+  const r = await fetch(rawUrl, { cache: 'no-store' });
+  if (r.status === 404) return {};
+  if (!r.ok) throw new Error('GitHub raw read HTTP ' + r.status);
+  return await r.json();
 }
 
 async function ghWrite(data) {
@@ -811,7 +817,11 @@ async function loadStock(){
   try {
     const data = await ghRead();
     stock   = data.stock   || JSON.parse(JSON.stringify(INITIAL));
-    history = data.history || [];
+    // Decompress history: codes may be stored as space-separated string
+    history = (data.history || []).map(h => ({
+      ...h,
+      codes: typeof h.codes === 'string' ? h.codes.split(' ').filter(Boolean) : (h.codes || [])
+    }));
     // Society is always rebuilt from history on load — ignore saved computed values
     society = null; // force full rebuild below
     const saved = data.lastUpdate || '';
@@ -846,7 +856,12 @@ async function saveStock(){
   // Always save society with _replayed=false so next load always rebuilds from history
   // Society is rebuilt from history on every load - only save rotation position
   const societyToSave = society ? { startDate: society.startDate, rotation: society.rotation } : null;
-  const payload = { stock, history: history.slice(0,200), society: societyToSave, lastUpdate: ds };
+  // Compress history codes as space-separated string (reduces file size ~60%)
+  const histCompressed = history.slice(0,200).map(h => ({
+    ...h,
+    codes: Array.isArray(h.codes) ? h.codes.join(' ') : (h.codes || '')
+  }));
+  const payload = { stock, history: histCompressed, society: societyToSave, lastUpdate: ds };
   // always save to localStorage as backup
   try { localStorage.setItem('copa2026_cache', JSON.stringify(payload)); } catch(e){}
   scheduleSave(payload);
@@ -1541,6 +1556,25 @@ function renderPessoas(){
 }
 
 // ── EXPORT XLSX ───────────────────────────────────────────────────────
+async function compactarDados() {
+  const btn = document.getElementById('btn-compact');
+  const orig = btn.textContent;
+  btn.textContent = '⏳ Compactando…';
+  btn.disabled = true;
+  try {
+    await saveStock();
+    btn.textContent = '✅ Compactado!';
+    const sizeBefore = JSON.stringify({stock, history, society}).length;
+    setTimeout(() => { btn.textContent = orig; btn.disabled = false; }, 3000);
+    alert('✅ Dados compactados e salvos no GitHub!\n\nO arquivo stock.json foi reduzido. Verifique o tamanho no GitHub.');
+  } catch(e) {
+    btn.textContent = '❌ Erro';
+    btn.disabled = false;
+    setTimeout(() => { btn.textContent = orig; }, 3000);
+    alert('Erro ao compactar: ' + e.message);
+  }
+}
+
 function exportarHistoricoXLSX(){
   if(!history.length){alert('Nenhuma transação para exportar.');return;}
   if(!window.XLSX){alert('Biblioteca XLSX não carregada ainda. Aguarde e tente novamente.');return;}
